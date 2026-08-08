@@ -10,8 +10,121 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 0) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_07_220500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
+  create_table "bookings", force: :cascade do |t|
+    t.integer "adults", default: 0, null: false
+    t.datetime "cancelled_at"
+    t.integer "children_0_4", default: 0, null: false
+    t.integer "children_5_9", default: 0, null: false
+    t.string "code", null: false
+    t.datetime "created_at", null: false
+    t.string "customer_email", null: false
+    t.string "customer_name", null: false
+    t.string "customer_phone"
+    t.bigint "departure_id", null: false
+    t.integer "deposit_cents", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "total_cents", null: false
+    t.integer "unit_price_cents", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_bookings_on_code", unique: true
+    t.index ["customer_email"], name: "index_bookings_on_customer_email"
+    t.index ["departure_id", "status"], name: "index_bookings_on_departure_id_and_status"
+    t.check_constraint "(adults + children_5_9 + children_0_4) > 0", name: "bookings_party_not_empty"
+    t.check_constraint "adults >= 0 AND children_5_9 >= 0 AND children_0_4 >= 0", name: "bookings_party_counts_non_negative"
+    t.check_constraint "deposit_cents <= total_cents", name: "bookings_deposit_within_total"
+    t.check_constraint "unit_price_cents >= 0 AND total_cents >= 0 AND deposit_cents >= 0", name: "bookings_money_non_negative"
+  end
+
+  create_table "departures", force: :cascade do |t|
+    t.integer "capacity", null: false
+    t.datetime "created_at", null: false
+    t.integer "price_override_cents"
+    t.integer "seats_taken", default: 0, null: false
+    t.datetime "starts_at", null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "tour_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["starts_at"], name: "index_departures_on_starts_at"
+    t.index ["tour_id", "starts_at"], name: "index_departures_on_tour_id_and_starts_at", unique: true
+    t.check_constraint "capacity > 0", name: "departures_capacity_positive"
+    t.check_constraint "price_override_cents IS NULL OR price_override_cents > 0", name: "departures_price_override_positive"
+    t.check_constraint "seats_taken >= 0 AND seats_taken <= capacity", name: "departures_seats_within_capacity"
+  end
+
+  create_table "operators", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.text "bio"
+    t.datetime "created_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "name", null: false
+    t.string "phone"
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.string "whatsapp"
+    t.index ["email"], name: "index_operators_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_operators_on_reset_password_token", unique: true
+    t.index ["slug"], name: "index_operators_on_slug", unique: true
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.bigint "booking_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "paid_at"
+    t.integer "refunded_amount_cents"
+    t.datetime "refunded_at"
+    t.integer "status", default: 0, null: false
+    t.string "stripe_payment_intent_id"
+    t.string "stripe_refund_id"
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_payments_on_booking_id", unique: true
+    t.index ["stripe_payment_intent_id"], name: "index_payments_on_stripe_payment_intent_id", unique: true
+    t.index ["stripe_refund_id"], name: "index_payments_on_stripe_refund_id", unique: true
+    t.check_constraint "amount_cents >= 0", name: "payments_amount_non_negative"
+    t.check_constraint "refunded_amount_cents IS NULL OR refunded_amount_cents >= 0 AND refunded_amount_cents <= amount_cents", name: "payments_refund_within_amount"
+  end
+
+  create_table "stripe_events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "event_type", null: false
+    t.datetime "processed_at"
+    t.string "stripe_event_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stripe_event_id"], name: "index_stripe_events_on_stripe_event_id", unique: true
+  end
+
+  create_table "tours", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.integer "base_price_cents", null: false
+    t.integer "category", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.integer "duration_minutes", null: false
+    t.boolean "includes_lunch", default: false, null: false
+    t.string "meeting_point", null: false
+    t.integer "min_age", default: 0, null: false
+    t.bigint "operator_id", null: false
+    t.string "slug", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category"], name: "index_tours_on_category"
+    t.index ["operator_id"], name: "index_tours_on_operator_id"
+    t.index ["slug"], name: "index_tours_on_slug", unique: true
+    t.check_constraint "base_price_cents > 0", name: "tours_base_price_positive"
+    t.check_constraint "duration_minutes > 0", name: "tours_duration_positive"
+    t.check_constraint "min_age >= 0", name: "tours_min_age_non_negative"
+  end
+
+  add_foreign_key "bookings", "departures"
+  add_foreign_key "departures", "tours"
+  add_foreign_key "payments", "bookings"
+  add_foreign_key "tours", "operators"
 end
