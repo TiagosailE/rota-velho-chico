@@ -33,7 +33,10 @@ module RotaVelhoChico
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    # A politica de cancelamento e ancorada em "48h antes de starts_at" --
+    # ver docs/architecture.md, secao 2.3. O banco guarda UTC; a aplicacao
+    # opera no fuso de Paulo Afonso.
+    config.time_zone = "America/Sao_Paulo"
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.

@@ -29,3 +29,17 @@
 
 en:
   hello: "Hello world"
+
+  activerecord:
+    errors:
+      models:
+        booking:
+          attributes:
+            base:
+              empty_party: "must include at least one passenger"
+            deposit_cents:
+              greater_than_total: "cannot be greater than the total"
+        payment:
+          attributes:
+            refunded_amount_cents:
+              greater_than_amount: "cannot be greater than the amount charged"
