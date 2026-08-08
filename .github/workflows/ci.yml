@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  lint:
+    name: Estilo (RuboCop)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version-file: .ruby-version
+          bundler-cache: true
+
+      - name: RuboCop
+        run: bin/rubocop --parallel
+
+  security:
+    name: Seguranca (Brakeman + auditoria de dependencias)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version-file: .ruby-version
+          bundler-cache: true
+
+      - name: Brakeman
+        run: bin/brakeman --no-pager --exit-on-warn --exit-on-error
+
+      - name: Gems com vulnerabilidade conhecida
+        run: bin/bundler-audit check --update
+
+      - name: Importmap
+        run: bin/importmap audit
+
+  test:
+    name: Testes (RSpec)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd=pg_isready
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # A gem pg compila contra o libpq; o runner nao traz os headers.
+      - name: Pacotes de sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y libpq-dev postgresql-client
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version-file: .ruby-version
+          bundler-cache: true
+
+      - name: Preparar o banco de teste
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: bin/rails db:test:prepare
+
+      # RAILS_MAX_THREADS fica DESCONFIGURADO de proposito. O config/database.yml
+      # usa 25 como padrao no ambiente de teste, que e o que o spec de overbooking
+      # precisa (20 threads). Definir a variavel aqui reduziria o pool e o teste
+      # passaria a falhar por timeout de conexao. Ver docs/architecture.md secao 5.
+      - name: RSpec
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: bin/rspec
+
+      - name: Guardar o relatorio de cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 7
