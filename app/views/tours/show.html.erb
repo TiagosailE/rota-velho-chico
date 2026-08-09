@@ -1,0 +1,45 @@
+<div class="w-full">
+  <%= link_to t("tours.show.back"), tours_path %>
+
+  <span class="text-xs uppercase tracking-wide"><%= t("tours.categories.#{@tour.category}") %></span>
+  <h1 class="text-2xl font-bold mb-2"><%= @tour.title %></h1>
+  <p class="text-sm mb-4"><%= t("tours.show.operated_by", name: @tour.operator.name) %></p>
+
+  <p class="mb-4"><%= @tour.description %></p>
+
+  <dl class="grid gap-2 mb-8">
+    <div>
+      <dt class="inline font-medium"><%= t("tours.show.meeting_point") %>:</dt>
+      <dd class="inline"><%= @tour.meeting_point %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("tours.show.duration") %>:</dt>
+      <dd class="inline"><%= format_duration(@tour.duration_minutes) %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("tours.show.price") %>:</dt>
+      <dd class="inline"><%= format_price_cents(@tour.base_price_cents) %></dd>
+    </div>
+    <% if @tour.min_age.positive? %>
+      <div>
+        <dd><%= t("tours.show.min_age", age: @tour.min_age) %></dd>
+      </div>
+    <% end %>
+  </dl>
+
+  <h2 class="text-lg font-semibold mb-2"><%= t("tours.show.upcoming_departures") %></h2>
+
+  <% if @departures.empty? %>
+    <p><%= t("tours.show.no_departures") %></p>
+  <% else %>
+    <ul>
+      <% @departures.each do |departure| %>
+        <li>
+          <%= departure.starts_at.strftime("%d/%m/%Y %H:%M") %>
+          &mdash;
+          <%= t("tours.show.seats_available", count: departure.capacity - departure.seats_taken) %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
