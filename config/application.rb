@@ -39,6 +39,10 @@ module RotaVelhoChico
     config.time_zone = "America/Sao_Paulo"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # Publico primario e turista brasileiro; observadores de aves estrangeiros
+    # usam :en (ver docs/architecture.md).
+    config.i18n.default_locale = :"pt-BR"
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end

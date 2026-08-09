@@ -1,0 +1,49 @@
+pt-BR:
+  hello: "Ola mundo"
+
+  activerecord:
+    errors:
+      models:
+        booking:
+          attributes:
+            base:
+              empty_party: "deve incluir pelo menos um passageiro"
+            deposit_cents:
+              greater_than_total: "nao pode ser maior que o total"
+        payment:
+          attributes:
+            refunded_amount_cents:
+              greater_than_amount: "nao pode ser maior que o valor cobrado"
+
+  tours:
+    categories:
+      boat: "Barco"
+      offroad: "Off-road"
+      hiking: "Trilha"
+      cultural: "Cultural"
+    index:
+      title: "Passeios em Paulo Afonso"
+      empty: "Nenhum passeio encontrado com esses filtros."
+      filter:
+        category: "Categoria"
+        all_categories: "Todas as categorias"
+        date: "Data da saida"
+        min_price: "Preco minimo (R$)"
+        max_price: "Preco maximo (R$)"
+        submit: "Filtrar"
+        clear: "Limpar filtros"
+      card:
+        duration_label: "Duracao"
+        details: "Ver detalhes"
+    show:
+      back: "Voltar para os passeios"
+      meeting_point: "Ponto de encontro"
+      duration: "Duracao"
+      min_age: "Idade minima: %{age} anos"
+      price: "Preco por pessoa"
+      operated_by: "Operado por %{name}"
+      upcoming_departures: "Proximas saidas"
+      no_departures: "Nenhuma saida agendada no momento."
+      seats_available:
+        one: "1 vaga disponivel"
+        other: "%{count} vagas disponiveis"

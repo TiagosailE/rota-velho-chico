@@ -43,3 +43,36 @@ en:
           attributes:
             refunded_amount_cents:
               greater_than_amount: "cannot be greater than the amount charged"
+
+  tours:
+    categories:
+      boat: "Boat"
+      offroad: "Off-road"
+      hiking: "Hiking"
+      cultural: "Cultural"
+    index:
+      title: "Tours in Paulo Afonso"
+      empty: "No tours found for these filters."
+      filter:
+        category: "Category"
+        all_categories: "All categories"
+        date: "Departure date"
+        min_price: "Minimum price (R$)"
+        max_price: "Maximum price (R$)"
+        submit: "Filter"
+        clear: "Clear filters"
+      card:
+        duration_label: "Duration"
+        details: "View details"
+    show:
+      back: "Back to tours"
+      meeting_point: "Meeting point"
+      duration: "Duration"
+      min_age: "Minimum age: %{age} years"
+      price: "Price per person"
+      operated_by: "Operated by %{name}"
+      upcoming_departures: "Upcoming departures"
+      no_departures: "No departures scheduled at the moment."
+      seats_available:
+        one: "1 seat available"
+        other: "%{count} seats available"
