@@ -43,6 +43,69 @@ en:
           attributes:
             refunded_amount_cents:
               greater_than_amount: "cannot be greater than the amount charged"
+        departure:
+          attributes:
+            capacity:
+              below_seats_taken: "cannot be less than the seats already taken"
+
+  operators:
+    nav:
+      signed_in_as: "Signed in as %{name}"
+      panel: "Panel"
+      sign_out: "Sign out"
+      sign_in: "Operator area"
+    tours:
+      index:
+        title: "My tours"
+        new: "New tour"
+        empty: "You haven't added any tours yet."
+        manage: "Manage"
+        inactive: "Inactive"
+      new:
+        title: "New tour"
+      edit:
+        title: "Edit %{title}"
+        departures_title: "Departures"
+        new_departure: "New departure"
+        no_departures: "No departures yet."
+      create:
+        success: "Tour created."
+      update:
+        success: "Tour updated."
+      form:
+        back: "Back to my tours"
+        title: "Title"
+        slug: "Slug"
+        description: "Description"
+        category: "Category"
+        duration_minutes: "Duration (minutes)"
+        base_price_reais: "Base price (R$)"
+        meeting_point: "Meeting point"
+        min_age: "Minimum age"
+        includes_lunch: "Includes lunch"
+        active: "Active (visible to tourists)"
+        submit: "Save"
+    departures:
+      new:
+        title: "New departure - %{tour}"
+      edit:
+        title: "Edit departure - %{tour}"
+      create:
+        success: "Departure created."
+      update:
+        success: "Departure updated."
+      form:
+        back: "Back to tour"
+        starts_at: "Date and time"
+        capacity: "Capacity"
+        price_override_reais: "Special price (R$, optional)"
+        submit: "Save"
+      show:
+        occupancy: "Occupancy"
+        bookings_title: "Bookings"
+        no_bookings: "No bookings for this departure."
+        code: "Code"
+        link: "View"
 
   bookings:
     new:

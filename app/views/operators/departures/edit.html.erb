@@ -1,0 +1,7 @@
+<div class="w-full">
+  <%= link_to t("operators.departures.form.back"), edit_operators_tour_path(@tour) %>
+
+  <h1 class="text-2xl font-bold mb-6"><%= t("operators.departures.edit.title", tour: @tour.title) %></h1>
+
+  <%= render "form", tour: @tour, departure: @departure %>
+</div>

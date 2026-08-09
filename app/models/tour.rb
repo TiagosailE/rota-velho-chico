@@ -10,4 +10,14 @@ class Tour < ApplicationRecord
   validates :base_price_cents, presence: true, numericality: { greater_than: 0 }
   validates :meeting_point, presence: true
   validates :min_age, numericality: { greater_than_or_equal_to: 0 }
+
+  # Atributo virtual para o formulario do operador aceitar reais em vez de
+  # centavos -- base_price_cents continua sendo a fonte da verdade.
+  def base_price_reais
+    base_price_cents && (base_price_cents / 100.0)
+  end
+
+  def base_price_reais=(value)
+    self.base_price_cents = value.present? ? (value.to_f * 100).round : nil
+  end
 end

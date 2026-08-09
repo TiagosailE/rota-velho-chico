@@ -18,10 +18,6 @@
     </div>
   </dl>
 
-  <% if flash[:alert] %>
-    <p class="text-red-600 mb-4"><%= flash[:alert] %></p>
-  <% end %>
-
   <%= form_with model: @booking, url: departure_bookings_path(@departure), class: "grid gap-4" do |f| %>
     <div>
       <%= f.label :customer_name, t("bookings.new.customer_name"), class: "block text-sm mb-1" %>

@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Agencia #{n}" }
     sequence(:slug) { |n| "agencia-#{n}" }
     sequence(:email) { |n| "agencia#{n}@exemplo.com" }
-    encrypted_password { "x" }
+    password { "password123" }
     active { true }
   end
 end

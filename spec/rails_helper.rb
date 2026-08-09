@@ -72,6 +72,9 @@ RSpec.configure do |config|
 
   # `create(...)` / `build(...)` sem prefixo FactoryBot.
   config.include FactoryBot::Syntax::Methods
+
+  # `sign_in operator` nos specs de request do painel do operador.
+  config.include Devise::Test::IntegrationHelpers, type: :request
 end
 
 Shoulda::Matchers.configure do |config|
