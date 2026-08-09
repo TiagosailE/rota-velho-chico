@@ -11,5 +11,11 @@ Rails.application.routes.draw do
 
   resources :tours, only: [ :index, :show ], param: :slug
 
+  resources :departures, only: [] do
+    resources :bookings, only: [ :new, :create ]
+  end
+
+  resource :booking_lookup, only: [ :new, :create ]
+
   root "tours#index"
 end

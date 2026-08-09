@@ -1,0 +1,21 @@
+<div class="w-full">
+  <h1 class="text-2xl font-bold mb-6"><%= t("booking_lookups.new.title") %></h1>
+
+  <% if flash[:alert] %>
+    <p class="text-red-600 mb-4"><%= flash[:alert] %></p>
+  <% end %>
+
+  <%= form_with url: booking_lookup_path, method: :post, class: "grid gap-4 max-w-sm" do |f| %>
+    <div>
+      <%= f.label :code, t("booking_lookups.new.code"), class: "block text-sm mb-1" %>
+      <%= f.text_field :code, required: true %>
+    </div>
+
+    <div>
+      <%= f.label :email, t("booking_lookups.new.email"), class: "block text-sm mb-1" %>
+      <%= f.email_field :email, required: true %>
+    </div>
+
+    <%= f.submit t("booking_lookups.new.submit") %>
+  <% end %>
+</div>

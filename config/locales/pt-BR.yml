@@ -26,7 +26,13 @@ pt-BR:
       - "Sab"
 
   activerecord:
+    attributes:
+      booking:
+        customer_name: "Nome"
+        customer_email: "E-mail"
     errors:
+      messages:
+        blank: "nao pode ficar em branco"
       models:
         booking:
           attributes:
@@ -38,6 +44,40 @@ pt-BR:
           attributes:
             refunded_amount_cents:
               greater_than_amount: "nao pode ser maior que o valor cobrado"
+
+  bookings:
+    new:
+      title: "Reservar passeio"
+      tour: "Passeio"
+      departure: "Saida"
+      customer_name: "Nome"
+      customer_email: "E-mail"
+      customer_phone: "Telefone (opcional)"
+      adults: "Adultos"
+      children_5_9: "Criancas de 5 a 9 anos"
+      children_0_4: "Criancas de 0 a 4 anos"
+      submit: "Confirmar reserva"
+    confirmation:
+      title: "Reserva criada"
+      keep_code: "Guarde este codigo. Ele e usado para consultar sua reserva."
+      total: "Total"
+      deposit: "Sinal (30%)"
+      status: "Status"
+      status_pending: "Pendente"
+    errors:
+      invalid_party: "Informe pelo menos um passageiro, sem valores negativos."
+      departure_not_scheduled: "Esta saida nao esta mais disponivel."
+      departure_in_the_past: "Esta saida ja aconteceu."
+      sold_out: "Nao ha vagas suficientes para essa saida."
+
+  booking_lookups:
+    new:
+      link: "Ja reservou? Consulte sua reserva"
+      title: "Consultar reserva"
+      code: "Codigo da reserva"
+      email: "E-mail usado na reserva"
+      submit: "Consultar"
+    not_found: "Nenhuma reserva encontrada com esse codigo e e-mail."
 
   tours:
     categories:
@@ -68,6 +108,7 @@ pt-BR:
       operated_by: "Operado por %{name}"
       calendar_title: "Calendario de disponibilidade"
       no_departures: "Nenhuma saida agendada neste mes."
+      book: "Reservar"
       seats_available:
         one: "1 vaga disponivel"
         other: "%{count} vagas disponiveis"

@@ -52,10 +52,14 @@
                 <% if day %>
                   <div class="text-xs"><%= day.day %></div>
                   <% (@departures_by_date[day] || []).each do |departure| %>
+                    <% remaining_seats = departure.capacity - departure.seats_taken %>
                     <div class="text-xs">
                       <%= departure.starts_at.strftime("%H:%M") %>
                       &mdash;
-                      <%= t("tours.show.seats_available", count: departure.capacity - departure.seats_taken) %>
+                      <%= t("tours.show.seats_available", count: remaining_seats) %>
+                      <% if remaining_seats.positive? %>
+                        <%= link_to t("tours.show.book"), new_departure_booking_path(departure), data: { turbo_frame: "_top" } %>
+                      <% end %>
                     </div>
                   <% end %>
                 <% end %>
