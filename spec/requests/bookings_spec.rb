@@ -1,0 +1,98 @@
+require "rails_helper"
+
+RSpec.describe "Bookings", type: :request do
+  def valid_params(overrides = {})
+    {
+      booking: {
+        customer_name: "Ana Turista",
+        customer_email: "ana@exemplo.com",
+        customer_phone: "+55 75 99999-0000",
+        adults: 2,
+        children_5_9: 1,
+        children_0_4: 0
+      }.merge(overrides)
+    }
+  end
+
+  describe "GET /departures/:departure_id/bookings/new" do
+    it "mostra o formulario para uma saida de passeio ativo" do
+      departure = create(:departure)
+
+      get new_departure_booking_path(departure)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(departure.tour.title)
+    end
+
+    it "devolve 404 para saida de passeio inativo" do
+      tour = create(:tour, active: false)
+      departure = create(:departure, tour:)
+
+      get new_departure_booking_path(departure)
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "POST /departures/:departure_id/bookings" do
+    it "cria a reserva, incrementa seats_taken e mostra a confirmacao com o codigo" do
+      departure = create(:departure, capacity: 10, seats_taken: 0)
+
+      post departure_bookings_path(departure), params: valid_params
+
+      expect(response).to have_http_status(:ok)
+      booking = Booking.last
+      expect(response.body).to include(booking.code)
+      expect(departure.reload.seats_taken).to eq(3)
+    end
+
+    it "recusa quando nao ha vagas suficientes" do
+      departure = create(:departure, capacity: 1, seats_taken: 1)
+
+      post departure_bookings_path(departure), params: valid_params(adults: 1, children_5_9: 0, children_0_4: 0)
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include(I18n.t("bookings.errors.sold_out"))
+      expect(Booking.count).to eq(0)
+    end
+
+    it "recusa grupo vazio" do
+      departure = create(:departure)
+
+      post departure_bookings_path(departure), params: valid_params(adults: 0, children_5_9: 0, children_0_4: 0)
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include(I18n.t("bookings.errors.invalid_party"))
+      expect(Booking.count).to eq(0)
+    end
+
+    it "recusa saida cancelada" do
+      departure = create(:departure, status: :cancelled)
+
+      post departure_bookings_path(departure), params: valid_params
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include(I18n.t("bookings.errors.departure_not_scheduled"))
+      expect(Booking.count).to eq(0)
+    end
+
+    it "recusa nome em branco com mensagem legivel, sem criar a reserva" do
+      departure = create(:departure)
+
+      post departure_bookings_path(departure), params: valid_params(customer_name: "")
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include("Nome")
+      expect(Booking.count).to eq(0)
+    end
+
+    it "devolve 404 para saida de passeio inativo" do
+      tour = create(:tour, active: false)
+      departure = create(:departure, tour:)
+
+      post departure_bookings_path(departure), params: valid_params
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+end

@@ -1,0 +1,58 @@
+<div class="w-full">
+  <%= link_to t("tours.show.back"), tour_path(@departure.tour.slug) %>
+
+  <h1 class="text-2xl font-bold mb-2"><%= t("bookings.new.title") %></h1>
+
+  <dl class="grid gap-2 mb-6">
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.new.tour") %>:</dt>
+      <dd class="inline"><%= @departure.tour.title %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.new.departure") %>:</dt>
+      <dd class="inline"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("tours.show.price") %>:</dt>
+      <dd class="inline"><%= format_price_cents(@departure.unit_price_cents) %></dd>
+    </div>
+  </dl>
+
+  <% if flash[:alert] %>
+    <p class="text-red-600 mb-4"><%= flash[:alert] %></p>
+  <% end %>
+
+  <%= form_with model: @booking, url: departure_bookings_path(@departure), class: "grid gap-4" do |f| %>
+    <div>
+      <%= f.label :customer_name, t("bookings.new.customer_name"), class: "block text-sm mb-1" %>
+      <%= f.text_field :customer_name, required: true %>
+    </div>
+
+    <div>
+      <%= f.label :customer_email, t("bookings.new.customer_email"), class: "block text-sm mb-1" %>
+      <%= f.email_field :customer_email, required: true %>
+    </div>
+
+    <div>
+      <%= f.label :customer_phone, t("bookings.new.customer_phone"), class: "block text-sm mb-1" %>
+      <%= f.telephone_field :customer_phone %>
+    </div>
+
+    <div>
+      <%= f.label :adults, t("bookings.new.adults"), class: "block text-sm mb-1" %>
+      <%= f.number_field :adults, min: 0 %>
+    </div>
+
+    <div>
+      <%= f.label :children_5_9, t("bookings.new.children_5_9"), class: "block text-sm mb-1" %>
+      <%= f.number_field :children_5_9, min: 0 %>
+    </div>
+
+    <div>
+      <%= f.label :children_0_4, t("bookings.new.children_0_4"), class: "block text-sm mb-1" %>
+      <%= f.number_field :children_0_4, min: 0 %>
+    </div>
+
+    <%= f.submit t("bookings.new.submit") %>
+  <% end %>
+</div>

@@ -44,6 +44,40 @@ en:
             refunded_amount_cents:
               greater_than_amount: "cannot be greater than the amount charged"
 
+  bookings:
+    new:
+      title: "Book this tour"
+      tour: "Tour"
+      departure: "Departure"
+      customer_name: "Name"
+      customer_email: "Email"
+      customer_phone: "Phone (optional)"
+      adults: "Adults"
+      children_5_9: "Children aged 5 to 9"
+      children_0_4: "Children aged 0 to 4"
+      submit: "Confirm booking"
+    confirmation:
+      title: "Booking created"
+      keep_code: "Keep this code. It is used to look up your booking."
+      total: "Total"
+      deposit: "Deposit (30%)"
+      status: "Status"
+      status_pending: "Pending"
+    errors:
+      invalid_party: "Enter at least one passenger, with no negative values."
+      departure_not_scheduled: "This departure is no longer available."
+      departure_in_the_past: "This departure has already happened."
+      sold_out: "There are not enough seats left for this departure."
+
+  booking_lookups:
+    new:
+      link: "Already booked? Look up your booking"
+      title: "Look up booking"
+      code: "Booking code"
+      email: "Email used in the booking"
+      submit: "Look up"
+    not_found: "No booking found with that code and email."
+
   tours:
     categories:
       boat: "Boat"
@@ -73,6 +107,7 @@ en:
       operated_by: "Operated by %{name}"
       calendar_title: "Availability calendar"
       no_departures: "No departures scheduled this month."
+      book: "Book"
       seats_available:
         one: "1 seat available"
         other: "%{count} seats available"

@@ -1,0 +1,41 @@
+<div class="w-full">
+  <h1 class="text-2xl font-bold mb-2"><%= t("bookings.confirmation.title") %></h1>
+
+  <p class="text-3xl font-mono font-bold mb-2"><%= @booking.code %></p>
+  <p class="mb-6"><%= t("bookings.confirmation.keep_code") %></p>
+
+  <dl class="grid gap-2 mb-6">
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.new.tour") %>:</dt>
+      <dd class="inline"><%= @booking.departure.tour.title %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.new.departure") %>:</dt>
+      <dd class="inline"><%= @booking.departure.starts_at.strftime("%d/%m/%Y %H:%M") %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.new.adults") %>:</dt>
+      <dd class="inline"><%= @booking.adults %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.new.children_5_9") %>:</dt>
+      <dd class="inline"><%= @booking.children_5_9 %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.new.children_0_4") %>:</dt>
+      <dd class="inline"><%= @booking.children_0_4 %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.confirmation.total") %>:</dt>
+      <dd class="inline"><%= format_price_cents(@booking.total_cents) %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.confirmation.deposit") %>:</dt>
+      <dd class="inline"><%= format_price_cents(@booking.deposit_cents) %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("bookings.confirmation.status") %>:</dt>
+      <dd class="inline"><%= t("bookings.confirmation.status_pending") %></dd>
+    </div>
+  </dl>
+</div>
