@@ -40,5 +40,6 @@
 # Ignore o relatorio de cobertura gerado pelo SimpleCov.
 /coverage
 
-# Notas internas de arquitetura -- uso pessoal, nao versionado.
+# Notas internas de arquitetura e planejamento -- uso pessoal, nao versionado.
 /CLAUDE.md
+/PLANO.md
