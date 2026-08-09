@@ -40,6 +40,34 @@ RSpec.describe Booking, type: :model do
     end
   end
 
+  describe "#generate_code" do
+    it "gera um codigo automaticamente quando nao informado" do
+      booking = build(:booking, code: nil)
+
+      booking.valid?
+
+      expect(booking.code).to match(/\A[A-HJ-NP-Z2-9]{6}\z/)
+    end
+
+    it "nao sobrescreve um codigo ja informado" do
+      booking = build(:booking, code: "ABCDEF")
+
+      booking.valid?
+
+      expect(booking.code).to eq("ABCDEF")
+    end
+
+    it "tenta de novo quando o candidato sorteado ja existe" do
+      allow(Booking).to receive(:exists?).and_return(true, false)
+
+      booking = build(:booking, code: nil)
+      booking.valid?
+
+      expect(Booking).to have_received(:exists?).twice
+      expect(booking.code).to be_present
+    end
+  end
+
   describe "sinal nao pode passar do total" do
     it "e invalido quando o deposito e maior que o total" do
       booking = build(:booking, total_cents: 10_000, deposit_cents: 10_001)
