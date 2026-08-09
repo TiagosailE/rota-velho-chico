@@ -42,4 +42,10 @@
   <% if @booking.pending? %>
     <%= button_to t("checkout.pay_button"), pay_booking_path(@booking.code) %>
   <% end %>
+
+  <% if @booking.pending? || @booking.confirmed? %>
+    <%= button_to t("bookings.confirmation.cancel_button"), cancel_booking_path(@booking.code),
+          params: { email: @booking.customer_email },
+          data: { turbo_confirm: t("bookings.confirmation.cancel_confirm") } %>
+  <% end %>
 </div>

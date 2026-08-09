@@ -65,11 +65,18 @@ pt-BR:
       status: "Status"
       status_pending: "Pendente"
       status_confirmed: "Confirmada"
+      status_cancelled: "Cancelada"
+      status_refunded: "Estornada"
+      cancel_button: "Cancelar reserva"
+      cancel_confirm: "Tem certeza que quer cancelar esta reserva?"
     errors:
       invalid_party: "Informe pelo menos um passageiro, sem valores negativos."
       departure_not_scheduled: "Esta saida nao esta mais disponivel."
       departure_in_the_past: "Esta saida ja aconteceu."
       sold_out: "Nao ha vagas suficientes para essa saida."
+    cancellation:
+      errors:
+        already_cancelled: "Essa reserva ja foi cancelada."
 
   booking_lookups:
     new:

@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   get "checkout/success", to: "checkout#success", as: :checkout_success
   get "checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
 
+  post "bookings/:code/cancel", to: "booking_cancellations#create", as: :cancel_booking
+
   post "stripe/webhook", to: "stripe_webhooks#create"
 
   root "tours#index"
