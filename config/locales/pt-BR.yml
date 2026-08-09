@@ -1,6 +1,30 @@
 pt-BR:
   hello: "Ola mundo"
 
+  date:
+    month_names:
+      - ~
+      - "Janeiro"
+      - "Fevereiro"
+      - "Marco"
+      - "Abril"
+      - "Maio"
+      - "Junho"
+      - "Julho"
+      - "Agosto"
+      - "Setembro"
+      - "Outubro"
+      - "Novembro"
+      - "Dezembro"
+    abbr_day_names:
+      - "Dom"
+      - "Seg"
+      - "Ter"
+      - "Qua"
+      - "Qui"
+      - "Sex"
+      - "Sab"
+
   activerecord:
     errors:
       models:
@@ -42,8 +66,8 @@ pt-BR:
       min_age: "Idade minima: %{age} anos"
       price: "Preco por pessoa"
       operated_by: "Operado por %{name}"
-      upcoming_departures: "Proximas saidas"
-      no_departures: "Nenhuma saida agendada no momento."
+      calendar_title: "Calendario de disponibilidade"
+      no_departures: "Nenhuma saida agendada neste mes."
       seats_available:
         one: "1 vaga disponivel"
         other: "%{count} vagas disponiveis"

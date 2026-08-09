@@ -71,8 +71,8 @@ en:
       min_age: "Minimum age: %{age} years"
       price: "Price per person"
       operated_by: "Operated by %{name}"
-      upcoming_departures: "Upcoming departures"
-      no_departures: "No departures scheduled at the moment."
+      calendar_title: "Availability calendar"
+      no_departures: "No departures scheduled this month."
       seats_available:
         one: "1 seat available"
         other: "%{count} seats available"
