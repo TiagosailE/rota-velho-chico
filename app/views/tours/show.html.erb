@@ -27,19 +27,47 @@
     <% end %>
   </dl>
 
-  <h2 class="text-lg font-semibold mb-2"><%= t("tours.show.upcoming_departures") %></h2>
+  <h2 class="text-lg font-semibold mb-2"><%= t("tours.show.calendar_title") %></h2>
 
-  <% if @departures.empty? %>
-    <p><%= t("tours.show.no_departures") %></p>
-  <% else %>
-    <ul>
-      <% @departures.each do |departure| %>
-        <li>
-          <%= departure.starts_at.strftime("%d/%m/%Y %H:%M") %>
-          &mdash;
-          <%= t("tours.show.seats_available", count: departure.capacity - departure.seats_taken) %>
-        </li>
-      <% end %>
-    </ul>
+  <%= turbo_frame_tag "availability_calendar" do %>
+    <div class="flex justify-between items-center mb-2">
+      <%= link_to "‹", tour_path(@tour.slug, month: @month.prev_month.strftime("%Y-%m")) %>
+      <strong><%= l(@month, format: "%B %Y") %></strong>
+      <%= link_to "›", tour_path(@tour.slug, month: @month.next_month.strftime("%Y-%m")) %>
+    </div>
+
+    <table class="w-full text-center border-collapse">
+      <thead>
+        <tr>
+          <% I18n.t("date.abbr_day_names").each do |day_name| %>
+            <th class="text-xs font-normal"><%= day_name %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% calendar_weeks(@month).each do |week| %>
+          <tr>
+            <% week.each do |day| %>
+              <td class="border align-top p-1">
+                <% if day %>
+                  <div class="text-xs"><%= day.day %></div>
+                  <% (@departures_by_date[day] || []).each do |departure| %>
+                    <div class="text-xs">
+                      <%= departure.starts_at.strftime("%H:%M") %>
+                      &mdash;
+                      <%= t("tours.show.seats_available", count: departure.capacity - departure.seats_taken) %>
+                    </div>
+                  <% end %>
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% if @departures_by_date.empty? %>
+      <p><%= t("tours.show.no_departures") %></p>
+    <% end %>
   <% end %>
 </div>

@@ -130,18 +130,56 @@ RSpec.describe "Tours", type: :request do
       expect(response).to have_http_status(:not_found)
     end
 
-    it "lista so saidas futuras e agendadas" do
+    it "mostra o calendario do mes atual, com horario e vagas no dia da saida agendada" do
       tour = create(:tour, slug: "passeio-com-saidas")
-      future = create(:departure, tour:, starts_at: 5.days.from_now.change(hour: 9))
-      create(:departure, tour:, starts_at: 5.days.ago.change(hour: 9), status: :completed)
-      create(:departure, tour:, starts_at: 6.days.from_now.change(hour: 9), status: :cancelled)
+      departure = create(:departure, tour:, starts_at: 5.days.from_now.change(hour: 9), capacity: 12, seats_taken: 2)
 
       get tour_path(tour.slug)
 
-      expect(response.body).to include(future.starts_at.strftime("%d/%m/%Y"))
+      expect(response.body).to include(departure.starts_at.strftime("%H:%M"))
+      expect(response.body).to include(I18n.t("tours.show.seats_available", count: 10))
     end
 
-    it "mostra estado vazio quando nao ha saida futura" do
+    it "nao mostra no calendario uma saida cancelada ou concluida" do
+      tour = create(:tour, slug: "passeio-sem-disponibilidade")
+      create(:departure, tour:, starts_at: 5.days.from_now.change(hour: 9), status: :cancelled)
+      create(:departure, tour:, starts_at: 6.days.from_now.change(hour: 9), status: :completed)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(I18n.t("tours.show.no_departures"))
+    end
+
+    it "navega para outro mes via parametro month, sem afetar o mes atual" do
+      tour = create(:tour, slug: "passeio-mes-que-vem")
+      next_month = Date.current.next_month.beginning_of_month
+      departure = create(:departure, tour:, starts_at: (next_month + 10.days).in_time_zone.change(hour: 9))
+
+      get tour_path(tour.slug), params: { month: next_month.strftime("%Y-%m") }
+
+      expect(response.body).to include(departure.starts_at.strftime("%H:%M"))
+    end
+
+    it "ignora parametro month invalido e usa o mes atual" do
+      tour = create(:tour, slug: "passeio-mes-invalido")
+      departure = create(:departure, tour:, starts_at: 3.days.from_now.change(hour: 9))
+
+      get tour_path(tour.slug), params: { month: "nao-e-um-mes" }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(departure.starts_at.strftime("%H:%M"))
+    end
+
+    it "nao mostra no calendario uma saida que ja passou hoje" do
+      tour = create(:tour, slug: "passeio-com-saida-passada")
+      create(:departure, tour:, starts_at: 1.hour.ago)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(I18n.t("tours.show.no_departures"))
+    end
+
+    it "mostra estado vazio quando nao ha saida no mes" do
       tour = create(:tour, slug: "passeio-sem-saidas")
 
       get tour_path(tour.slug)
