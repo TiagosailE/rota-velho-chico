@@ -17,5 +17,11 @@ Rails.application.routes.draw do
 
   resource :booking_lookup, only: [ :new, :create ]
 
+  post "bookings/:code/pay", to: "checkout#create", as: :pay_booking
+  get "checkout/success", to: "checkout#success", as: :checkout_success
+  get "checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
+
+  post "stripe/webhook", to: "stripe_webhooks#create"
+
   root "tours#index"
 end

@@ -63,6 +63,7 @@ en:
       deposit: "Deposit (30%)"
       status: "Status"
       status_pending: "Pending"
+      status_confirmed: "Confirmed"
     errors:
       invalid_party: "Enter at least one passenger, with no negative values."
       departure_not_scheduled: "This departure is no longer available."
@@ -77,6 +78,19 @@ en:
       email: "Email used in the booking"
       submit: "Look up"
     not_found: "No booking found with that code and email."
+
+  checkout:
+    line_item_name: "Deposit - %{tour}"
+    pay_button: "Pay deposit now"
+    success:
+      title: "Payment submitted"
+      message: "Your booking %{code} will be confirmed once the payment is processed."
+    cancel:
+      title: "Payment cancelled"
+      message: "Your booking %{code} is still pending. You can try paying again from the booking lookup."
+    errors:
+      not_payable: "This booking is no longer pending payment."
+      unavailable: "Could not start the payment right now. Please try again shortly."
 
   tours:
     categories:
