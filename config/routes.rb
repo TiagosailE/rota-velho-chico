@@ -9,6 +9,18 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  devise_for :operators, skip: [ :registrations ]
+
+  # Plural para nao colidir com a constante do model Operator -- um
+  # namespace :operator geraria controllers no modulo Operator::, que o
+  # Zeitwerk nao consegue distinguir da classe do model.
+  namespace :operators do
+    root to: "tours#index"
+    resources :tours, only: [ :index, :new, :create, :edit, :update ] do
+      resources :departures, only: [ :new, :create, :show, :edit, :update ]
+    end
+  end
+
   resources :tours, only: [ :index, :show ], param: :slug
 
   resources :departures, only: [] do

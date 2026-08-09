@@ -1,0 +1,61 @@
+<%= form_with model: [ :operators, tour ], class: "grid gap-4 max-w-lg" do |f| %>
+  <% if tour.errors.any? %>
+    <div class="text-red-600">
+      <% tour.errors.full_messages.each do |message| %>
+        <p><%= message %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :title, t("operators.tours.form.title"), class: "block text-sm mb-1" %>
+    <%= f.text_field :title, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :slug, t("operators.tours.form.slug"), class: "block text-sm mb-1" %>
+    <%= f.text_field :slug, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :description, t("operators.tours.form.description"), class: "block text-sm mb-1" %>
+    <%= f.text_area :description %>
+  </div>
+
+  <div>
+    <%= f.label :category, t("operators.tours.form.category"), class: "block text-sm mb-1" %>
+    <%= f.select :category, Tour.categories.keys.map { |key| [ t("tours.categories.#{key}"), key ] } %>
+  </div>
+
+  <div>
+    <%= f.label :duration_minutes, t("operators.tours.form.duration_minutes"), class: "block text-sm mb-1" %>
+    <%= f.number_field :duration_minutes, min: 1, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :base_price_reais, t("operators.tours.form.base_price_reais"), class: "block text-sm mb-1" %>
+    <%= f.number_field :base_price_reais, min: 0, step: 0.01, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :meeting_point, t("operators.tours.form.meeting_point"), class: "block text-sm mb-1" %>
+    <%= f.text_field :meeting_point, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :min_age, t("operators.tours.form.min_age"), class: "block text-sm mb-1" %>
+    <%= f.number_field :min_age, min: 0 %>
+  </div>
+
+  <div>
+    <%= f.check_box :includes_lunch %>
+    <%= f.label :includes_lunch, t("operators.tours.form.includes_lunch") %>
+  </div>
+
+  <div>
+    <%= f.check_box :active %>
+    <%= f.label :active, t("operators.tours.form.active") %>
+  </div>
+
+  <%= f.submit t("operators.tours.form.submit") %>
+<% end %>

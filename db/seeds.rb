@@ -42,15 +42,20 @@ operators = [
     bio: "Trilhas e esportes de aventura na Serra do Umbuzeiro."
   }
 ].map do |attrs|
-  Operator.find_or_create_by!(email: attrs[:email]) do |operator|
-    operator.name = attrs[:name]
-    operator.slug = attrs[:slug]
-    operator.phone = attrs[:phone]
-    operator.whatsapp = attrs[:whatsapp]
-    operator.bio = attrs[:bio]
-    operator.encrypted_password = "x" # Devise ainda nao esta ligado ao model (ver PLANO.md, Dias 14-15)
-    operator.active = true
+  operator = Operator.find_or_create_by!(email: attrs[:email]) do |o|
+    o.name = attrs[:name]
+    o.slug = attrs[:slug]
+    o.phone = attrs[:phone]
+    o.whatsapp = attrs[:whatsapp]
+    o.bio = attrs[:bio]
+    o.active = true
   end
+
+  # Fora do bloco de criacao de proposito: roda em toda execucao, nao so na
+  # primeira, entao um banco com operadores semeados antes do Devise
+  # existir (senha placeholder invalida) tambem fica utilizavel.
+  operator.update!(password: "password123") # senha de desenvolvimento, nunca usada em producao
+  operator
 end
 
 catamara, raso_da_catarina, sertao_vivo, aventura_umbuzeiro = operators

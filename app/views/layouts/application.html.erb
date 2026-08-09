@@ -24,7 +24,17 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <main class="container mx-auto mt-28 px-5 flex flex-col">
+      <div class="text-sm mb-4 flex justify-end gap-4">
+        <% if operator_signed_in? %>
+          <span><%= t("operators.nav.signed_in_as", name: current_operator.name) %></span>
+          <%= link_to t("operators.nav.panel"), operators_root_path %>
+          <%= button_to t("operators.nav.sign_out"), destroy_operator_session_path, method: :delete %>
+        <% else %>
+          <%= link_to t("operators.nav.sign_in"), new_operator_session_path %>
+        <% end %>
+      </div>
+      <%= render "shared/flash" %>
       <%= yield %>
     </main>
   </body>

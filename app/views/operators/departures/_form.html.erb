@@ -1,0 +1,26 @@
+<%= form_with model: [ :operators, tour, departure ], class: "grid gap-4 max-w-lg" do |f| %>
+  <% if departure.errors.any? %>
+    <div class="text-red-600">
+      <% departure.errors.full_messages.each do |message| %>
+        <p><%= message %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :starts_at, t("operators.departures.form.starts_at"), class: "block text-sm mb-1" %>
+    <%= f.datetime_field :starts_at, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :capacity, t("operators.departures.form.capacity"), class: "block text-sm mb-1" %>
+    <%= f.number_field :capacity, min: 1, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :price_override_reais, t("operators.departures.form.price_override_reais"), class: "block text-sm mb-1" %>
+    <%= f.number_field :price_override_reais, min: 0, step: 0.01 %>
+  </div>
+
+  <%= f.submit t("operators.departures.form.submit") %>
+<% end %>

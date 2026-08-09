@@ -44,6 +44,69 @@ pt-BR:
           attributes:
             refunded_amount_cents:
               greater_than_amount: "nao pode ser maior que o valor cobrado"
+        departure:
+          attributes:
+            capacity:
+              below_seats_taken: "nao pode ser menor que as vagas ja ocupadas"
+
+  operators:
+    nav:
+      signed_in_as: "Logado como %{name}"
+      panel: "Painel"
+      sign_out: "Sair"
+      sign_in: "Area do operador"
+    tours:
+      index:
+        title: "Meus passeios"
+        new: "Novo passeio"
+        empty: "Voce ainda nao cadastrou nenhum passeio."
+        manage: "Gerenciar"
+        inactive: "Inativo"
+      new:
+        title: "Novo passeio"
+      edit:
+        title: "Editar %{title}"
+        departures_title: "Saidas"
+        new_departure: "Nova saida"
+        no_departures: "Nenhuma saida cadastrada."
+      create:
+        success: "Passeio criado."
+      update:
+        success: "Passeio atualizado."
+      form:
+        back: "Voltar para meus passeios"
+        title: "Titulo"
+        slug: "Slug"
+        description: "Descricao"
+        category: "Categoria"
+        duration_minutes: "Duracao (minutos)"
+        base_price_reais: "Preco base (R$)"
+        meeting_point: "Ponto de encontro"
+        min_age: "Idade minima"
+        includes_lunch: "Inclui almoco"
+        active: "Ativo (visivel para turistas)"
+        submit: "Salvar"
+    departures:
+      new:
+        title: "Nova saida - %{tour}"
+      edit:
+        title: "Editar saida - %{tour}"
+      create:
+        success: "Saida criada."
+      update:
+        success: "Saida atualizada."
+      form:
+        back: "Voltar para o passeio"
+        starts_at: "Data e hora"
+        capacity: "Capacidade"
+        price_override_reais: "Preco especial (R$, opcional)"
+        submit: "Salvar"
+      show:
+        occupancy: "Ocupacao"
+        bookings_title: "Reservas"
+        no_bookings: "Nenhuma reserva para esta saida."
+        code: "Codigo"
+        link: "Ver"
 
   bookings:
     new:

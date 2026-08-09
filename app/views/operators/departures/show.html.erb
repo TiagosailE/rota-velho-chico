@@ -1,0 +1,48 @@
+<div class="w-full">
+  <%= link_to t("operators.departures.form.back"), edit_operators_tour_path(@tour) %>
+
+  <h1 class="text-2xl font-bold mb-2"><%= @tour.title %></h1>
+  <p class="mb-6"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></p>
+
+  <%= link_to t("operators.departures.form.submit"), edit_operators_tour_departure_path(@tour, @departure), class: "block mb-6" %>
+
+  <dl class="grid gap-2 mb-8">
+    <div>
+      <dt class="inline font-medium"><%= t("operators.departures.show.occupancy") %>:</dt>
+      <dd class="inline"><%= @departure.seats_taken %>/<%= @departure.capacity %> (<%= @occupancy_percentage %>%)</dd>
+    </div>
+  </dl>
+
+  <h2 class="text-lg font-semibold mb-2"><%= t("operators.departures.show.bookings_title") %></h2>
+
+  <% if @bookings.empty? %>
+    <p><%= t("operators.departures.show.no_bookings") %></p>
+  <% else %>
+    <table class="w-full text-left">
+      <thead>
+        <tr>
+          <th><%= t("operators.departures.show.code") %></th>
+          <th><%= t("bookings.new.customer_name") %></th>
+          <th><%= t("bookings.new.adults") %></th>
+          <th><%= t("bookings.new.children_5_9") %></th>
+          <th><%= t("bookings.new.children_0_4") %></th>
+          <th><%= t("bookings.confirmation.total") %></th>
+          <th><%= t("bookings.confirmation.status") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @bookings.each do |booking| %>
+          <tr>
+            <td><%= booking.code %></td>
+            <td><%= booking.customer_name %></td>
+            <td><%= booking.adults %></td>
+            <td><%= booking.children_5_9 %></td>
+            <td><%= booking.children_0_4 %></td>
+            <td><%= format_price_cents(booking.total_cents) %></td>
+            <td><%= t("bookings.confirmation.status_#{booking.status}") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
