@@ -35,7 +35,11 @@
     </div>
     <div>
       <dt class="inline font-medium"><%= t("bookings.confirmation.status") %>:</dt>
-      <dd class="inline"><%= t("bookings.confirmation.status_pending") %></dd>
+      <dd class="inline"><%= t("bookings.confirmation.status_#{@booking.status}") %></dd>
     </div>
   </dl>
+
+  <% if @booking.pending? %>
+    <%= button_to t("checkout.pay_button"), pay_booking_path(@booking.code) %>
+  <% end %>
 </div>

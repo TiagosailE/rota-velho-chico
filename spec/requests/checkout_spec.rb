@@ -1,0 +1,80 @@
+require "rails_helper"
+
+RSpec.describe "Checkout", type: :request do
+  def stub_stripe_session(payment_intent: "pi_test_123", url: "https://checkout.stripe.com/pay/cs_test_123")
+    allow(Stripe::Checkout::Session).to receive(:create)
+      .and_return(instance_double(Stripe::Checkout::Session, payment_intent:, url:))
+  end
+
+  describe "POST /bookings/:code/pay" do
+    it "cria a sessao e redireciona para o Stripe" do
+      booking = create(:booking, code: "ABCDEF", status: :pending)
+      stub_stripe_session(url: "https://checkout.stripe.com/pay/cs_test_abc")
+
+      post pay_booking_path("ABCDEF")
+
+      expect(response).to redirect_to("https://checkout.stripe.com/pay/cs_test_abc")
+      expect(booking.reload.payment).to be_present
+    end
+
+    it "permite tentar de novo quando o pagamento anterior ainda esta pendente" do
+      booking = create(:booking, code: "ABCDEF", status: :pending)
+      create(:payment, booking:, status: :pending, stripe_payment_intent_id: "pi_test_old")
+      stub_stripe_session(payment_intent: "pi_test_new")
+
+      post pay_booking_path("ABCDEF")
+
+      expect(response).to have_http_status(:found)
+      expect(Payment.where(booking:).count).to eq(1)
+    end
+
+    it "recusa quando a reserva ja esta confirmada" do
+      booking = create(:booking, code: "ABCDEF", status: :confirmed)
+
+      post pay_booking_path("ABCDEF")
+
+      expect(response).to redirect_to(new_booking_lookup_path)
+      follow_redirect!
+      expect(response.body).to include(I18n.t("checkout.errors.not_payable"))
+    end
+
+    it "recusa quando o pagamento ja foi bem-sucedido" do
+      booking = create(:booking, code: "ABCDEF", status: :pending)
+      create(:payment, booking:, status: :succeeded)
+
+      post pay_booking_path("ABCDEF")
+
+      expect(response).to redirect_to(new_booking_lookup_path)
+    end
+
+    it "mostra mensagem generica quando o Stripe falha" do
+      booking = create(:booking, code: "ABCDEF", status: :pending)
+      allow(Stripe::Checkout::Session).to receive(:create).and_raise(Stripe::APIConnectionError.new("timeout"))
+
+      post pay_booking_path("ABCDEF")
+
+      expect(response).to redirect_to(new_booking_lookup_path)
+      follow_redirect!
+      expect(response.body).to include(I18n.t("checkout.errors.unavailable"))
+      expect(booking.reload.payment).to be_nil
+    end
+  end
+
+  describe "GET /checkout/success" do
+    it "mostra o codigo da reserva" do
+      get checkout_success_path(code: "ABCDEF")
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("ABCDEF")
+    end
+  end
+
+  describe "GET /checkout/cancel" do
+    it "mostra o codigo da reserva" do
+      get checkout_cancel_path(code: "ABCDEF")
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("ABCDEF")
+    end
+  end
+end

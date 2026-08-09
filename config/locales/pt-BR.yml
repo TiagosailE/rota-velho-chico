@@ -64,6 +64,7 @@ pt-BR:
       deposit: "Sinal (30%)"
       status: "Status"
       status_pending: "Pendente"
+      status_confirmed: "Confirmada"
     errors:
       invalid_party: "Informe pelo menos um passageiro, sem valores negativos."
       departure_not_scheduled: "Esta saida nao esta mais disponivel."
@@ -78,6 +79,19 @@ pt-BR:
       email: "E-mail usado na reserva"
       submit: "Consultar"
     not_found: "Nenhuma reserva encontrada com esse codigo e e-mail."
+
+  checkout:
+    line_item_name: "Sinal - %{tour}"
+    pay_button: "Pagar sinal agora"
+    success:
+      title: "Pagamento enviado"
+      message: "Sua reserva %{code} sera confirmada assim que o pagamento for processado."
+    cancel:
+      title: "Pagamento cancelado"
+      message: "Sua reserva %{code} continua pendente. Voce pode tentar pagar novamente pela consulta de reserva."
+    errors:
+      not_payable: "Essa reserva ja nao esta mais pendente de pagamento."
+      unavailable: "Nao foi possivel iniciar o pagamento agora. Tente novamente em instantes."
 
   tours:
     categories:
