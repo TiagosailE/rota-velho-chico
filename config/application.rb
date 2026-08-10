@@ -43,6 +43,12 @@ module RotaVelhoChico
     # usam :en (ver docs/architecture.md).
     config.i18n.default_locale = :"pt-BR"
 
+    # Sem isso, I18n.available_locales inclui as ~90 traducoes que o
+    # rails-i18n/devise-i18n trazem (dependencias do Devise), nao so as duas
+    # que o app de fato suporta -- e o guarda de locale invalido no
+    # ApplicationController#switch_locale aceitaria qualquer uma delas.
+    config.i18n.available_locales = [ :"pt-BR", :en ]
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end

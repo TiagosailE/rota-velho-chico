@@ -73,6 +73,9 @@ group :test do
 
   # Coverage reporting
   gem "simplecov", require: false
+
+  # System specs no caminho feliz da reserva [https://github.com/teamcapybara/capybara]
+  gem "capybara"
 end
 
 group :development do

@@ -121,4 +121,46 @@ RSpec.describe "Operators::Departures", type: :request do
       expect(response.body).to include(booking.code)
     end
   end
+
+  describe "DELETE /operators/tours/:tour_id/departures/:id" do
+    it "cancela a saida e as reservas ativas, com a contagem na mensagem" do
+      operator = create(:operator)
+      tour = create(:tour, operator:)
+      departure = create(:departure, tour:, status: :scheduled)
+      create(:booking, departure:, status: :pending)
+      sign_in operator
+
+      delete operators_tour_departure_path(tour, departure)
+
+      expect(response).to redirect_to(edit_operators_tour_path(tour))
+      follow_redirect!
+      expect(response.body).to include(I18n.t("operators.departures.destroy.success", count: 1))
+      expect(departure.reload).to be_cancelled
+    end
+
+    it "recusa cancelar uma saida ja cancelada" do
+      operator = create(:operator)
+      tour = create(:tour, operator:)
+      departure = create(:departure, tour:, status: :cancelled)
+      sign_in operator
+
+      delete operators_tour_departure_path(tour, departure)
+
+      expect(response).to redirect_to(edit_operators_tour_path(tour))
+      follow_redirect!
+      expect(response.body).to include(I18n.t("operators.departures.destroy.errors.already_cancelled"))
+    end
+
+    it "devolve 404 ao tentar cancelar saida de outro operador" do
+      operator = create(:operator)
+      other_tour = create(:tour, operator: create(:operator))
+      other_departure = create(:departure, tour: other_tour, status: :scheduled)
+      sign_in operator
+
+      delete operators_tour_departure_path(other_tour, other_departure)
+
+      expect(response).to have_http_status(:not_found)
+      expect(other_departure.reload).to be_scheduled
+    end
+  end
 end

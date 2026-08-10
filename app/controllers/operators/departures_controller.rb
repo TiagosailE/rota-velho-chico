@@ -1,6 +1,6 @@
 class Operators::DeparturesController < Operators::BaseController
   before_action :set_tour
-  before_action :set_departure, only: [ :show, :edit, :update ]
+  before_action :set_departure, only: [ :show, :edit, :update, :destroy ]
 
   def new
     @departure = @tour.departures.new
@@ -29,6 +29,16 @@ class Operators::DeparturesController < Operators::BaseController
       redirect_to operators_tour_departure_path(@tour, @departure), notice: t("operators.departures.update.success")
     else
       render :edit, status: :unprocessable_content
+    end
+  end
+
+  def destroy
+    result = DepartureCanceller.new(departure: @departure).call
+
+    if result.success?
+      redirect_to edit_operators_tour_path(@tour), notice: t("operators.departures.destroy.success", count: result.value)
+    else
+      redirect_to edit_operators_tour_path(@tour), alert: t("operators.departures.destroy.errors.#{result.error}")
     end
   end
 

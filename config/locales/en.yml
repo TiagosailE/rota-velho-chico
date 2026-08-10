@@ -31,6 +31,13 @@ en:
   hello: "Hello world"
 
   activerecord:
+    attributes:
+      operator:
+        email: "Email"
+        password: "Password"
+        password_confirmation: "Password confirmation"
+        remember_me: "Remember me"
+        current_password: "Current password"
     errors:
       models:
         booking:
@@ -106,6 +113,20 @@ en:
         no_bookings: "No bookings for this departure."
         code: "Code"
         link: "View"
+        cancel_button: "Cancel departure"
+        cancel_confirm: "Are you sure? This cancels every booking for this departure and starts refunds."
+      destroy:
+        success: "Departure cancelled. %{count} booking(s) cancelled -- refunds, where applicable, have been started."
+        errors:
+          already_cancelled: "This departure has already been cancelled."
+
+  booking_mailer:
+    departure_cancelled:
+      subject: "Your departure was cancelled"
+      greeting: "Hello, %{name}."
+      body_html: "The departure for <strong>%{tour}</strong> scheduled for %{date} was cancelled by the operator. Your booking (code %{code}) has been cancelled."
+      body_text: "The departure for %{tour} scheduled for %{date} was cancelled by the operator. Your booking (code %{code}) has been cancelled."
+      refunded: "Your deposit has been refunded."
 
   bookings:
     new:
