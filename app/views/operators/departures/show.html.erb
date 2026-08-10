@@ -4,7 +4,13 @@
   <h1 class="text-2xl font-bold mb-2"><%= @tour.title %></h1>
   <p class="mb-6"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></p>
 
-  <%= link_to t("operators.departures.form.submit"), edit_operators_tour_departure_path(@tour, @departure), class: "block mb-6" %>
+  <%= link_to t("operators.departures.form.submit"), edit_operators_tour_departure_path(@tour, @departure), class: "block mb-2" %>
+
+  <% if @departure.scheduled? %>
+    <%= button_to t("operators.departures.show.cancel_button"), operators_tour_departure_path(@tour, @departure),
+          method: :delete, class: "mb-6",
+          data: { turbo_confirm: t("operators.departures.show.cancel_confirm") } %>
+  <% end %>
 
   <dl class="grid gap-2 mb-8">
     <div>

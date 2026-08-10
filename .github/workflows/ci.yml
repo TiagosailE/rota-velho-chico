@@ -82,10 +82,12 @@ jobs:
       # usa 25 como padrao no ambiente de teste, que e o que o spec de overbooking
       # precisa (20 threads). Definir a variavel aqui reduziria o pool e o teste
       # passaria a falhar por timeout de conexao. Ver docs/architecture.md secao 5.
+      # Piso de cobertura ligado a partir do Dia 19 -- ver spec/spec_helper.rb.
       - name: RSpec
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          COVERAGE_MIN: 85
         run: bin/rspec
 
       - name: Guardar o relatorio de cobertura

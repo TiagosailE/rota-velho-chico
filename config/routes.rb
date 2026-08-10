@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   namespace :operators do
     root to: "tours#index"
     resources :tours, only: [ :index, :new, :create, :edit, :update ] do
-      resources :departures, only: [ :new, :create, :show, :edit, :update ]
+      resources :departures, only: [ :new, :create, :show, :edit, :update, :destroy ]
     end
   end
 

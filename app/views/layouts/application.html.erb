@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
     <title><%= content_for(:title) || "Rota Velho Chico" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -25,7 +25,7 @@
 
   <body>
     <main class="container mx-auto mt-28 px-5 flex flex-col">
-      <div class="text-sm mb-4 flex justify-end gap-4">
+      <nav class="text-sm mb-4 flex justify-end items-center gap-4">
         <% if operator_signed_in? %>
           <span><%= t("operators.nav.signed_in_as", name: current_operator.name) %></span>
           <%= link_to t("operators.nav.panel"), operators_root_path %>
@@ -33,7 +33,10 @@
         <% else %>
           <%= link_to t("operators.nav.sign_in"), new_operator_session_path %>
         <% end %>
-      </div>
+        <span aria-hidden="true">|</span>
+        <%= link_to "PT", url_for(locale: "pt-BR"), lang: "pt-BR" %>
+        <%= link_to "EN", url_for(locale: "en"), lang: "en" %>
+      </nav>
       <%= render "shared/flash" %>
       <%= yield %>
     </main>

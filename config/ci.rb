@@ -9,7 +9,8 @@ CI.run do
   step "Security: Importmap vulnerability audit", "bin/importmap audit"
   step "Security: Brakeman code analysis", "bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error"
 
-  step "Tests: RSpec", "bin/rspec"
+  # Piso de cobertura ligado a partir do Dia 19 -- ver spec/spec_helper.rb.
+  step "Tests: RSpec", "COVERAGE_MIN=85 bin/rspec"
 
 
   # Optional: set a green GitHub commit status to unblock PR merge.

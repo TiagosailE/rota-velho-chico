@@ -30,6 +30,12 @@ pt-BR:
       booking:
         customer_name: "Nome"
         customer_email: "E-mail"
+      operator:
+        email: "E-mail"
+        password: "Senha"
+        password_confirmation: "Confirmacao de senha"
+        remember_me: "Lembrar de mim"
+        current_password: "Senha atual"
     errors:
       messages:
         blank: "nao pode ficar em branco"
@@ -107,6 +113,20 @@ pt-BR:
         no_bookings: "Nenhuma reserva para esta saida."
         code: "Codigo"
         link: "Ver"
+        cancel_button: "Cancelar saida"
+        cancel_confirm: "Tem certeza? Isso cancela todas as reservas dessa saida e inicia os estornos."
+      destroy:
+        success: "Saida cancelada. %{count} reserva(s) canceladas -- estornos, quando aplicaveis, foram iniciados."
+        errors:
+          already_cancelled: "Essa saida ja foi cancelada."
+
+  booking_mailer:
+    departure_cancelled:
+      subject: "Sua saida foi cancelada"
+      greeting: "Ola, %{name}."
+      body_html: "A saida do passeio <strong>%{tour}</strong> marcada para %{date} foi cancelada pelo operador. Sua reserva (codigo %{code}) foi cancelada."
+      body_text: "A saida do passeio %{tour} marcada para %{date} foi cancelada pelo operador. Sua reserva (codigo %{code}) foi cancelada."
+      refunded: "O sinal pago foi estornado."
 
   bookings:
     new:
