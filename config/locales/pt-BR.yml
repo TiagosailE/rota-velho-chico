@@ -92,6 +92,31 @@ pt-BR:
         includes_lunch: "Inclui almoco"
         active: "Ativo (visivel para turistas)"
         submit: "Salvar"
+    tour_photos:
+      title: "Fotos do passeio"
+      hint: "A primeira foto e a capa: e ela que aparece no catalogo. Use os botoes para reordenar."
+      upload_label: "Adicionar fotos (JPEG, PNG ou WebP)"
+      upload_submit: "Enviar fotos"
+      empty: "Este passeio ainda nao tem fotos."
+      cover: "Capa"
+      no_alt: "Foto do passeio"
+      alt_label: "Descricao da imagem (acessibilidade)"
+      alt_submit: "Salvar"
+      move_up: "Subir"
+      move_down: "Descer"
+      destroy: "Remover"
+      destroy_confirm: "Remover esta foto?"
+      create:
+        success:
+          one: "1 foto enviada."
+          other: "%{count} fotos enviadas."
+        rejected:
+          one: "1 arquivo foi recusado: envie apenas JPEG, PNG ou WebP."
+          other: "%{count} arquivos foram recusados: envie apenas JPEG, PNG ou WebP."
+      update:
+        success: "Descricao da imagem atualizada."
+      destroy:
+        success: "Foto removida."
     departures:
       new:
         title: "Nova saida - %{tour}"
@@ -185,6 +210,9 @@ pt-BR:
       unavailable: "Nao foi possivel iniciar o pagamento agora. Tente novamente em instantes."
 
   tours:
+    cover:
+      no_photo: "Sem foto"
+      placeholder: "Passeio %{title} ainda sem foto"
     categories:
       boat: "Barco"
       offroad: "Off-road"

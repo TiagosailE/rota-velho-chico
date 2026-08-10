@@ -5,6 +5,7 @@ RSpec.describe Tour, type: :model do
 
   it { is_expected.to belong_to(:operator) }
   it { is_expected.to have_many(:departures) }
+  it { is_expected.to have_many(:tour_photos) }
 
   it do
     expect(subject).to define_enum_for(:category)
@@ -24,6 +25,21 @@ RSpec.describe Tour, type: :model do
   it { is_expected.to validate_presence_of(:meeting_point) }
 
   it { is_expected.to validate_numericality_of(:min_age).is_greater_than_or_equal_to(0) }
+
+  describe "#cover_photo" do
+    it "e nil quando o passeio nao tem foto" do
+      expect(create(:tour).cover_photo).to be_nil
+    end
+
+    it "e a foto de menor position, nao a mais recente" do
+      tour = create(:tour)
+      segunda = create(:tour_photo, tour: tour, position: 1)
+      primeira = create(:tour_photo, tour: tour, position: 0)
+
+      expect(tour.reload.cover_photo).to eq(primeira)
+      expect(tour.cover_photo).not_to eq(segunda)
+    end
+  end
 
   describe "#base_price_reais" do
     it "converte reais para centavos" do

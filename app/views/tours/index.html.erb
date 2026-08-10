@@ -39,7 +39,10 @@
   <% else %>
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <% @tours.each do |tour| %>
-        <%= link_to tour_path(tour.slug), class: "card card-hover p-5 flex flex-col" do %>
+        <%= link_to tour_path(tour.slug), class: "card card-hover overflow-hidden flex flex-col" do %>
+          <%= render "tours/cover", tour: tour, variant: :card, css: "w-full aspect-[4/3] object-cover" %>
+
+          <div class="p-5 flex flex-col flex-1">
           <span class="badge badge-category w-fit mb-3"><%= t("tours.categories.#{tour.category}") %></span>
           <h2 class="text-lg font-display font-semibold text-stone-900 mb-1"><%= tour.title %></h2>
           <p class="text-sm text-stone-500 mb-4">
@@ -48,6 +51,7 @@
           <div class="mt-auto flex items-center justify-between pt-3 border-t border-stone-100">
             <span class="text-lg font-semibold text-stone-900"><%= format_price_cents(tour.base_price_cents) %></span>
             <span class="btn-link"><%= t("tours.index.card.details") %></span>
+          </div>
           </div>
         <% end %>
       <% end %>

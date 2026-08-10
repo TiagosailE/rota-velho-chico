@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     root to: "tours#index"
     resources :tours, only: [ :index, :new, :create, :edit, :update ] do
       resources :departures, only: [ :new, :create, :show, :edit, :update, :destroy ]
+      resources :photos, only: [ :create, :update, :destroy ], controller: "tour_photos" do
+        member do
+          patch :move_up
+          patch :move_down
+        end
+      end
     end
   end
 
