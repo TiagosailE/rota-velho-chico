@@ -1,7 +1,7 @@
 require "rails_helper"
 
 # Caminho feliz da reserva, de ponta a ponta: busca -> detalhe -> calendario
-# -> formulario -> confirmacao com codigo (CLAUDE.md, convencoes de teste).
+# -> formulario -> confirmacao com codigo (NOTES.md, convencoes de teste).
 RSpec.describe "Reserva de um passeio", type: :system do
   it "turista navega do catalogo ate a confirmacao com codigo" do
     departure = create(:departure, starts_at: 10.days.from_now.change(hour: 9), capacity: 10, seats_taken: 0)

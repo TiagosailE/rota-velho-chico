@@ -1,7 +1,7 @@
 require_relative "../../app/services/price_calculator"
 
 # Ruby puro: sem rails_helper de proposito, para o spec rodar em milissegundos
-# (CLAUDE.md, convencoes de teste).
+# (NOTES.md, convencoes de teste).
 RSpec.describe PriceCalculator do
   def calculator(unit:, adults: 0, children_5_9: 0, children_0_4: 0)
     described_class.new(

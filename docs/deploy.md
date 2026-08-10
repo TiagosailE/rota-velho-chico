@@ -98,7 +98,7 @@ demonstração em produção.
   DNS (registro A) para o IP da VPS.
 - **Stripe em modo produção.** As credenciais de teste (`bin/rails
   credentials:edit`, chave `stripe:`) continuam vazias até o Stripe ser
-  configurado de verdade — ver `PLANO.md`, Dias 11-12.
+  configurado de verdade — ver `PROGRESS.md`, Dias 11-12.
 - **Backup do Postgres.** O accessory `db` guarda dados no volume Docker
   `data` — sobrevive a redeploys, mas não a perda da VPS. Sem rotina de
   backup automatizada ainda.

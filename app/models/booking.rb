@@ -1,5 +1,5 @@
 class Booking < ApplicationRecord
-  # Sem 0/O, 1/I/L -- o codigo e lido por telefone e WhatsApp (CLAUDE.md).
+  # Sem 0/O, 1/I/L -- o codigo e lido por telefone e WhatsApp (NOTES.md).
   CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789".chars.freeze
   CODE_LENGTH = 6
 

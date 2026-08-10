@@ -16,7 +16,7 @@ servers:
   #   cmd: bin/jobs
 
 # Sem proxy/SSL por enquanto -- sem dominio, nao ha certificado Let's Encrypt
-# pra emitir. Ver PLANO.md para o que muda quando um dominio entrar.
+# pra emitir. Ver PROGRESS.md para o que muda quando um dominio entrar.
 # proxy:
 #   ssl: true
 #   host: app.example.com

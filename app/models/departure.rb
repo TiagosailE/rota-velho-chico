@@ -12,7 +12,7 @@ class Departure < ApplicationRecord
   # seats_taken nao tem validacao de modelo de proposito: a mutacao real
   # acontece via increment! dentro de um lock (BookingCreator), que pula
   # validacoes. A CHECK constraint do banco e a unica linha de defesa contra
-  # overbooking -- ver CLAUDE.md, invariante 3.
+  # overbooking -- ver NOTES.md, invariante 3.
 
   def unit_price_cents
     price_override_cents || tour.base_price_cents
