@@ -208,6 +208,7 @@ pt-BR:
     errors:
       not_payable: "Essa reserva ja nao esta mais pendente de pagamento."
       unavailable: "Nao foi possivel iniciar o pagamento agora. Tente novamente em instantes."
+      not_configured: "O pagamento online ainda nao esta disponivel. Sua reserva continua garantida - entre em contato com a agencia para combinar o sinal."
 
   tours:
     cover:

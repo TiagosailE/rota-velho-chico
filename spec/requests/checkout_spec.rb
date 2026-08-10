@@ -58,6 +58,22 @@ RSpec.describe "Checkout", type: :request do
       expect(response.body).to include(I18n.t("checkout.errors.unavailable"))
       expect(booking.reload.payment).to be_nil
     end
+
+    # Credencial faltando nao e falha passageira: mandar o turista "tentar de
+    # novo em instantes" e conselho falso, porque nunca vai funcionar ate
+    # alguem configurar a chave.
+    it "diferencia credencial ausente de indisponibilidade passageira" do
+      booking = create(:booking, code: "ABCDEF", status: :pending)
+      allow(Stripe::Checkout::Session).to receive(:create)
+        .and_raise(Stripe::AuthenticationError.new("No API key provided"))
+
+      post pay_booking_path("ABCDEF")
+
+      follow_redirect!
+      expect(response.body).to include(I18n.t("checkout.errors.not_configured"))
+      expect(response.body).not_to include(I18n.t("checkout.errors.unavailable"))
+      expect(booking.reload.payment).to be_nil
+    end
   end
 
   describe "GET /checkout/success" do
