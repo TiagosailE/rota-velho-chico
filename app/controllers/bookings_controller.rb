@@ -18,8 +18,8 @@ class BookingsController < ApplicationController
     ).call
 
     if result.success?
-      @booking = result.value
-      render :confirmation
+      flash[:booking_id] = result.value.id
+      redirect_to booking_confirmation_path
     else
       @booking = Booking.new(booking_params)
       flash.now[:alert] = t("bookings.errors.#{result.error}")
@@ -29,6 +29,17 @@ class BookingsController < ApplicationController
     @booking = e.record
     flash.now[:alert] = @booking.errors.full_messages.to_sentence
     render :new, status: :unprocessable_content
+  end
+
+  # GET separado do POST que cria/consulta/cancela a reserva -- Turbo exige
+  # redirect numa resposta de sucesso pra formulario fora de frame (senao
+  # lanca "Form responses must redirect to another location" e a pagina
+  # trava sem navegar, so descoberto testando de verdade no navegador). O
+  # id vem da flash, nunca da URL/params -- codigo publico na URL furaria a
+  # regra de "consulta so com codigo + e-mail" do architecture.md 3.1.
+  def confirmation
+    @booking = Booking.find_by(id: flash[:booking_id])
+    redirect_to root_path if @booking.nil?
   end
 
   private

@@ -10,8 +10,8 @@ class BookingCancellationsController < ApplicationController
     result = BookingCanceller.new(booking:).call
 
     if result.success?
-      @booking = result.value
-      render "bookings/confirmation"
+      flash[:booking_id] = result.value.id
+      redirect_to booking_confirmation_path
     else
       flash[:alert] = t("bookings.cancellation.errors.#{result.error}")
       redirect_to new_booking_lookup_path

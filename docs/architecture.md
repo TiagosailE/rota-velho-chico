@@ -260,6 +260,8 @@ busca → detalhe do passeio → calendário (Turbo Frame)
 
 O turista guarda o **código**. Consulta depois com código + e-mail — dois fatores fracos, mas suficientes para o caso de uso e sem custo de cadastro.
 
+**Página de confirmação é sempre um redirect, nunca `render` direto.** Turbo Drive exige que uma resposta 2xx a um formulário fora de `turbo_frame_tag` seja um redirect — renderizar HTML direto com `200` faz o Turbo recusar navegar (`Error: Form responses must redirect to another location`) e a página trava sem feedback, mesmo que a escrita no banco tenha funcionado. `BookingsController#create`, `BookingLookupsController#create` e `BookingCancellationsController#create` guardam `flash[:booking_id]` e redirecionam para `GET /bookings/confirmation`, que lê o id da *flash* — nunca da URL — e renderiza a mesma view. Sem `code` na URL dessa rota de propósito: um `GET` público com o código furaria a regra de consulta "código + e-mail" acima. Como a flash sobrevive a exatamente um redirect, a página só é visível para quem acabou de reservar/consultar/cancelar; acessá-la direto redireciona para a home.
+
 ### 3.2 Cancelamento pelo turista
 
 ```

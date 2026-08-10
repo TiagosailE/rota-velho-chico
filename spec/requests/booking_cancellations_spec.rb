@@ -9,7 +9,8 @@ RSpec.describe "BookingCancellations", type: :request do
 
       post cancel_booking_path("ABCDEF"), params: { email: "ana@exemplo.com" }
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to redirect_to(booking_confirmation_path)
+      follow_redirect!
       expect(response.body).to include(I18n.t("bookings.confirmation.status_cancelled"))
       expect(booking.reload).to be_cancelled
       expect(departure.reload.seats_taken).to eq(0)
@@ -24,7 +25,8 @@ RSpec.describe "BookingCancellations", type: :request do
 
       post cancel_booking_path("ABCDEF"), params: { email: "ana@exemplo.com" }
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to redirect_to(booking_confirmation_path)
+      follow_redirect!
       expect(response.body).to include(I18n.t("bookings.confirmation.status_refunded"))
     end
 
