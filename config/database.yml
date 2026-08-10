@@ -96,6 +96,10 @@ production:
     database: rota_velho_chico_production
     username: rota_velho_chico
     password: <%= ENV["ROTA_VELHO_CHICO_DATABASE_PASSWORD"] %>
+    # Container do accessory Postgres, pela rede Docker do Kamal -- ver
+    # config/deploy.yml. Sem isso o app tentaria localhost, que dentro do
+    # container da app nao enxerga o container do banco.
+    host: <%= ENV.fetch("DB_HOST", "localhost") %>
   cache:
     <<: *primary_production
     database: rota_velho_chico_production_cache
