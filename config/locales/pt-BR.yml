@@ -140,6 +140,7 @@ pt-BR:
       children_5_9: "Criancas de 5 a 9 anos"
       children_0_4: "Criancas de 0 a 4 anos"
       submit: "Confirmar reserva"
+      submitting: "Enviando..."
     confirmation:
       title: "Reserva criada"
       keep_code: "Guarde este codigo. Ele e usado para consultar sua reserva."
