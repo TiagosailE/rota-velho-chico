@@ -41,7 +41,7 @@ class BookingCreator
   private
 
   # Criancas de 0 a 4 anos ocupam vaga (contagem de colete) mas nao pagam --
-  # a assimetria com o PriceCalculator e intencional (CLAUDE.md).
+  # a assimetria com o PriceCalculator e intencional (NOTES.md).
   def total_seats
     @adults + @children_5_9 + @children_0_4
   end

@@ -6,7 +6,7 @@ class PriceCalculator
   #
   # children_0_4 nao entra em nenhuma conta: bebe vai no colo e nao paga, mas
   # ocupa vaga. Quem conta assento e o BookingCreator; a assimetria e
-  # intencional (CLAUDE.md, armadilhas). O argumento fica na assinatura para o
+  # intencional (NOTES.md, armadilhas). O argumento fica na assinatura para o
   # chamador descrever a composicao do grupo num lugar so.
   def initialize(unit_price_cents:, adults:, children_5_9:, children_0_4:)
     @unit_price_cents = unit_price_cents

@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   around_action :switch_locale
 
-  # Operator e o unico model Devise -- turista nao tem login (CLAUDE.md).
+  # Operator e o unico model Devise -- turista nao tem login (NOTES.md).
   def after_sign_in_path_for(_resource)
     operators_root_path
   end
