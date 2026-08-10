@@ -14,6 +14,15 @@ class CheckoutController < ApplicationController
     ).call
 
     redirect_to checkout_url, allow_other_host: true
+  # Antes do rescue generico de proposito: AuthenticationError herda de
+  # StripeError, e sem essa distincao uma chave faltando vira "tente de novo
+  # em instantes" -- conselho falso, porque nenhuma tentativa vai funcionar
+  # ate alguem configurar a credencial. Erro de operacao, nao do turista:
+  # vai pro log em nivel de erro para aparecer no monitoramento.
+  rescue Stripe::AuthenticationError => e
+    Rails.logger.error("Stripe sem credencial valida -- pagamento indisponivel: #{e.message}")
+    flash[:alert] = t("checkout.errors.not_configured")
+    redirect_to new_booking_lookup_path
   rescue Stripe::StripeError
     flash[:alert] = t("checkout.errors.unavailable")
     redirect_to new_booking_lookup_path

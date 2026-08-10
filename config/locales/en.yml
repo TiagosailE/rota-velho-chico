@@ -208,6 +208,7 @@ en:
     errors:
       not_payable: "This booking is no longer pending payment."
       unavailable: "Could not start the payment right now. Please try again shortly."
+      not_configured: "Online payment is not available yet. Your booking is still held - please contact the agency to arrange the deposit."
 
   tours:
     cover:
