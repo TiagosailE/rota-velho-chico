@@ -140,6 +140,7 @@ en:
       children_5_9: "Children aged 5 to 9"
       children_0_4: "Children aged 0 to 4"
       submit: "Confirm booking"
+      submitting: "Submitting..."
     confirmation:
       title: "Booking created"
       keep_code: "Keep this code. It is used to look up your booking."
