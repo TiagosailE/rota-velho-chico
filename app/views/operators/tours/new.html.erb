@@ -1,7 +1,7 @@
 <div class="w-full">
-  <%= link_to t("operators.tours.form.back"), operators_tours_path %>
+  <%= link_to t("operators.tours.form.back"), operators_tours_path, class: "btn-link mb-6 inline-flex" %>
 
-  <h1 class="text-2xl font-bold mb-6"><%= t("operators.tours.new.title") %></h1>
+  <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900 mb-6"><%= t("operators.tours.new.title") %></h1>
 
   <%= render "form", tour: @tour %>
 </div>

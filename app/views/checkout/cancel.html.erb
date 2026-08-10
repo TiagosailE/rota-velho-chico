@@ -1,4 +1,10 @@
-<div class="w-full">
-  <h1 class="text-2xl font-bold mb-2"><%= t("checkout.cancel.title") %></h1>
-  <p><%= t("checkout.cancel.message", code: @code) %></p>
+<div class="w-full max-w-md mx-auto text-center">
+  <div class="card p-8">
+    <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-2xl">
+      &times;
+    </div>
+    <h1 class="text-xl font-semibold text-stone-900 mb-2"><%= t("checkout.cancel.title") %></h1>
+    <p class="text-stone-600 mb-6"><%= t("checkout.cancel.message", code: @code) %></p>
+    <%= link_to t("booking_lookups.new.link"), new_booking_lookup_path, class: "btn btn-secondary" %>
+  </div>
 </div>
