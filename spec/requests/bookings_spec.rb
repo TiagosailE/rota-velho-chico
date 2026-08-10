@@ -35,13 +35,14 @@ RSpec.describe "Bookings", type: :request do
   end
 
   describe "POST /departures/:departure_id/bookings" do
-    it "cria a reserva, incrementa seats_taken e mostra a confirmacao com o codigo" do
+    it "cria a reserva, incrementa seats_taken e redireciona para a confirmacao com o codigo" do
       departure = create(:departure, capacity: 10, seats_taken: 0)
 
       post departure_bookings_path(departure), params: valid_params
-
-      expect(response).to have_http_status(:ok)
       booking = Booking.last
+
+      expect(response).to redirect_to(booking_confirmation_path)
+      follow_redirect!
       expect(response.body).to include(booking.code)
       expect(departure.reload.seats_taken).to eq(3)
     end
@@ -93,6 +94,14 @@ RSpec.describe "Bookings", type: :request do
       post departure_bookings_path(departure), params: valid_params
 
       expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "GET /bookings/confirmation" do
+    it "redireciona para a home quando acessado sem ter acabado de reservar" do
+      get booking_confirmation_path
+
+      expect(response).to redirect_to(root_path)
     end
   end
 end

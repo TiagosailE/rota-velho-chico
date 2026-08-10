@@ -8,8 +8,8 @@ class BookingLookupsController < ApplicationController
     booking = Booking.find_by(code:)
 
     if booking && booking.customer_email.casecmp?(email)
-      @booking = booking
-      render "bookings/confirmation"
+      flash[:booking_id] = booking.id
+      redirect_to booking_confirmation_path
     else
       flash.now[:alert] = t("booking_lookups.not_found")
       render :new, status: :unprocessable_content

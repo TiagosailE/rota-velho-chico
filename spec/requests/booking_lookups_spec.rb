@@ -15,7 +15,8 @@ RSpec.describe "BookingLookups", type: :request do
 
       post booking_lookup_path, params: { code: "ABCDEF", email: "ana@exemplo.com" }
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to redirect_to(booking_confirmation_path)
+      follow_redirect!
       expect(response.body).to include(booking.code)
     end
 
@@ -24,7 +25,8 @@ RSpec.describe "BookingLookups", type: :request do
 
       post booking_lookup_path, params: { code: "abcdef", email: "ANA@EXEMPLO.COM" }
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to redirect_to(booking_confirmation_path)
+      follow_redirect!
       expect(response.body).to include(booking.code)
     end
 

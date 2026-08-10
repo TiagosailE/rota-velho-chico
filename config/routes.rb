@@ -27,6 +27,8 @@ Rails.application.routes.draw do
     resources :bookings, only: [ :new, :create ]
   end
 
+  get "bookings/confirmation", to: "bookings#confirmation", as: :booking_confirmation
+
   resource :booking_lookup, only: [ :new, :create ]
 
   post "bookings/:code/pay", to: "checkout#create", as: :pay_booking
