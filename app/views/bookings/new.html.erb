@@ -1,54 +1,56 @@
-<div class="w-full">
-  <%= link_to t("tours.show.back"), tour_path(@departure.tour.slug) %>
+<div class="w-full max-w-lg mx-auto">
+  <%= link_to t("tours.show.back"), tour_path(@departure.tour.slug), class: "btn-link mb-6 inline-flex" %>
 
-  <h1 class="text-2xl font-bold mb-2"><%= t("bookings.new.title") %></h1>
+  <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900 mb-6"><%= t("bookings.new.title") %></h1>
 
-  <dl class="grid gap-2 mb-6">
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.new.tour") %>:</dt>
-      <dd class="inline"><%= @departure.tour.title %></dd>
+  <dl class="card p-5 grid gap-2 mb-8 text-sm">
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("bookings.new.tour") %></dt>
+      <dd class="font-medium text-stone-900"><%= @departure.tour.title %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.new.departure") %>:</dt>
-      <dd class="inline"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></dd>
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("bookings.new.departure") %></dt>
+      <dd class="font-medium text-stone-900"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("tours.show.price") %>:</dt>
-      <dd class="inline"><%= format_price_cents(@departure.unit_price_cents) %></dd>
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("tours.show.price") %></dt>
+      <dd class="font-semibold text-stone-900"><%= format_price_cents(@departure.unit_price_cents) %></dd>
     </div>
   </dl>
 
-  <%= form_with model: @booking, url: departure_bookings_path(@departure), class: "grid gap-4" do |f| %>
+  <%= form_with model: @booking, url: departure_bookings_path(@departure), class: "card p-6 grid gap-5" do |f| %>
     <div>
-      <%= f.label :customer_name, t("bookings.new.customer_name"), class: "block text-sm mb-1" %>
-      <%= f.text_field :customer_name, required: true %>
+      <%= f.label :customer_name, t("bookings.new.customer_name"), class: "field-label" %>
+      <%= f.text_field :customer_name, required: true, class: "field-input" %>
     </div>
 
     <div>
-      <%= f.label :customer_email, t("bookings.new.customer_email"), class: "block text-sm mb-1" %>
-      <%= f.email_field :customer_email, required: true %>
+      <%= f.label :customer_email, t("bookings.new.customer_email"), class: "field-label" %>
+      <%= f.email_field :customer_email, required: true, class: "field-input" %>
     </div>
 
     <div>
-      <%= f.label :customer_phone, t("bookings.new.customer_phone"), class: "block text-sm mb-1" %>
-      <%= f.telephone_field :customer_phone %>
+      <%= f.label :customer_phone, t("bookings.new.customer_phone"), class: "field-label" %>
+      <%= f.telephone_field :customer_phone, class: "field-input" %>
     </div>
 
-    <div>
-      <%= f.label :adults, t("bookings.new.adults"), class: "block text-sm mb-1" %>
-      <%= f.number_field :adults, min: 0 %>
+    <div class="grid grid-cols-3 gap-3">
+      <div>
+        <%= f.label :adults, t("bookings.new.adults"), class: "field-label" %>
+        <%= f.number_field :adults, min: 0, class: "field-input" %>
+      </div>
+
+      <div>
+        <%= f.label :children_5_9, t("bookings.new.children_5_9"), class: "field-label" %>
+        <%= f.number_field :children_5_9, min: 0, class: "field-input" %>
+      </div>
+
+      <div>
+        <%= f.label :children_0_4, t("bookings.new.children_0_4"), class: "field-label" %>
+        <%= f.number_field :children_0_4, min: 0, class: "field-input" %>
+      </div>
     </div>
 
-    <div>
-      <%= f.label :children_5_9, t("bookings.new.children_5_9"), class: "block text-sm mb-1" %>
-      <%= f.number_field :children_5_9, min: 0 %>
-    </div>
-
-    <div>
-      <%= f.label :children_0_4, t("bookings.new.children_0_4"), class: "block text-sm mb-1" %>
-      <%= f.number_field :children_0_4, min: 0 %>
-    </div>
-
-    <%= f.submit t("bookings.new.submit") %>
+    <%= f.submit t("bookings.new.submit"), class: "btn btn-primary w-full mt-2" %>
   <% end %>
 </div>

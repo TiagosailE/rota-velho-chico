@@ -1,6 +1,6 @@
-<%= form_with model: [ :operators, tour, departure ], class: "grid gap-4 max-w-lg" do |f| %>
+<%= form_with model: [ :operators, tour, departure ], class: "card p-6 sm:p-8 grid gap-5 max-w-lg" do |f| %>
   <% if departure.errors.any? %>
-    <div class="text-red-600">
+    <div class="alert-error">
       <% departure.errors.full_messages.each do |message| %>
         <p><%= message %></p>
       <% end %>
@@ -8,19 +8,19 @@
   <% end %>
 
   <div>
-    <%= f.label :starts_at, t("operators.departures.form.starts_at"), class: "block text-sm mb-1" %>
-    <%= f.datetime_field :starts_at, required: true %>
+    <%= f.label :starts_at, t("operators.departures.form.starts_at"), class: "field-label" %>
+    <%= f.datetime_field :starts_at, required: true, class: "field-input" %>
   </div>
 
   <div>
-    <%= f.label :capacity, t("operators.departures.form.capacity"), class: "block text-sm mb-1" %>
-    <%= f.number_field :capacity, min: 1, required: true %>
+    <%= f.label :capacity, t("operators.departures.form.capacity"), class: "field-label" %>
+    <%= f.number_field :capacity, min: 1, required: true, class: "field-input" %>
   </div>
 
   <div>
-    <%= f.label :price_override_reais, t("operators.departures.form.price_override_reais"), class: "block text-sm mb-1" %>
-    <%= f.number_field :price_override_reais, min: 0, step: 0.01 %>
+    <%= f.label :price_override_reais, t("operators.departures.form.price_override_reais"), class: "field-label" %>
+    <%= f.number_field :price_override_reais, min: 0, step: 0.01, class: "field-input" %>
   </div>
 
-  <%= f.submit t("operators.departures.form.submit") %>
+  <%= f.submit t("operators.departures.form.submit"), class: "btn btn-primary w-full mt-2" %>
 <% end %>

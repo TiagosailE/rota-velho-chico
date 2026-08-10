@@ -1,51 +1,62 @@
-<div class="w-full">
-  <h1 class="text-2xl font-bold mb-2"><%= t("bookings.confirmation.title") %></h1>
+<div class="w-full max-w-lg mx-auto">
+  <div class="card p-6 sm:p-8 text-center mb-6">
+    <h1 class="text-xl font-semibold text-stone-900 mb-4"><%= t("bookings.confirmation.title") %></h1>
 
-  <p class="text-3xl font-mono font-bold mb-2"><%= @booking.code %></p>
-  <p class="mb-6"><%= t("bookings.confirmation.keep_code") %></p>
+    <p class="font-mono text-3xl sm:text-4xl font-bold tracking-widest text-orange-700 bg-orange-50 rounded-xl py-4 mb-3">
+      <%= @booking.code %>
+    </p>
+    <p class="text-sm text-stone-500"><%= t("bookings.confirmation.keep_code") %></p>
+  </div>
 
-  <dl class="grid gap-2 mb-6">
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.new.tour") %>:</dt>
-      <dd class="inline"><%= @booking.departure.tour.title %></dd>
+  <dl class="card p-6 grid gap-3 mb-6 text-sm">
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("bookings.new.tour") %></dt>
+      <dd class="font-medium text-stone-900"><%= @booking.departure.tour.title %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.new.departure") %>:</dt>
-      <dd class="inline"><%= @booking.departure.starts_at.strftime("%d/%m/%Y %H:%M") %></dd>
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("bookings.new.departure") %></dt>
+      <dd class="font-medium text-stone-900"><%= @booking.departure.starts_at.strftime("%d/%m/%Y %H:%M") %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.new.adults") %>:</dt>
-      <dd class="inline"><%= @booking.adults %></dd>
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("bookings.new.adults") %></dt>
+      <dd class="font-medium text-stone-900"><%= @booking.adults %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.new.children_5_9") %>:</dt>
-      <dd class="inline"><%= @booking.children_5_9 %></dd>
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("bookings.new.children_5_9") %></dt>
+      <dd class="font-medium text-stone-900"><%= @booking.children_5_9 %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.new.children_0_4") %>:</dt>
-      <dd class="inline"><%= @booking.children_0_4 %></dd>
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("bookings.new.children_0_4") %></dt>
+      <dd class="font-medium text-stone-900"><%= @booking.children_0_4 %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.confirmation.total") %>:</dt>
-      <dd class="inline"><%= format_price_cents(@booking.total_cents) %></dd>
+    <div class="flex justify-between border-t border-stone-100 pt-3">
+      <dt class="text-stone-500"><%= t("bookings.confirmation.total") %></dt>
+      <dd class="font-medium text-stone-900"><%= format_price_cents(@booking.total_cents) %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.confirmation.deposit") %>:</dt>
-      <dd class="inline"><%= format_price_cents(@booking.deposit_cents) %></dd>
+    <div class="flex justify-between">
+      <dt class="text-stone-500"><%= t("bookings.confirmation.deposit") %></dt>
+      <dd class="font-semibold text-stone-900"><%= format_price_cents(@booking.deposit_cents) %></dd>
     </div>
-    <div>
-      <dt class="inline font-medium"><%= t("bookings.confirmation.status") %>:</dt>
-      <dd class="inline"><%= t("bookings.confirmation.status_#{@booking.status}") %></dd>
+    <div class="flex justify-between items-center border-t border-stone-100 pt-3">
+      <dt class="text-stone-500"><%= t("bookings.confirmation.status") %></dt>
+      <dd>
+        <% status_badge = { "pending" => "badge-warning", "confirmed" => "badge-success",
+                             "cancelled" => "badge-neutral", "refunded" => "badge-neutral" }.fetch(@booking.status) %>
+        <span class="badge <%= status_badge %>"><%= t("bookings.confirmation.status_#{@booking.status}") %></span>
+      </dd>
     </div>
   </dl>
 
-  <% if @booking.pending? %>
-    <%= button_to t("checkout.pay_button"), pay_booking_path(@booking.code) %>
-  <% end %>
+  <div class="grid gap-3">
+    <% if @booking.pending? %>
+      <%= button_to t("checkout.pay_button"), pay_booking_path(@booking.code), class: "btn btn-primary w-full" %>
+    <% end %>
 
-  <% if @booking.pending? || @booking.confirmed? %>
-    <%= button_to t("bookings.confirmation.cancel_button"), cancel_booking_path(@booking.code),
-          params: { email: @booking.customer_email },
-          data: { turbo_confirm: t("bookings.confirmation.cancel_confirm") } %>
-  <% end %>
+    <% if @booking.pending? || @booking.confirmed? %>
+      <%= button_to t("bookings.confirmation.cancel_button"), cancel_booking_path(@booking.code),
+            params: { email: @booking.customer_email },
+            data: { turbo_confirm: t("bookings.confirmation.cancel_confirm") },
+            class: "btn btn-danger w-full" %>
+    <% end %>
+  </div>
 </div>

@@ -1,54 +1,69 @@
 <div class="w-full">
-  <%= link_to t("operators.departures.form.back"), edit_operators_tour_path(@tour) %>
+  <%= link_to t("operators.departures.form.back"), edit_operators_tour_path(@tour), class: "btn-link mb-6 inline-flex" %>
 
-  <h1 class="text-2xl font-bold mb-2"><%= @tour.title %></h1>
-  <p class="mb-6"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></p>
+  <div class="card p-6 sm:p-8 mb-8">
+    <div class="flex items-start justify-between flex-wrap gap-4 mb-4">
+      <div>
+        <h1 class="text-2xl font-semibold text-stone-900 mb-1"><%= @tour.title %></h1>
+        <p class="text-stone-500"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></p>
+      </div>
 
-  <%= link_to t("operators.departures.form.submit"), edit_operators_tour_departure_path(@tour, @departure), class: "block mb-2" %>
-
-  <% if @departure.scheduled? %>
-    <%= button_to t("operators.departures.show.cancel_button"), operators_tour_departure_path(@tour, @departure),
-          method: :delete, class: "mb-6",
-          data: { turbo_confirm: t("operators.departures.show.cancel_confirm") } %>
-  <% end %>
-
-  <dl class="grid gap-2 mb-8">
-    <div>
-      <dt class="inline font-medium"><%= t("operators.departures.show.occupancy") %>:</dt>
-      <dd class="inline"><%= @departure.seats_taken %>/<%= @departure.capacity %> (<%= @occupancy_percentage %>%)</dd>
+      <div class="flex gap-2">
+        <%= link_to t("operators.departures.form.submit"), edit_operators_tour_departure_path(@tour, @departure), class: "btn btn-secondary" %>
+        <% if @departure.scheduled? %>
+          <%= button_to t("operators.departures.show.cancel_button"), operators_tour_departure_path(@tour, @departure),
+                method: :delete,
+                data: { turbo_confirm: t("operators.departures.show.cancel_confirm") },
+                class: "btn btn-danger" %>
+        <% end %>
+      </div>
     </div>
-  </dl>
 
-  <h2 class="text-lg font-semibold mb-2"><%= t("operators.departures.show.bookings_title") %></h2>
+    <div class="flex items-center gap-3 border-t border-stone-100 pt-4">
+      <span class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("operators.departures.show.occupancy") %></span>
+      <div class="flex-1 h-2 rounded-full bg-stone-100 overflow-hidden max-w-xs">
+        <div class="h-full bg-orange-500" style="width: <%= @occupancy_percentage %>%"></div>
+      </div>
+      <span class="text-sm font-medium text-stone-700"><%= @departure.seats_taken %>/<%= @departure.capacity %> (<%= @occupancy_percentage %>%)</span>
+    </div>
+  </div>
+
+  <h2 class="text-lg font-semibold text-stone-900 mb-4"><%= t("operators.departures.show.bookings_title") %></h2>
 
   <% if @bookings.empty? %>
-    <p><%= t("operators.departures.show.no_bookings") %></p>
+    <p class="text-stone-500"><%= t("operators.departures.show.no_bookings") %></p>
   <% else %>
-    <table class="w-full text-left">
-      <thead>
-        <tr>
-          <th><%= t("operators.departures.show.code") %></th>
-          <th><%= t("bookings.new.customer_name") %></th>
-          <th><%= t("bookings.new.adults") %></th>
-          <th><%= t("bookings.new.children_5_9") %></th>
-          <th><%= t("bookings.new.children_0_4") %></th>
-          <th><%= t("bookings.confirmation.total") %></th>
-          <th><%= t("bookings.confirmation.status") %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @bookings.each do |booking| %>
+    <div class="card overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-stone-50 text-stone-500 text-xs uppercase tracking-wide">
           <tr>
-            <td><%= booking.code %></td>
-            <td><%= booking.customer_name %></td>
-            <td><%= booking.adults %></td>
-            <td><%= booking.children_5_9 %></td>
-            <td><%= booking.children_0_4 %></td>
-            <td><%= format_price_cents(booking.total_cents) %></td>
-            <td><%= t("bookings.confirmation.status_#{booking.status}") %></td>
+            <th class="px-4 py-2 font-medium"><%= t("operators.departures.show.code") %></th>
+            <th class="px-4 py-2 font-medium"><%= t("bookings.new.customer_name") %></th>
+            <th class="px-4 py-2 font-medium"><%= t("bookings.new.adults") %></th>
+            <th class="px-4 py-2 font-medium"><%= t("bookings.new.children_5_9") %></th>
+            <th class="px-4 py-2 font-medium"><%= t("bookings.new.children_0_4") %></th>
+            <th class="px-4 py-2 font-medium"><%= t("bookings.confirmation.total") %></th>
+            <th class="px-4 py-2 font-medium"><%= t("bookings.confirmation.status") %></th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="divide-y divide-stone-100">
+          <% @bookings.each do |booking| %>
+            <tr>
+              <td class="px-4 py-2.5 font-mono text-stone-800"><%= booking.code %></td>
+              <td class="px-4 py-2.5 text-stone-800"><%= booking.customer_name %></td>
+              <td class="px-4 py-2.5 text-stone-600"><%= booking.adults %></td>
+              <td class="px-4 py-2.5 text-stone-600"><%= booking.children_5_9 %></td>
+              <td class="px-4 py-2.5 text-stone-600"><%= booking.children_0_4 %></td>
+              <td class="px-4 py-2.5 text-stone-800"><%= format_price_cents(booking.total_cents) %></td>
+              <td class="px-4 py-2.5">
+                <% status_badge = { "pending" => "badge-warning", "confirmed" => "badge-success",
+                                     "cancelled" => "badge-neutral", "refunded" => "badge-neutral" }.fetch(booking.status) %>
+                <span class="badge <%= status_badge %>"><%= t("bookings.confirmation.status_#{booking.status}") %></span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% end %>
 </div>

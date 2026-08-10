@@ -18,27 +18,47 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex flex-col">
-      <nav class="text-sm mb-4 flex justify-end items-center gap-4">
-        <% if operator_signed_in? %>
-          <span><%= t("operators.nav.signed_in_as", name: current_operator.name) %></span>
-          <%= link_to t("operators.nav.panel"), operators_root_path %>
-          <%= button_to t("operators.nav.sign_out"), destroy_operator_session_path, method: :delete %>
-        <% else %>
-          <%= link_to t("operators.nav.sign_in"), new_operator_session_path %>
+  <body class="min-h-screen flex flex-col">
+    <header class="border-b border-stone-200 bg-white/90 backdrop-blur sticky top-0 z-10">
+      <div class="container mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+        <%= link_to tours_path, class: "font-display text-xl font-semibold text-stone-900 hover:text-orange-700 transition-colors" do %>
+          Rota Velho Chico
         <% end %>
-        <span aria-hidden="true">|</span>
-        <%= link_to "PT", url_for(locale: "pt-BR"), lang: "pt-BR" %>
-        <%= link_to "EN", url_for(locale: "en"), lang: "en" %>
-      </nav>
+
+        <nav class="text-sm flex items-center gap-4 text-stone-600">
+          <% if operator_signed_in? %>
+            <span class="hidden sm:inline"><%= t("operators.nav.signed_in_as", name: current_operator.name) %></span>
+            <%= link_to t("operators.nav.panel"), operators_root_path, class: "font-medium text-stone-700 hover:text-orange-700" %>
+            <%= button_to t("operators.nav.sign_out"), destroy_operator_session_path, method: :delete,
+                  class: "font-medium text-stone-700 hover:text-orange-700 underline-offset-2 hover:underline bg-transparent p-0" %>
+          <% else %>
+            <%= link_to t("operators.nav.sign_in"), new_operator_session_path, class: "font-medium text-stone-700 hover:text-orange-700" %>
+          <% end %>
+          <span aria-hidden="true" class="text-stone-300">|</span>
+          <%= link_to "PT", url_for(locale: "pt-BR"), lang: "pt-BR", class: "font-medium hover:text-orange-700" %>
+          <%= link_to "EN", url_for(locale: "en"), lang: "en", class: "font-medium hover:text-orange-700" %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-5 py-8 flex-1 w-full flex flex-col">
       <%= render "shared/flash" %>
       <%= yield %>
     </main>
+
+    <footer class="border-t border-stone-200 mt-16">
+      <div class="container mx-auto px-5 py-6 text-xs text-stone-500">
+        Rota Velho Chico -- projeto de portfolio. Nomes de agencia e dados de reserva sao ficticios, sem afiliacao com operadores reais de Paulo Afonso.
+      </div>
+    </footer>
   </body>
 </html>

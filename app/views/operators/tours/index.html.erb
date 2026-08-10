@@ -1,21 +1,24 @@
 <div class="w-full">
-  <h1 class="text-2xl font-bold mb-6"><%= t("operators.tours.index.title") %></h1>
-
-  <%= link_to t("operators.tours.index.new"), new_operators_tour_path, class: "block mb-4" %>
+  <div class="flex items-center justify-between mb-8 flex-wrap gap-3">
+    <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900"><%= t("operators.tours.index.title") %></h1>
+    <%= link_to t("operators.tours.index.new"), new_operators_tour_path, class: "btn btn-primary" %>
+  </div>
 
   <% if @tours.empty? %>
-    <p><%= t("operators.tours.index.empty") %></p>
+    <p class="text-stone-500"><%= t("operators.tours.index.empty") %></p>
   <% else %>
-    <div class="grid gap-4">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <% @tours.each do |tour| %>
-        <div class="border rounded-lg p-4">
-          <span class="text-xs uppercase tracking-wide"><%= t("tours.categories.#{tour.category}") %></span>
-          <% unless tour.active? %>
-            <span class="text-xs text-red-600"><%= t("operators.tours.index.inactive") %></span>
-          <% end %>
-          <h2 class="text-lg font-semibold"><%= tour.title %></h2>
-          <%= link_to t("operators.tours.index.manage"), edit_operators_tour_path(tour) %>
-        </div>
+        <%= link_to edit_operators_tour_path(tour), class: "card card-hover p-5 flex flex-col" do %>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="badge badge-category"><%= t("tours.categories.#{tour.category}") %></span>
+            <% unless tour.active? %>
+              <span class="badge badge-danger"><%= t("operators.tours.index.inactive") %></span>
+            <% end %>
+          </div>
+          <h2 class="text-lg font-display font-semibold text-stone-900 mb-3"><%= tour.title %></h2>
+          <span class="btn-link mt-auto"><%= t("operators.tours.index.manage") %></span>
+        <% end %>
       <% end %>
     </div>
   <% end %>

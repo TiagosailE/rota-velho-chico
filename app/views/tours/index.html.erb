@@ -1,49 +1,55 @@
 <div class="w-full">
-  <h1 class="text-2xl font-bold mb-6"><%= t("tours.index.title") %></h1>
+  <div class="mb-8">
+    <h1 class="text-3xl sm:text-4xl font-semibold text-stone-900 mb-2"><%= t("tours.index.title") %></h1>
+    <%= link_to t("booking_lookups.new.link"), new_booking_lookup_path, class: "btn-link" %>
+  </div>
 
-  <%= link_to t("booking_lookups.new.link"), new_booking_lookup_path, class: "block mb-4 text-sm" %>
-
-  <%= form_with url: tours_path, method: :get, class: "flex flex-wrap gap-4 items-end mb-8" do |f| %>
+  <%= form_with url: tours_path, method: :get, class: "card p-5 mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end" do |f| %>
     <div>
-      <%= f.label :category, t("tours.index.filter.category"), class: "block text-sm mb-1" %>
+      <%= f.label :category, t("tours.index.filter.category"), class: "field-label" %>
       <%= f.select :category,
             Tour.categories.keys.map { |key| [ t("tours.categories.#{key}"), key ] },
-            { include_blank: t("tours.index.filter.all_categories"), selected: @category } %>
+            { include_blank: t("tours.index.filter.all_categories"), selected: @category },
+            class: "field-input" %>
     </div>
 
     <div>
-      <%= f.label :date, t("tours.index.filter.date"), class: "block text-sm mb-1" %>
-      <%= f.date_field :date, value: @date %>
+      <%= f.label :date, t("tours.index.filter.date"), class: "field-label" %>
+      <%= f.date_field :date, value: @date, class: "field-input" %>
     </div>
 
     <div>
-      <%= f.label :min_price, t("tours.index.filter.min_price"), class: "block text-sm mb-1" %>
-      <%= f.number_field :min_price, value: @min_price, min: 0 %>
+      <%= f.label :min_price, t("tours.index.filter.min_price"), class: "field-label" %>
+      <%= f.number_field :min_price, value: @min_price, min: 0, class: "field-input" %>
     </div>
 
     <div>
-      <%= f.label :max_price, t("tours.index.filter.max_price"), class: "block text-sm mb-1" %>
-      <%= f.number_field :max_price, value: @max_price, min: 0 %>
+      <%= f.label :max_price, t("tours.index.filter.max_price"), class: "field-label" %>
+      <%= f.number_field :max_price, value: @max_price, min: 0, class: "field-input" %>
     </div>
 
     <div class="flex gap-2">
-      <%= f.submit t("tours.index.filter.submit") %>
-      <%= link_to t("tours.index.filter.clear"), tours_path %>
+      <%= f.submit t("tours.index.filter.submit"), class: "btn btn-primary" %>
+      <%= link_to t("tours.index.filter.clear"), tours_path, class: "btn btn-secondary" %>
     </div>
   <% end %>
 
   <% if @tours.empty? %>
-    <p><%= t("tours.index.empty") %></p>
+    <p class="text-stone-500"><%= t("tours.index.empty") %></p>
   <% else %>
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <% @tours.each do |tour| %>
-        <div class="border rounded-lg p-4">
-          <span class="text-xs uppercase tracking-wide"><%= t("tours.categories.#{tour.category}") %></span>
-          <h2 class="text-lg font-semibold"><%= tour.title %></h2>
-          <p class="text-sm"><%= t("tours.index.card.duration_label") %>: <%= format_duration(tour.duration_minutes) %></p>
-          <p class="font-medium"><%= format_price_cents(tour.base_price_cents) %></p>
-          <%= link_to t("tours.index.card.details"), tour_path(tour.slug) %>
-        </div>
+        <%= link_to tour_path(tour.slug), class: "card card-hover p-5 flex flex-col" do %>
+          <span class="badge badge-category w-fit mb-3"><%= t("tours.categories.#{tour.category}") %></span>
+          <h2 class="text-lg font-display font-semibold text-stone-900 mb-1"><%= tour.title %></h2>
+          <p class="text-sm text-stone-500 mb-4">
+            <%= t("tours.index.card.duration_label") %>: <%= format_duration(tour.duration_minutes) %>
+          </p>
+          <div class="mt-auto flex items-center justify-between pt-3 border-t border-stone-100">
+            <span class="text-lg font-semibold text-stone-900"><%= format_price_cents(tour.base_price_cents) %></span>
+            <span class="btn-link"><%= t("tours.index.card.details") %></span>
+          </div>
+        <% end %>
       <% end %>
     </div>
   <% end %>
