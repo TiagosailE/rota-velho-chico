@@ -92,6 +92,31 @@ en:
         includes_lunch: "Includes lunch"
         active: "Active (visible to tourists)"
         submit: "Save"
+    tour_photos:
+      title: "Tour photos"
+      hint: "The first photo is the cover: it is the one shown in the catalogue. Use the buttons to reorder."
+      upload_label: "Add photos (JPEG, PNG or WebP)"
+      upload_submit: "Upload photos"
+      empty: "This tour has no photos yet."
+      cover: "Cover"
+      no_alt: "Tour photo"
+      alt_label: "Image description (accessibility)"
+      alt_submit: "Save"
+      move_up: "Up"
+      move_down: "Down"
+      destroy: "Remove"
+      destroy_confirm: "Remove this photo?"
+      create:
+        success:
+          one: "1 photo uploaded."
+          other: "%{count} photos uploaded."
+        rejected:
+          one: "1 file was rejected: please upload only JPEG, PNG or WebP."
+          other: "%{count} files were rejected: please upload only JPEG, PNG or WebP."
+      update:
+        success: "Image description updated."
+      destroy:
+        success: "Photo removed."
     departures:
       new:
         title: "New departure - %{tour}"
@@ -185,6 +210,9 @@ en:
       unavailable: "Could not start the payment right now. Please try again shortly."
 
   tours:
+    cover:
+      no_photo: "No photo"
+      placeholder: "Tour %{title} has no photo yet"
     categories:
       boat: "Boat"
       offroad: "Off-road"

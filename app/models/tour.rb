@@ -1,6 +1,7 @@
 class Tour < ApplicationRecord
   belongs_to :operator
   has_many :departures
+  has_many :tour_photos, -> { order(:position) }, dependent: :destroy
 
   enum :category, boat: 0, offroad: 1, hiking: 2, cultural: 3
 
@@ -10,6 +11,13 @@ class Tour < ApplicationRecord
   validates :base_price_cents, presence: true, numericality: { greater_than: 0 }
   validates :meeting_point, presence: true
   validates :min_age, numericality: { greater_than_or_equal_to: 0 }
+
+  # A foto de menor position e a capa: e ela que aparece no card do catalogo
+  # e no topo da pagina de detalhe. Nil quando o passeio ainda nao tem foto,
+  # e a view cai no placeholder.
+  def cover_photo
+    tour_photos.first
+  end
 
   # Atributo virtual para o formulario do operador aceitar reais em vez de
   # centavos -- base_price_cents continua sendo a fonte da verdade.

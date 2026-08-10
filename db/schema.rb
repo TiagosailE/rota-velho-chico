@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_07_220500) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_10_215000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "bookings", force: :cascade do |t|
     t.integer "adults", default: 0, null: false
@@ -101,6 +129,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_07_220500) do
     t.index ["stripe_event_id"], name: "index_stripe_events_on_stripe_event_id", unique: true
   end
 
+  create_table "tour_photos", force: :cascade do |t|
+    t.string "alt_text"
+    t.datetime "created_at", null: false
+    t.integer "position", null: false
+    t.bigint "tour_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_id"], name: "index_tour_photos_on_tour_id"
+    t.check_constraint "\"position\" >= 0", name: "tour_photos_position_non_negative"
+    t.unique_constraint ["tour_id", "position"], deferrable: :immediate, name: "tour_photos_unique_position"
+  end
+
   create_table "tours", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.integer "base_price_cents", null: false
@@ -123,8 +162,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_07_220500) do
     t.check_constraint "min_age >= 0", name: "tours_min_age_non_negative"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookings", "departures"
   add_foreign_key "departures", "tours"
   add_foreign_key "payments", "bookings"
+  add_foreign_key "tour_photos", "tours"
   add_foreign_key "tours", "operators"
 end
