@@ -49,6 +49,7 @@ operators = [
     o.whatsapp = attrs[:whatsapp]
     o.bio = attrs[:bio]
     o.active = true
+    o.password = "password123" # Devise exige senha na criacao; banco 100% novo sem isso falha aqui
   end
 
   # Fora do bloco de criacao de proposito: roda em toda execucao, nao so na
@@ -175,4 +176,52 @@ tours.each do |tour, departure_hour|
   end
 end
 
-puts "Seeds: #{Operator.count} operadores, #{Tour.count} passeios, #{Departure.count} saidas."
+# Fotos curadas do Pexels (licenca gratuita, creditos em db/seeds/photos/CREDITS.md).
+# Ordem de cada lista vira a ordem de exibicao -- a primeira e a capa.
+PHOTOS_BY_TOUR_SLUG = {
+  "catamara-no-canion" => [
+    { file: "01.jpg", alt: "Barco passando entre paredoes de rocha no canion do Rio Sao Francisco" },
+    { file: "02.jpg", alt: "Vista aerea de canion com cachoeiras e barcos ancorados em agua esverdeada" },
+    { file: "03.jpg", alt: "Turistas de barco observando os paredoes altos do canion" },
+    { file: "04.jpg", alt: "Vista aerea do Rio Sao Francisco cortando o canion entre paredoes de pedra" },
+    { file: "05.jpg", alt: "Cachoeira caindo em piscina natural de pedra, parada para banho" }
+  ],
+  "por-do-sol-de-lancha" => [
+    { file: "01.jpg", alt: "Lancha em silhueta contra o por do sol no rio" },
+    { file: "02.jpg", alt: "Lancha navegando em aguas calmas ao entardecer" },
+    { file: "03.jpg", alt: "Represa do Rio Sao Francisco ao entardecer com vegetacao de sertao" },
+    { file: "04.jpg", alt: "Paisagem de sertao com lago ao por do sol" }
+  ],
+  "raso-da-catarina-4x4" => [
+    { file: "01.jpg", alt: "Mirante de pedra com vegetacao seca da caatinga ao fundo" },
+    { file: "02.jpg", alt: "Estrada de terra na caatinga com mandacaru e cerca rural" },
+    { file: "03.jpg", alt: "Cactos em contraluz ao amanhecer na caatinga baiana" }
+  ],
+  "complexo-chesf" => [
+    { file: "01.jpg", alt: "Barragem de concreto com comportas liberando agua" },
+    { file: "02.jpg", alt: "Torres de transmissao de energia eletrica em paisagem rural" }
+  ],
+  "rota-do-cangaco" => [
+    { file: "01.jpg", alt: "Casa simples de rua de cidade do interior nordestino" },
+    { file: "02.jpg", alt: "Porteira de fazenda antiga em paisagem seca do sertao" }
+  ],
+  "serra-do-umbuzeiro" => [
+    { file: "01.jpg", alt: "Serra rochosa com vegetacao rala de campo rupestre" },
+    { file: "02.jpg", alt: "Trilha de terra entre vegetacao seca de serra" },
+    { file: "03.jpg", alt: "Estrada de terra ao entardecer entre arvores do sertao" }
+  ]
+}.freeze
+
+# Idempotente pelo mesmo motivo do resto do arquivo: so anexa se o passeio
+# ainda nao tem foto nenhuma, senao rodar db:seed de novo duplicaria.
+PHOTOS_BY_TOUR_SLUG.each do |slug, photos|
+  tour = Tour.find_by!(slug: slug)
+  next if tour.tour_photos.any?
+
+  photos.each do |photo|
+    path = Rails.root.join("db", "seeds", "photos", slug, photo[:file])
+    tour.tour_photos.create!(image: File.open(path), alt_text: photo[:alt])
+  end
+end
+
+puts "Seeds: #{Operator.count} operadores, #{Tour.count} passeios, #{Departure.count} saidas, #{TourPhoto.count} fotos."
