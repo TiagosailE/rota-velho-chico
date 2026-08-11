@@ -1,9 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "Checkout", type: :request do
-  def stub_stripe_session(payment_intent: "pi_test_123", url: "https://checkout.stripe.com/pay/cs_test_123")
+  # payment_intent nil por padrao replica o comportamento real: a Checkout
+  # Session so ganha PaymentIntent quando o pagamento e concluido.
+  def stub_stripe_session(id: "cs_test_123", payment_intent: nil, url: "https://checkout.stripe.com/pay/cs_test_123")
     allow(Stripe::Checkout::Session).to receive(:create)
-      .and_return(instance_double(Stripe::Checkout::Session, payment_intent:, url:))
+      .and_return(instance_double(Stripe::Checkout::Session, id:, payment_intent:, url:))
   end
 
   describe "POST /bookings/:code/pay" do

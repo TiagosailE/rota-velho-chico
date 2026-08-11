@@ -23,11 +23,17 @@ class CheckoutSessionCreator
       cancel_url: @cancel_url
     )
 
+    # session.payment_intent vem nil aqui -- Stripe so cria o PaymentIntent
+    # quando o pagamento e concluido, nao na criacao da sessao (confirmado
+    # contra a API de verdade). Por isso o id da sessao, nao o do intent, e
+    # o que correlaciona esse Payment ao webhook de confirmacao.
+    #
     # Reaproveita o Payment existente (has_one, indice unico em booking_id)
     # em vez de criar outro -- turista pode cancelar no Stripe e tentar de
-    # novo, isso so troca o intent id que estamos rastreando.
+    # novo, isso so troca a sessao que estamos rastreando.
     payment = @booking.payment || @booking.build_payment
     payment.update!(
+      stripe_checkout_session_id: session.id,
       stripe_payment_intent_id: session.payment_intent,
       amount_cents: @booking.deposit_cents,
       status: :pending

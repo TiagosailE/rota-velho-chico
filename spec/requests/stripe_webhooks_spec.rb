@@ -12,8 +12,8 @@ RSpec.describe "StripeWebhooks", type: :request do
     allow(Rails.application.credentials).to receive(:dig).with(:stripe, :webhook_secret).and_return(webhook_secret)
   end
 
-  def event_payload(type:, object_id:, event_id: "evt_#{SecureRandom.hex(8)}")
-    { id: event_id, type:, data: { object: { id: object_id } } }.to_json
+  def event_payload(type:, object_id:, payment_intent: nil, event_id: "evt_#{SecureRandom.hex(8)}")
+    { id: event_id, type:, data: { object: { id: object_id, payment_intent: } } }.to_json
   end
 
   def post_webhook(payload, secret: webhook_secret)
@@ -24,11 +24,11 @@ RSpec.describe "StripeWebhooks", type: :request do
     post stripe_webhook_path, params: payload, headers: { "Stripe-Signature" => signature, "CONTENT_TYPE" => "application/json" }
   end
 
-  it "confirma o pagamento e a reserva quando payment_intent.succeeded chega com assinatura valida" do
+  it "confirma o pagamento e a reserva quando checkout.session.completed chega com assinatura valida" do
     booking = create(:booking, status: :pending)
-    create(:payment, booking:, stripe_payment_intent_id: "pi_test_123", status: :pending)
+    create(:payment, booking:, stripe_checkout_session_id: "cs_test_123", status: :pending)
 
-    post_webhook(event_payload(type: "payment_intent.succeeded", object_id: "pi_test_123"))
+    post_webhook(event_payload(type: "checkout.session.completed", object_id: "cs_test_123", payment_intent: "pi_test_123"))
 
     expect(response).to have_http_status(:ok)
     expect(booking.reload).to be_confirmed
@@ -36,9 +36,9 @@ RSpec.describe "StripeWebhooks", type: :request do
 
   it "recusa com 400 quando a assinatura nao bate" do
     booking = create(:booking, status: :pending)
-    create(:payment, booking:, stripe_payment_intent_id: "pi_test_123", status: :pending)
+    create(:payment, booking:, stripe_checkout_session_id: "cs_test_123", status: :pending)
 
-    post_webhook(event_payload(type: "payment_intent.succeeded", object_id: "pi_test_123"), secret: "whsec_outro_segredo")
+    post_webhook(event_payload(type: "checkout.session.completed", object_id: "cs_test_123"), secret: "whsec_outro_segredo")
 
     expect(response).to have_http_status(:bad_request)
     expect(booking.reload).to be_pending
@@ -46,8 +46,9 @@ RSpec.describe "StripeWebhooks", type: :request do
 
   it "responde 200 sem reprocessar quando o mesmo evento chega duas vezes" do
     booking = create(:booking, status: :pending)
-    create(:payment, booking:, stripe_payment_intent_id: "pi_test_123", status: :pending)
-    payload = event_payload(type: "payment_intent.succeeded", object_id: "pi_test_123", event_id: "evt_fixo")
+    create(:payment, booking:, stripe_checkout_session_id: "cs_test_123", status: :pending)
+    payload = event_payload(type: "checkout.session.completed", object_id: "cs_test_123",
+                             payment_intent: "pi_test_123", event_id: "evt_fixo")
 
     post_webhook(payload)
     booking.update!(status: :cancelled) # se reprocessar, o confirm sobrescreveria isso de novo
@@ -64,8 +65,8 @@ RSpec.describe "StripeWebhooks", type: :request do
     expect(response).to have_http_status(:ok)
   end
 
-  it "responde 200 mesmo sem Payment correspondente ao intent id" do
-    post_webhook(event_payload(type: "payment_intent.succeeded", object_id: "pi_test_inexistente"))
+  it "responde 200 mesmo sem Payment correspondente ao id da sessao" do
+    post_webhook(event_payload(type: "checkout.session.completed", object_id: "cs_test_inexistente"))
 
     expect(response).to have_http_status(:ok)
   end
@@ -73,7 +74,7 @@ RSpec.describe "StripeWebhooks", type: :request do
   it "recusa com 400 em vez de 500 quando o webhook_secret ainda nao esta configurado" do
     allow(Rails.application.credentials).to receive(:dig).with(:stripe, :webhook_secret).and_return(nil)
 
-    post_webhook(event_payload(type: "payment_intent.succeeded", object_id: "pi_test_123"))
+    post_webhook(event_payload(type: "checkout.session.completed", object_id: "cs_test_123"))
 
     expect(response).to have_http_status(:bad_request)
   end

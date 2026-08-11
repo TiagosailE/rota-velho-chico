@@ -136,23 +136,23 @@ RSpec.describe "Constraints do banco" do
     it "recusa estorno maior que o valor cobrado" do
       expect {
         connection.execute(<<~SQL.squish)
-          INSERT INTO payments (booking_id, amount_cents, status, refunded_amount_cents,
-                                created_at, updated_at)
-          VALUES (#{booking_id}, 8100, 3, 8101, now(), now())
+          INSERT INTO payments (booking_id, stripe_checkout_session_id, amount_cents, status,
+                                refunded_amount_cents, created_at, updated_at)
+          VALUES (#{booking_id}, 'cs_test_constraint', 8100, 3, 8101, now(), now())
         SQL
       }.to raise_error(ActiveRecord::StatementInvalid, /payments_refund_within_amount/)
     end
 
     it "recusa dois pagamentos para a mesma reserva" do
       connection.execute(<<~SQL.squish)
-        INSERT INTO payments (booking_id, amount_cents, status, created_at, updated_at)
-        VALUES (#{booking_id}, 8100, 0, now(), now())
+        INSERT INTO payments (booking_id, stripe_checkout_session_id, amount_cents, status, created_at, updated_at)
+        VALUES (#{booking_id}, 'cs_test_first', 8100, 0, now(), now())
       SQL
 
       expect {
         connection.execute(<<~SQL.squish)
-          INSERT INTO payments (booking_id, amount_cents, status, created_at, updated_at)
-          VALUES (#{booking_id}, 8100, 0, now(), now())
+          INSERT INTO payments (booking_id, stripe_checkout_session_id, amount_cents, status, created_at, updated_at)
+          VALUES (#{booking_id}, 'cs_test_second', 8100, 0, now(), now())
         SQL
       }.to raise_error(ActiveRecord::RecordNotUnique)
     end

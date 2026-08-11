@@ -1,8 +1,11 @@
 require "rails_helper"
 
 RSpec.describe CheckoutSessionCreator do
-  def stub_stripe_session(payment_intent: "pi_test_123", url: "https://checkout.stripe.com/pay/cs_test_123")
-    session = instance_double(Stripe::Checkout::Session, payment_intent:, url:)
+  # payment_intent nil replica o comportamento real: a Checkout Session so
+  # ganha PaymentIntent quando o pagamento e concluido, nao na criacao
+  # (confirmado contra a API de verdade, nao documentacao).
+  def stub_stripe_session(id: "cs_test_123", payment_intent: nil, url: "https://checkout.stripe.com/pay/cs_test_123")
+    session = instance_double(Stripe::Checkout::Session, id:, payment_intent:, url:)
     allow(Stripe::Checkout::Session).to receive(:create).and_return(session)
     session
   end
@@ -10,10 +13,7 @@ RSpec.describe CheckoutSessionCreator do
   describe "#call" do
     it "cria a sessao do Stripe com o valor do sinal, nao do total, e devolve a url" do
       booking = create(:booking, total_cents: 27_000, deposit_cents: 8_100)
-      allow(Stripe::Checkout::Session).to receive(:create)
-        .and_return(instance_double(Stripe::Checkout::Session,
-                                     payment_intent: "pi_test_123",
-                                     url: "https://checkout.stripe.com/pay/cs_test_abc"))
+      stub_stripe_session(url: "https://checkout.stripe.com/pay/cs_test_abc")
 
       result = described_class.new(
         booking:, success_url: "https://example.com/success", cancel_url: "https://example.com/cancel"
@@ -30,27 +30,28 @@ RSpec.describe CheckoutSessionCreator do
       expect(result).to eq("https://checkout.stripe.com/pay/cs_test_abc")
     end
 
-    it "cria o Payment associado com o intent id da sessao" do
+    it "cria o Payment associado com o id da sessao, mesmo sem payment_intent ainda" do
       booking = create(:booking, deposit_cents: 8_100)
-      stub_stripe_session(payment_intent: "pi_test_456")
+      stub_stripe_session(id: "cs_test_456", payment_intent: nil)
 
       described_class.new(booking:, success_url: "https://example.com/s", cancel_url: "https://example.com/c").call
 
       payment = booking.reload.payment
-      expect(payment.stripe_payment_intent_id).to eq("pi_test_456")
+      expect(payment.stripe_checkout_session_id).to eq("cs_test_456")
+      expect(payment.stripe_payment_intent_id).to be_nil
       expect(payment.amount_cents).to eq(8_100)
       expect(payment).to be_pending
     end
 
     it "reaproveita o Payment existente numa nova tentativa, em vez de criar outro" do
       booking = create(:booking, deposit_cents: 8_100)
-      existing_payment = create(:payment, booking:, stripe_payment_intent_id: "pi_test_old")
-      stub_stripe_session(payment_intent: "pi_test_new")
+      existing_payment = create(:payment, booking:, stripe_checkout_session_id: "cs_test_old")
+      stub_stripe_session(id: "cs_test_new")
 
       described_class.new(booking:, success_url: "https://example.com/s", cancel_url: "https://example.com/c").call
 
       expect(Payment.where(booking:).count).to eq(1)
-      expect(existing_payment.reload.stripe_payment_intent_id).to eq("pi_test_new")
+      expect(existing_payment.reload.stripe_checkout_session_id).to eq("cs_test_new")
     end
 
     it "deixa Stripe::StripeError subir para quem chamou" do
