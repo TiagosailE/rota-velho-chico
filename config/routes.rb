@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   get "checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
 
   post "bookings/:code/cancel", to: "booking_cancellations#create", as: :cancel_booking
+  post "bookings/:code/review", to: "reviews#create", as: :review_booking
 
   post "stripe/webhook", to: "stripe_webhooks#create"
 

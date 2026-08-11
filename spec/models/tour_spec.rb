@@ -5,6 +5,8 @@ RSpec.describe Tour, type: :model do
 
   it { is_expected.to belong_to(:operator) }
   it { is_expected.to have_many(:departures) }
+  it { is_expected.to have_many(:bookings) }
+  it { is_expected.to have_many(:reviews) }
   it { is_expected.to have_many(:tour_photos) }
 
   it do
@@ -38,6 +40,23 @@ RSpec.describe Tour, type: :model do
 
       expect(tour.reload.cover_photo).to eq(primeira)
       expect(tour.cover_photo).not_to eq(segunda)
+    end
+  end
+
+  describe "#average_rating" do
+    it "e nil quando o passeio nao tem avaliacao" do
+      expect(create(:tour).average_rating).to be_nil
+    end
+
+    it "e a media arredondada em uma casa decimal" do
+      tour = create(:tour)
+      departure = create(:departure, tour:)
+      booking_a = create(:booking, departure:)
+      booking_b = create(:booking, departure:)
+      create(:review, booking: booking_a, rating: 5)
+      create(:review, booking: booking_b, rating: 4)
+
+      expect(tour.average_rating).to eq(4.5)
     end
   end
 

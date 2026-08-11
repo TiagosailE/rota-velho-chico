@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_11_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_11_020000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -122,6 +122,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_000000) do
     t.check_constraint "refunded_amount_cents IS NULL OR refunded_amount_cents >= 0 AND refunded_amount_cents <= amount_cents", name: "payments_refund_within_amount"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.integer "rating", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_reviews_on_booking_id", unique: true
+    t.check_constraint "rating >= 1 AND rating <= 5", name: "reviews_rating_range"
+  end
+
   create_table "stripe_events", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "event_type", null: false
@@ -169,6 +179,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_000000) do
   add_foreign_key "bookings", "departures"
   add_foreign_key "departures", "tours"
   add_foreign_key "payments", "bookings"
+  add_foreign_key "reviews", "bookings"
   add_foreign_key "tour_photos", "tours"
   add_foreign_key "tours", "operators"
 end

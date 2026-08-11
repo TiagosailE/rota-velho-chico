@@ -8,6 +8,11 @@ module ToursHelper
     remaining_minutes.zero? ? "#{hours}h" : "#{hours}h#{format('%02d', remaining_minutes)}"
   end
 
+  def star_rating(rating)
+    full_stars = rating.round
+    ("★" * full_stars) + ("☆" * (5 - full_stars))
+  end
+
   # Grade de semanas (domingo a sabado) cobrindo o mes, com nil para os dias
   # das semanas de borda que pertencem ao mes anterior/seguinte.
   def calendar_weeks(month)

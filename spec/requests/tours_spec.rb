@@ -102,6 +102,17 @@ RSpec.describe "Tours", type: :request do
 
       expect(response.body).to include(I18n.t("tours.index.empty"))
     end
+
+    it "mostra a nota media no card quando o passeio tem avaliacao" do
+      tour = create(:tour)
+      departure = create(:departure, tour:, starts_at: 2.days.ago)
+      booking = create(:booking, departure:, status: :confirmed)
+      create(:review, booking:, rating: 4)
+
+      get tours_path
+
+      expect(response.body).to include(I18n.t("tours.index.card.rating", rating: 4.0, count: 1))
+    end
   end
 
   describe "GET /tours/:slug" do
@@ -185,6 +196,26 @@ RSpec.describe "Tours", type: :request do
       get tour_path(tour.slug)
 
       expect(response.body).to include(I18n.t("tours.show.no_departures"))
+    end
+
+    it "mostra mensagem de vazio quando o passeio nao tem avaliacao" do
+      tour = create(:tour, slug: "passeio-sem-avaliacao")
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(I18n.t("tours.show.reviews_empty"))
+    end
+
+    it "lista as avaliacoes com nota e comentario quando existem" do
+      tour = create(:tour, slug: "passeio-avaliado")
+      departure = create(:departure, tour:, starts_at: 2.days.ago)
+      booking = create(:booking, departure:, status: :confirmed)
+      create(:review, booking:, rating: 5, comment: "Experiencia incrivel")
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include("Experiencia incrivel")
+      expect(response.body).to include(I18n.t("tours.show.reviews_summary", rating: 5.0, count: 1))
     end
   end
 end
