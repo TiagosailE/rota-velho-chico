@@ -12,8 +12,15 @@ class StripeWebhooksController < ApplicationController
     StripeEvent.create!(stripe_event_id: event.id, event_type: event.type)
 
     case event.type
-    when "payment_intent.succeeded"
-      PaymentConfirmer.new(stripe_payment_intent_id: event.data.object.id).call
+    # Nao payment_intent.succeeded: o PaymentIntent so existe a partir do
+    # pagamento concluido, entao o Payment nunca teria como ser criado com
+    # esse id de antemao. checkout.session.completed carrega o id da sessao
+    # (conhecido desde a criacao) e o payment_intent (populado agora).
+    when "checkout.session.completed"
+      PaymentConfirmer.new(
+        stripe_checkout_session_id: event.data.object.id,
+        stripe_payment_intent_id: event.data.object.payment_intent
+      ).call
     end
 
     head :ok

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_10_215000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_11_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -110,10 +110,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_10_215000) do
     t.integer "refunded_amount_cents"
     t.datetime "refunded_at"
     t.integer "status", default: 0, null: false
+    t.string "stripe_checkout_session_id", null: false
     t.string "stripe_payment_intent_id"
     t.string "stripe_refund_id"
     t.datetime "updated_at", null: false
     t.index ["booking_id"], name: "index_payments_on_booking_id", unique: true
+    t.index ["stripe_checkout_session_id"], name: "index_payments_on_stripe_checkout_session_id", unique: true
     t.index ["stripe_payment_intent_id"], name: "index_payments_on_stripe_payment_intent_id", unique: true
     t.index ["stripe_refund_id"], name: "index_payments_on_stripe_refund_id", unique: true
     t.check_constraint "amount_cents >= 0", name: "payments_amount_non_negative"
