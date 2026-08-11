@@ -49,7 +49,8 @@
 
   <div class="grid gap-3">
     <% if @booking.pending? %>
-      <%= button_to t("checkout.pay_button"), pay_booking_path(@booking.code), class: "btn btn-primary w-full" %>
+      <%= button_to t("checkout.pay_button"), pay_booking_path(@booking.code),
+            form: { data: { turbo: false } }, class: "btn btn-primary w-full" %>
     <% end %>
 
     <% if @booking.pending? || @booking.confirmed? %>
