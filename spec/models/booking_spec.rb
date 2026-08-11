@@ -5,6 +5,7 @@ RSpec.describe Booking, type: :model do
 
   it { is_expected.to belong_to(:departure) }
   it { is_expected.to have_one(:payment) }
+  it { is_expected.to have_one(:review) }
 
   it do
     expect(subject).to define_enum_for(:status)
@@ -80,6 +81,37 @@ RSpec.describe Booking, type: :model do
       booking = build(:booking, total_cents: 10_000, deposit_cents: 10_000)
 
       expect(booking).to be_valid
+    end
+  end
+
+  describe "#reviewable?" do
+    it "e avaliavel quando confirmada, com saida no passado e sem avaliacao" do
+      departure = create(:departure, starts_at: 2.days.ago)
+      booking = create(:booking, departure:, status: :confirmed)
+
+      expect(booking.reviewable?).to be true
+    end
+
+    it "nao e avaliavel quando pendente" do
+      departure = create(:departure, starts_at: 2.days.ago)
+      booking = create(:booking, departure:, status: :pending)
+
+      expect(booking.reviewable?).to be false
+    end
+
+    it "nao e avaliavel quando a saida ainda nao aconteceu" do
+      departure = create(:departure, starts_at: 2.days.from_now)
+      booking = create(:booking, departure:, status: :confirmed)
+
+      expect(booking.reviewable?).to be false
+    end
+
+    it "nao e avaliavel quando ja existe avaliacao" do
+      departure = create(:departure, starts_at: 2.days.ago)
+      booking = create(:booking, departure:, status: :confirmed)
+      create(:review, booking:)
+
+      expect(booking.reviewable?).to be false
     end
   end
 end

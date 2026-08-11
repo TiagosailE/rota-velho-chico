@@ -60,4 +60,26 @@
             class: "btn btn-danger w-full" %>
     <% end %>
   </div>
+
+  <% if @booking.review.present? %>
+    <div class="card p-6 mt-6 text-center text-stone-700">
+      <%= t("reviews.thanks") %>
+    </div>
+  <% elsif @booking.reviewable? %>
+    <div class="card p-6 mt-6">
+      <h2 class="text-lg font-semibold text-stone-900 mb-4"><%= t("reviews.form.title") %></h2>
+      <%= form_with url: review_booking_path(@booking.code), method: :post, scope: :review, class: "grid gap-4" do |f| %>
+        <%= hidden_field_tag :email, @booking.customer_email %>
+        <div>
+          <%= f.label :rating, t("reviews.form.rating"), class: "field-label" %>
+          <%= f.select :rating, (5.downto(1)), {}, class: "field-input" %>
+        </div>
+        <div>
+          <%= f.label :comment, t("reviews.form.comment"), class: "field-label" %>
+          <%= f.text_area :comment, rows: 3, class: "field-input" %>
+        </div>
+        <%= f.submit t("reviews.form.submit"), class: "btn btn-primary w-full" %>
+      <% end %>
+    </div>
+  <% end %>
 </div>

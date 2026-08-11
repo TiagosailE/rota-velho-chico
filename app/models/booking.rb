@@ -5,6 +5,7 @@ class Booking < ApplicationRecord
 
   belongs_to :departure
   has_one :payment
+  has_one :review
 
   enum :status, pending: 0, confirmed: 1, cancelled: 2, refunded: 3
 
@@ -19,6 +20,18 @@ class Booking < ApplicationRecord
             presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :party_not_empty
   validate :deposit_within_total
+
+  # So avalia quem realmente foi: reserva confirmada, saida ja aconteceu,
+  # e ainda sem avaliacao (has_one :review + indice unico impedem duas,
+  # mas checar aqui evita cair no erro de unicidade pra dar a mensagem
+  # certa). Nao usa departure.completed? porque nada no app transiciona
+  # esse enum automaticamente hoje -- ver NOTES.md/architecture.md, so
+  # existe o valor. Comparar com starts_at no passado (Time.current,
+  # invariante 5 do NOTES.md) e o que realmente reflete "o passeio ja
+  # aconteceu".
+  def reviewable?
+    confirmed? && departure.starts_at.past? && review.nil?
+  end
 
   private
 

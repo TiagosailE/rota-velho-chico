@@ -1,6 +1,8 @@
 class Tour < ApplicationRecord
   belongs_to :operator
   has_many :departures
+  has_many :bookings, through: :departures
+  has_many :reviews, through: :bookings
   has_many :tour_photos, -> { order(:position) }, dependent: :destroy
 
   enum :category, boat: 0, offroad: 1, hiking: 2, cultural: 3
@@ -17,6 +19,12 @@ class Tour < ApplicationRecord
   # e a view cai no placeholder.
   def cover_photo
     tour_photos.first
+  end
+
+  # Nil (nao 0) quando nao ha avaliacao nenhuma -- a view usa isso pra
+  # decidir se mostra o selo de nota ou nada, em vez de mostrar "0.0".
+  def average_rating
+    reviews.average(:rating)&.round(1)
   end
 
   # Atributo virtual para o formulario do operador aceitar reais em vez de

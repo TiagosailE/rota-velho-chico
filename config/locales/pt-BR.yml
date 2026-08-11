@@ -196,6 +196,16 @@ pt-BR:
       submit: "Consultar"
     not_found: "Nenhuma reserva encontrada com esse codigo e e-mail."
 
+  reviews:
+    form:
+      title: "Avalie este passeio"
+      rating: "Nota"
+      comment: "Comentario (opcional)"
+      submit: "Enviar avaliacao"
+    thanks: "Obrigado pela sua avaliacao!"
+    errors:
+      not_reviewable: "Essa reserva nao pode ser avaliada."
+
   checkout:
     line_item_name: "Sinal - %{tour}"
     pay_button: "Pagar sinal agora"
@@ -236,6 +246,7 @@ pt-BR:
       card:
         duration_label: "Duracao"
         details: "Ver detalhes"
+        rating: "%{rating} (%{count})"
     show:
       back: "Voltar para os passeios"
       meeting_point: "Ponto de encontro"
@@ -263,3 +274,8 @@ pt-BR:
         close: "Fechar"
         previous: "Foto anterior"
         next: "Proxima foto"
+      reviews_title: "Avaliacoes"
+      reviews_empty: "Este passeio ainda nao tem avaliacoes."
+      reviews_summary:
+        one: "%{rating} de 5 -- 1 avaliacao"
+        other: "%{rating} de 5 -- %{count} avaliacoes"

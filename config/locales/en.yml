@@ -196,6 +196,16 @@ en:
       submit: "Look up"
     not_found: "No booking found with that code and email."
 
+  reviews:
+    form:
+      title: "Rate this tour"
+      rating: "Rating"
+      comment: "Comment (optional)"
+      submit: "Submit review"
+    thanks: "Thanks for your review!"
+    errors:
+      not_reviewable: "This booking can't be reviewed."
+
   checkout:
     line_item_name: "Deposit - %{tour}"
     pay_button: "Pay deposit now"
@@ -236,6 +246,7 @@ en:
       card:
         duration_label: "Duration"
         details: "View details"
+        rating: "%{rating} (%{count})"
     show:
       back: "Back to tours"
       meeting_point: "Meeting point"
@@ -263,3 +274,8 @@ en:
         close: "Close"
         previous: "Previous photo"
         next: "Next photo"
+      reviews_title: "Reviews"
+      reviews_empty: "This tour doesn't have any reviews yet."
+      reviews_summary:
+        one: "%{rating} out of 5 -- 1 review"
+        other: "%{rating} out of 5 -- %{count} reviews"

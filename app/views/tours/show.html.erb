@@ -8,9 +8,15 @@
       <div class="card p-6 sm:p-8 mb-8">
         <span class="badge badge-category mb-3"><%= t("tours.categories.#{@tour.category}") %></span>
         <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900 mb-1"><%= @tour.title %></h1>
-        <p class="text-sm text-stone-500 mb-6"><%= t("tours.show.operated_by", name: @tour.operator.name) %></p>
+        <p class="text-sm text-stone-500 mb-1"><%= t("tours.show.operated_by", name: @tour.operator.name) %></p>
+        <% if (rating = @tour.average_rating) %>
+          <p class="text-sm text-amber-600 mb-6">
+            <%= star_rating(rating) %>
+            <%= t("tours.show.reviews_summary", rating: rating, count: @tour.reviews.count) %>
+          </p>
+        <% end %>
 
-        <h2 class="text-lg font-display font-semibold text-stone-900 mb-2"><%= t("tours.show.about") %></h2>
+        <h2 class="text-lg font-display font-semibold text-stone-900 mb-2 mt-2"><%= t("tours.show.about") %></h2>
         <p class="text-stone-700 leading-relaxed"><%= @tour.description %></p>
       </div>
 
@@ -40,9 +46,27 @@
         </dl>
       </div>
 
-      <div class="card p-6 sm:p-8">
+      <div class="card p-6 sm:p-8 mb-8">
         <h2 class="text-lg font-display font-semibold text-stone-900 mb-2"><%= t("tours.show.cancellation_policy") %></h2>
         <p class="text-stone-700 leading-relaxed text-sm"><%= t("tours.show.cancellation_policy_body") %></p>
+      </div>
+
+      <div class="card p-6 sm:p-8">
+        <h2 class="text-lg font-display font-semibold text-stone-900 mb-4"><%= t("tours.show.reviews_title") %></h2>
+        <% if @tour.reviews.none? %>
+          <p class="text-stone-500 text-sm"><%= t("tours.show.reviews_empty") %></p>
+        <% else %>
+          <ul class="grid gap-4">
+            <% @tour.reviews.order(created_at: :desc).each do |review| %>
+              <li class="border-t border-stone-100 pt-4 first:border-t-0 first:pt-0">
+                <p class="text-amber-600 text-sm mb-1"><%= star_rating(review.rating) %></p>
+                <% if review.comment.present? %>
+                  <p class="text-stone-700 text-sm"><%= review.comment %></p>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
       </div>
     </div>
 
