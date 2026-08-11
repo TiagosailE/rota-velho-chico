@@ -221,6 +221,9 @@ pt-BR:
       cultural: "Cultural"
     index:
       title: "Passeios em Paulo Afonso"
+      hero:
+        title: "Descubra o sertao pelo Rio Sao Francisco"
+        subtitle: "Passeios de barco, trilha e aventura com saida e reserva confirmada na hora."
       empty: "Nenhum passeio encontrado com esses filtros."
       filter:
         category: "Categoria"
@@ -238,6 +241,10 @@ pt-BR:
       meeting_point: "Ponto de encontro"
       duration: "Duracao"
       min_age: "Idade minima: %{age} anos"
+      min_age_label: "Idade minima"
+      age_years: "%{age} anos"
+      lunch_label: "Refeicao"
+      lunch_included: "Almoco incluso"
       price: "Preco por pessoa"
       operated_by: "Operado por %{name}"
       calendar_title: "Calendario de disponibilidade"
@@ -246,3 +253,13 @@ pt-BR:
       seats_available:
         one: "1 vaga disponivel"
         other: "%{count} vagas disponiveis"
+      about: "Sobre este passeio"
+      whats_included: "O que inclui"
+      cancellation_policy: "Politica de cancelamento"
+      cancellation_policy_body: "Cancelamento gratuito ate 48 horas antes do horario de saida, com estorno integral do sinal pago. Cancelamentos com menos de 48 horas de antecedencia nao sao reembolsaveis."
+      gallery:
+        more_photos: "+%{count} fotos"
+        open: "Ver foto em tela cheia"
+        close: "Fechar"
+        previous: "Foto anterior"
+        next: "Proxima foto"

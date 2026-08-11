@@ -221,6 +221,9 @@ en:
       cultural: "Cultural"
     index:
       title: "Tours in Paulo Afonso"
+      hero:
+        title: "Discover the backlands along the Sao Francisco River"
+        subtitle: "Boat, hiking and adventure tours with instant departure and booking confirmation."
       empty: "No tours found for these filters."
       filter:
         category: "Category"
@@ -238,6 +241,10 @@ en:
       meeting_point: "Meeting point"
       duration: "Duration"
       min_age: "Minimum age: %{age} years"
+      min_age_label: "Minimum age"
+      age_years: "%{age} years"
+      lunch_label: "Meal"
+      lunch_included: "Lunch included"
       price: "Price per person"
       operated_by: "Operated by %{name}"
       calendar_title: "Availability calendar"
@@ -246,3 +253,13 @@ en:
       seats_available:
         one: "1 seat available"
         other: "%{count} seats available"
+      about: "About this tour"
+      whats_included: "What's included"
+      cancellation_policy: "Cancellation policy"
+      cancellation_policy_body: "Free cancellation up to 48 hours before departure, with a full refund of the deposit paid. Cancellations within 48 hours of departure are not refundable."
+      gallery:
+        more_photos: "+%{count} photos"
+        open: "View photo full screen"
+        close: "Close"
+        previous: "Previous photo"
+        next: "Next photo"
