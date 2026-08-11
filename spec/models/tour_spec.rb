@@ -28,6 +28,20 @@ RSpec.describe Tour, type: :model do
 
   it { is_expected.to validate_numericality_of(:min_age).is_greater_than_or_equal_to(0) }
 
+  it { is_expected.to validate_numericality_of(:lat).is_greater_than_or_equal_to(-90).is_less_than_or_equal_to(90).allow_nil }
+  it { is_expected.to validate_numericality_of(:lng).is_greater_than_or_equal_to(-180).is_less_than_or_equal_to(180).allow_nil }
+
+  describe "#coordinates?" do
+    it "e falso quando falta lat ou lng" do
+      expect(build(:tour, lat: nil, lng: -38.2).coordinates?).to be false
+      expect(build(:tour, lat: -9.4, lng: nil).coordinates?).to be false
+    end
+
+    it "e verdadeiro quando os dois estao presentes" do
+      expect(build(:tour, lat: -9.4, lng: -38.2).coordinates?).to be true
+    end
+  end
+
   describe "#cover_photo" do
     it "e nil quando o passeio nao tem foto" do
       expect(create(:tour).cover_photo).to be_nil

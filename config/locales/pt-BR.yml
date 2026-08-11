@@ -88,6 +88,9 @@ pt-BR:
         duration_minutes: "Duracao (minutos)"
         base_price_reais: "Preco base (R$)"
         meeting_point: "Ponto de encontro"
+        lat: "Latitude (opcional)"
+        lng: "Longitude (opcional)"
+        coordinates_hint: "Preencha os dois para mostrar o mapa na pagina do passeio."
         min_age: "Idade minima"
         includes_lunch: "Inclui almoco"
         active: "Ativo (visivel para turistas)"
@@ -274,6 +277,7 @@ pt-BR:
         close: "Fechar"
         previous: "Foto anterior"
         next: "Proxima foto"
+      location_title: "Localizacao"
       reviews_title: "Avaliacoes"
       reviews_empty: "Este passeio ainda nao tem avaliacoes."
       reviews_summary:

@@ -86,6 +86,18 @@ RSpec.describe "Operators::Tours", type: :request do
       expect(tour.reload.base_price_cents).to eq(9_990)
     end
 
+    it "salva as coordenadas do ponto de encontro" do
+      operator = create(:operator)
+      tour = create(:tour, operator:, lat: nil, lng: nil)
+      sign_in operator
+
+      patch operators_tour_path(tour), params: { tour: { lat: "-9.4", lng: "-38.225" } }
+
+      tour.reload
+      expect(tour.lat).to eq(-9.4)
+      expect(tour.lng).to eq(-38.225)
+    end
+
     it "recusa atualizar o passeio de outro operador" do
       operator = create(:operator)
       other_tour = create(:tour, operator: create(:operator), title: "Original")

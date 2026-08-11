@@ -46,6 +46,15 @@
         </dl>
       </div>
 
+      <% if @tour.coordinates? %>
+        <div class="card p-6 sm:p-8 mb-8">
+          <h2 class="text-lg font-display font-semibold text-stone-900 mb-4"><%= t("tours.show.location_title") %></h2>
+          <div class="h-64 rounded-lg overflow-hidden" data-controller="map"
+               data-map-lat-value="<%= @tour.lat %>" data-map-lng-value="<%= @tour.lng %>"
+               data-map-label-value="<%= @tour.meeting_point %>"></div>
+        </div>
+      <% end %>
+
       <div class="card p-6 sm:p-8 mb-8">
         <h2 class="text-lg font-display font-semibold text-stone-900 mb-2"><%= t("tours.show.cancellation_policy") %></h2>
         <p class="text-stone-700 leading-relaxed text-sm"><%= t("tours.show.cancellation_policy_body") %></p>

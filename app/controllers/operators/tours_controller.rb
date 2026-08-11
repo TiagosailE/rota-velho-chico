@@ -40,6 +40,7 @@ class Operators::ToursController < Operators::BaseController
 
   def tour_params
     params.require(:tour).permit(:title, :slug, :description, :category, :duration_minutes,
-                                  :base_price_reais, :meeting_point, :min_age, :includes_lunch, :active)
+                                  :base_price_reais, :meeting_point, :min_age, :includes_lunch, :active,
+                                  :lat, :lng)
   end
 end
