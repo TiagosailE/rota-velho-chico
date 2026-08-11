@@ -44,6 +44,19 @@
     <%= f.text_field :meeting_point, required: true, class: "field-input" %>
   </div>
 
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :lat, t("operators.tours.form.lat"), class: "field-label" %>
+      <%= f.number_field :lat, step: "any", min: -90, max: 90, class: "field-input" %>
+    </div>
+
+    <div>
+      <%= f.label :lng, t("operators.tours.form.lng"), class: "field-label" %>
+      <%= f.number_field :lng, step: "any", min: -180, max: 180, class: "field-input" %>
+    </div>
+  </div>
+  <p class="field-hint -mt-3"><%= t("operators.tours.form.coordinates_hint") %></p>
+
   <div>
     <%= f.label :min_age, t("operators.tours.form.min_age"), class: "field-label" %>
     <%= f.number_field :min_age, min: 0, class: "field-input max-w-[8rem]" %>

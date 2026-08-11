@@ -88,6 +88,9 @@ en:
         duration_minutes: "Duration (minutes)"
         base_price_reais: "Base price (R$)"
         meeting_point: "Meeting point"
+        lat: "Latitude (optional)"
+        lng: "Longitude (optional)"
+        coordinates_hint: "Fill in both to show the map on the tour page."
         min_age: "Minimum age"
         includes_lunch: "Includes lunch"
         active: "Active (visible to tourists)"
@@ -274,6 +277,7 @@ en:
         close: "Close"
         previous: "Previous photo"
         next: "Next photo"
+      location_title: "Location"
       reviews_title: "Reviews"
       reviews_empty: "This tour doesn't have any reviews yet."
       reviews_summary:

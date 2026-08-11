@@ -198,6 +198,24 @@ RSpec.describe "Tours", type: :request do
       expect(response.body).to include(I18n.t("tours.show.no_departures"))
     end
 
+    it "nao mostra o mapa quando o passeio nao tem coordenadas" do
+      tour = create(:tour, slug: "passeio-sem-mapa", lat: nil, lng: nil)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).not_to include(I18n.t("tours.show.location_title"))
+    end
+
+    it "mostra o mapa com as coordenadas quando o passeio tem lat/lng" do
+      tour = create(:tour, slug: "passeio-com-mapa", lat: -9.4, lng: -38.225)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(I18n.t("tours.show.location_title"))
+      expect(response.body).to include('data-map-lat-value="-9.4"')
+      expect(response.body).to include('data-map-lng-value="-38.225"')
+    end
+
     it "mostra mensagem de vazio quando o passeio nao tem avaliacao" do
       tour = create(:tour, slug: "passeio-sem-avaliacao")
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_11_020000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_11_030000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -160,6 +160,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_020000) do
     t.text "description"
     t.integer "duration_minutes", null: false
     t.boolean "includes_lunch", default: false, null: false
+    t.decimal "lat", precision: 10, scale: 6
+    t.decimal "lng", precision: 10, scale: 6
     t.string "meeting_point", null: false
     t.integer "min_age", default: 0, null: false
     t.bigint "operator_id", null: false
@@ -171,6 +173,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_020000) do
     t.index ["slug"], name: "index_tours_on_slug", unique: true
     t.check_constraint "base_price_cents > 0", name: "tours_base_price_positive"
     t.check_constraint "duration_minutes > 0", name: "tours_duration_positive"
+    t.check_constraint "lat IS NULL OR lat >= '-90'::integer::numeric AND lat <= 90::numeric", name: "tours_lat_valid_range"
+    t.check_constraint "lng IS NULL OR lng >= '-180'::integer::numeric AND lng <= 180::numeric", name: "tours_lng_valid_range"
     t.check_constraint "min_age >= 0", name: "tours_min_age_non_negative"
   end
 

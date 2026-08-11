@@ -13,12 +13,18 @@ class Tour < ApplicationRecord
   validates :base_price_cents, presence: true, numericality: { greater_than: 0 }
   validates :meeting_point, presence: true
   validates :min_age, numericality: { greater_than_or_equal_to: 0 }
+  validates :lat, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }, allow_nil: true
+  validates :lng, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_nil: true
 
   # A foto de menor position e a capa: e ela que aparece no card do catalogo
   # e no topo da pagina de detalhe. Nil quando o passeio ainda nao tem foto,
   # e a view cai no placeholder.
   def cover_photo
     tour_photos.first
+  end
+
+  def coordinates?
+    lat.present? && lng.present?
   end
 
   # Nil (nao 0) quando nao ha avaliacao nenhuma -- a view usa isso pra
