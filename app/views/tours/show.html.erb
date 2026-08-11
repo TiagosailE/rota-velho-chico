@@ -1,83 +1,122 @@
-<div class="w-full max-w-4xl mx-auto">
+<div class="w-full max-w-6xl mx-auto">
   <%= link_to t("tours.show.back"), tours_path, class: "btn-link mb-6 inline-flex" %>
 
-  <div class="card p-6 sm:p-8 mb-8">
-    <span class="badge badge-category mb-3"><%= t("tours.categories.#{@tour.category}") %></span>
-    <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900 mb-1"><%= @tour.title %></h1>
-    <p class="text-sm text-stone-500 mb-6"><%= t("tours.show.operated_by", name: @tour.operator.name) %></p>
+  <%= render "tours/gallery", tour: @tour %>
 
-    <p class="text-stone-700 leading-relaxed mb-6"><%= @tour.description %></p>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:items-start">
+    <div class="lg:col-span-2">
+      <div class="card p-6 sm:p-8 mb-8">
+        <span class="badge badge-category mb-3"><%= t("tours.categories.#{@tour.category}") %></span>
+        <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900 mb-1"><%= @tour.title %></h1>
+        <p class="text-sm text-stone-500 mb-6"><%= t("tours.show.operated_by", name: @tour.operator.name) %></p>
 
-    <dl class="grid gap-3 sm:grid-cols-2 border-t border-stone-100 pt-6">
-      <div>
-        <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("tours.show.meeting_point") %></dt>
-        <dd class="text-stone-800"><%= @tour.meeting_point %></dd>
-      </div>
-      <div>
-        <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("tours.show.duration") %></dt>
-        <dd class="text-stone-800"><%= format_duration(@tour.duration_minutes) %></dd>
-      </div>
-      <div>
-        <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("tours.show.price") %></dt>
-        <dd class="text-lg font-semibold text-stone-900"><%= format_price_cents(@tour.base_price_cents) %></dd>
-      </div>
-    </dl>
-
-    <% if @tour.min_age.positive? %>
-      <p class="text-sm text-stone-500 mt-4"><%= t("tours.show.min_age", age: @tour.min_age) %></p>
-    <% end %>
-  </div>
-
-  <div class="card p-6 sm:p-8">
-    <h2 class="text-lg font-semibold text-stone-900 mb-4"><%= t("tours.show.calendar_title") %></h2>
-
-    <%= turbo_frame_tag "availability_calendar" do %>
-      <div class="flex justify-between items-center mb-4">
-        <%= link_to "‹", tour_path(@tour.slug, month: @month.prev_month.strftime("%Y-%m")), class: "btn btn-secondary px-3 py-1.5" %>
-        <strong class="font-display text-stone-900"><%= l(@month, format: "%B %Y") %></strong>
-        <%= link_to "›", tour_path(@tour.slug, month: @month.next_month.strftime("%Y-%m")), class: "btn btn-secondary px-3 py-1.5" %>
+        <h2 class="text-lg font-display font-semibold text-stone-900 mb-2"><%= t("tours.show.about") %></h2>
+        <p class="text-stone-700 leading-relaxed"><%= @tour.description %></p>
       </div>
 
-      <table class="w-full text-center border-collapse text-sm">
-        <thead>
-          <tr>
-            <% I18n.t("date.abbr_day_names").each do |day_name| %>
-              <th class="text-xs font-medium text-stone-400 uppercase pb-2"><%= day_name %></th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% calendar_weeks(@month).each do |week| %>
-            <tr>
-              <% week.each do |day| %>
-                <% departures = day ? (@departures_by_date[day] || []) : [] %>
-                <td class="align-top p-1">
-                  <% if day %>
-                    <div class="rounded-lg p-1.5 min-h-16 <%= departures.any? ? "bg-orange-50 border border-orange-100" : "" %>">
-                      <div class="text-xs text-stone-400"><%= day.day %></div>
-                      <% departures.each do |departure| %>
-                        <% remaining_seats = departure.capacity - departure.seats_taken %>
-                        <div class="text-xs mt-1">
-                          <div class="text-stone-600"><%= departure.starts_at.strftime("%H:%M") %></div>
-                          <div class="text-stone-500"><%= t("tours.show.seats_available", count: remaining_seats) %></div>
-                          <% if remaining_seats.positive? %>
-                            <%= link_to t("tours.show.book"), new_departure_booking_path(departure),
-                                  data: { turbo_frame: "_top" }, class: "btn-link text-xs" %>
+      <div class="card p-6 sm:p-8 mb-8">
+        <h2 class="text-lg font-display font-semibold text-stone-900 mb-4"><%= t("tours.show.whats_included") %></h2>
+        <dl class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("tours.show.duration") %></dt>
+            <dd class="text-stone-800"><%= format_duration(@tour.duration_minutes) %></dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("tours.show.meeting_point") %></dt>
+            <dd class="text-stone-800"><%= @tour.meeting_point %></dd>
+          </div>
+          <% if @tour.min_age.positive? %>
+            <div>
+              <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("tours.show.min_age_label") %></dt>
+              <dd class="text-stone-800"><%= t("tours.show.age_years", age: @tour.min_age) %></dd>
+            </div>
+          <% end %>
+          <% if @tour.includes_lunch %>
+            <div>
+              <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("tours.show.lunch_label") %></dt>
+              <dd class="text-stone-800"><%= t("tours.show.lunch_included") %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+
+      <div class="card p-6 sm:p-8">
+        <h2 class="text-lg font-display font-semibold text-stone-900 mb-2"><%= t("tours.show.cancellation_policy") %></h2>
+        <p class="text-stone-700 leading-relaxed text-sm"><%= t("tours.show.cancellation_policy_body") %></p>
+      </div>
+    </div>
+
+    <div class="lg:sticky lg:top-24">
+      <div class="card p-6 sm:p-8 mb-8">
+        <p class="text-xs font-medium uppercase tracking-wide text-stone-400 mb-1"><%= t("tours.show.price") %></p>
+        <p class="text-2xl font-semibold text-stone-900 mb-4"><%= format_price_cents(@tour.base_price_cents) %></p>
+
+        <dl class="grid gap-2 text-sm border-t border-stone-100 pt-4">
+          <div class="flex justify-between">
+            <dt class="text-stone-500"><%= t("tours.show.duration") %></dt>
+            <dd class="text-stone-800"><%= format_duration(@tour.duration_minutes) %></dd>
+          </div>
+          <% if @tour.min_age.positive? %>
+            <div class="flex justify-between">
+              <dt class="text-stone-500"><%= t("tours.show.min_age_label") %></dt>
+              <dd class="text-stone-800"><%= t("tours.show.age_years", age: @tour.min_age) %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+
+      <div class="card p-6 sm:p-8">
+        <h2 class="text-lg font-semibold text-stone-900 mb-4"><%= t("tours.show.calendar_title") %></h2>
+
+        <%= turbo_frame_tag "availability_calendar" do %>
+          <div class="flex justify-between items-center mb-4">
+            <%= link_to "‹", tour_path(@tour.slug, month: @month.prev_month.strftime("%Y-%m")), class: "btn btn-secondary px-3 py-1.5" %>
+            <strong class="font-display text-stone-900"><%= l(@month, format: "%B %Y") %></strong>
+            <%= link_to "›", tour_path(@tour.slug, month: @month.next_month.strftime("%Y-%m")), class: "btn btn-secondary px-3 py-1.5" %>
+          </div>
+
+          <table class="w-full table-fixed text-center border-collapse text-sm">
+            <thead>
+              <tr>
+                <% I18n.t("date.abbr_day_names").each do |day_name| %>
+                  <th class="text-xs font-medium text-stone-400 uppercase pb-2"><%= day_name %></th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% calendar_weeks(@month).each do |week| %>
+                <tr>
+                  <% week.each do |day| %>
+                    <% departures = day ? (@departures_by_date[day] || []) : [] %>
+                    <td class="align-top p-1">
+                      <% if day %>
+                        <div class="rounded-lg p-1.5 min-h-16 <%= departures.any? ? "bg-orange-50 border border-orange-100" : "" %>">
+                          <div class="text-xs text-stone-400"><%= day.day %></div>
+                          <% departures.each do |departure| %>
+                            <% remaining_seats = departure.capacity - departure.seats_taken %>
+                            <div class="text-xs mt-1">
+                              <div class="text-stone-600"><%= departure.starts_at.strftime("%H:%M") %></div>
+                              <div class="text-stone-500"><%= t("tours.show.seats_available", count: remaining_seats) %></div>
+                              <% if remaining_seats.positive? %>
+                                <%= link_to t("tours.show.book"), new_departure_booking_path(departure),
+                                      data: { turbo_frame: "_top" }, class: "btn-link text-xs" %>
+                              <% end %>
+                            </div>
                           <% end %>
                         </div>
                       <% end %>
-                    </div>
+                    </td>
                   <% end %>
-                </td>
+                </tr>
               <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+            </tbody>
+          </table>
 
-      <% if @departures_by_date.empty? %>
-        <p class="text-stone-500 text-sm mt-4"><%= t("tours.show.no_departures") %></p>
-      <% end %>
-    <% end %>
+          <% if @departures_by_date.empty? %>
+            <p class="text-stone-500 text-sm mt-4"><%= t("tours.show.no_departures") %></p>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

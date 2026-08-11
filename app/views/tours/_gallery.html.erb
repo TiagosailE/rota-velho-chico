@@ -1,0 +1,66 @@
+<%# Galeria estilo Airbnb: foto grande + ate 4 menores, com lightbox nativo
+    (<dialog>) controlado pelo gallery_controller. Fotos 2 e 5+ tem layouts
+    proprios porque o grid de "1 grande + 4" fica com buraco vazio quando
+    sobra so 1 foto pequena. %>
+<% photos = tour.tour_photos.to_a %>
+
+<% if photos.empty? %>
+  <div class="mb-8 rounded-2xl bg-stone-100 aspect-[21/9] flex items-center justify-center" role="img"
+       aria-label="<%= t("tours.cover.placeholder", title: tour.title) %>">
+    <span class="text-stone-400"><%= t("tours.cover.no_photo") %></span>
+  </div>
+<% else %>
+  <div class="mb-8"
+       data-controller="gallery"
+       data-gallery-urls-value="<%= photos.map { |photo| url_for(photo.image.variant(:hero)) }.to_json %>"
+       data-gallery-alts-value="<%= photos.map { |photo| photo.alt_text.presence || tour.title }.to_json %>">
+
+    <% if photos.size == 1 %>
+      <div class="rounded-2xl overflow-hidden aspect-[21/9]">
+        <button type="button" class="block w-full h-full" data-action="gallery#open" data-gallery-index-param="0">
+          <%= image_tag photos[0].image.variant(:hero), class: "w-full h-full object-cover", alt: photos[0].alt_text.presence || tour.title %>
+        </button>
+      </div>
+    <% elsif photos.size == 2 %>
+      <div class="grid grid-cols-2 gap-2 rounded-2xl overflow-hidden aspect-[21/9]">
+        <% photos.each_with_index do |photo, index| %>
+          <button type="button" class="relative h-full" data-action="gallery#open" data-gallery-index-param="<%= index %>">
+            <%= image_tag photo.image.variant(:hero), class: "w-full h-full object-cover", alt: photo.alt_text.presence || tour.title %>
+          </button>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="grid grid-cols-4 grid-rows-2 gap-2 rounded-2xl overflow-hidden aspect-[16/9]">
+        <button type="button" class="col-span-2 row-span-2 relative" data-action="gallery#open" data-gallery-index-param="0">
+          <%= image_tag photos[0].image.variant(:hero), class: "w-full h-full object-cover", alt: photos[0].alt_text.presence || tour.title %>
+        </button>
+
+        <% photos[1, 4].each_with_index do |photo, i| %>
+          <% real_index = i + 1 %>
+          <button type="button" class="relative" data-action="gallery#open" data-gallery-index-param="<%= real_index %>">
+            <%= image_tag photo.image.variant(:card), class: "w-full h-full object-cover", alt: photo.alt_text.presence || tour.title %>
+            <% if real_index == 4 && photos.size > 5 %>
+              <span class="absolute inset-0 bg-stone-950/60 flex items-center justify-center text-white font-semibold text-sm">
+                <%= t("tours.show.gallery.more_photos", count: photos.size - 5) %>
+              </span>
+            <% end %>
+          </button>
+        <% end %>
+      </div>
+    <% end %>
+
+    <dialog data-gallery-target="dialog" data-action="click->gallery#backdropClose"
+            class="m-auto max-w-4xl w-[90vw] bg-transparent p-0 backdrop:bg-stone-950/85">
+      <div class="relative">
+        <%= image_tag "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",
+              data: { gallery_target: "image" }, class: "w-full max-h-[80vh] object-contain rounded-lg" %>
+        <button type="button" data-action="gallery#close" aria-label="<%= t("tours.show.gallery.close") %>"
+                class="absolute top-3 right-3 btn btn-secondary px-3 py-1.5">&times;</button>
+        <button type="button" data-action="gallery#previous" aria-label="<%= t("tours.show.gallery.previous") %>"
+                class="absolute left-3 top-1/2 -translate-y-1/2 btn btn-secondary px-3 py-2">&lsaquo;</button>
+        <button type="button" data-action="gallery#next" aria-label="<%= t("tours.show.gallery.next") %>"
+                class="absolute right-3 top-1/2 -translate-y-1/2 btn btn-secondary px-3 py-2">&rsaquo;</button>
+      </div>
+    </dialog>
+  </div>
+<% end %>

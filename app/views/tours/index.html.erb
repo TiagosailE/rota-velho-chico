@@ -1,10 +1,16 @@
+<% content_for(:title) { t("tours.index.title") } %>
 <div class="w-full">
-  <div class="mb-8">
-    <h1 class="text-3xl sm:text-4xl font-semibold text-stone-900 mb-2"><%= t("tours.index.title") %></h1>
-    <%= link_to t("booking_lookups.new.link"), new_booking_lookup_path, class: "btn-link" %>
+  <div class="-mx-5 -mt-8 px-5 pt-14 pb-24 mb-[-64px]
+              bg-gradient-to-br from-orange-900 via-orange-800 to-stone-900 text-white">
+    <div class="max-w-2xl">
+      <h1 class="text-3xl sm:text-4xl font-display font-semibold mb-3"><%= t("tours.index.hero.title") %></h1>
+      <p class="text-orange-50/90 text-lg mb-4"><%= t("tours.index.hero.subtitle") %></p>
+      <%= link_to t("booking_lookups.new.link"), new_booking_lookup_path, class: "text-sm font-medium text-white hover:text-orange-100 underline underline-offset-2" %>
+    </div>
   </div>
 
-  <%= form_with url: tours_path, method: :get, class: "card p-5 mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end" do |f| %>
+  <%= form_with url: tours_path, method: :get,
+        class: "relative card p-5 mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end" do |f| %>
     <div>
       <%= f.label :category, t("tours.index.filter.category"), class: "field-label" %>
       <%= f.select :category,
@@ -40,10 +46,14 @@
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <% @tours.each do |tour| %>
         <%= link_to tour_path(tour.slug), class: "card card-hover overflow-hidden flex flex-col" do %>
-          <%= render "tours/cover", tour: tour, variant: :card, css: "w-full aspect-[4/3] object-cover" %>
+          <div class="relative">
+            <%= render "tours/cover", tour: tour, variant: :card, css: "w-full aspect-[4/3] object-cover" %>
+            <span class="badge badge-category absolute top-3 left-3 bg-white/90 text-orange-800 shadow-sm">
+              <%= t("tours.categories.#{tour.category}") %>
+            </span>
+          </div>
 
           <div class="p-5 flex flex-col flex-1">
-          <span class="badge badge-category w-fit mb-3"><%= t("tours.categories.#{tour.category}") %></span>
           <h2 class="text-lg font-display font-semibold text-stone-900 mb-1"><%= tour.title %></h2>
           <p class="text-sm text-stone-500 mb-4">
             <%= t("tours.index.card.duration_label") %>: <%= format_duration(tour.duration_minutes) %>
