@@ -29,6 +29,8 @@ Rails.application.routes.draw do
 
   resources :tours, only: [ :index, :show ], param: :slug
 
+  get "agencias/:slug", to: "operator_profiles#show", as: :operator_profile
+
   resources :departures, only: [] do
     resources :bookings, only: [ :new, :create ]
   end

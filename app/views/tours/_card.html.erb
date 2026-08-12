@@ -1,0 +1,24 @@
+<%= link_to tour_path(tour.slug), class: "card card-hover overflow-hidden flex flex-col" do %>
+  <div class="relative">
+    <%= render "tours/cover", tour: tour, variant: :card, css: "w-full aspect-[4/3] object-cover" %>
+    <span class="badge badge-category absolute top-3 left-3 bg-white/90 text-orange-800 shadow-sm">
+      <%= t("tours.categories.#{tour.category}") %>
+    </span>
+  </div>
+
+  <div class="p-5 flex flex-col flex-1">
+  <h2 class="text-lg font-display font-semibold text-stone-900 mb-1"><%= tour.title %></h2>
+  <% if (rating = tour.average_rating) %>
+    <p class="text-sm text-amber-600 mb-1">
+      <%= t("tours.index.card.rating", rating: rating, count: tour.reviews.count) %>
+    </p>
+  <% end %>
+  <p class="text-sm text-stone-500 mb-4">
+    <%= t("tours.index.card.duration_label") %>: <%= format_duration(tour.duration_minutes) %>
+  </p>
+  <div class="mt-auto flex items-center justify-between pt-3 border-t border-stone-100">
+    <span class="text-lg font-semibold text-stone-900"><%= format_price_cents(tour.base_price_cents) %></span>
+    <span class="btn-link"><%= t("tours.index.card.details") %></span>
+  </div>
+  </div>
+<% end %>
