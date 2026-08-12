@@ -77,6 +77,28 @@ RSpec.describe "Bookings", type: :request do
       expect(Booking.count).to eq(0)
     end
 
+    it "cria a reserva com almoco quando o passeio oferece o add-on" do
+      tour = create(:tour, :with_lunch)
+      departure = create(:departure, tour:, capacity: 10, seats_taken: 0)
+
+      post departure_bookings_path(departure), params: valid_params(lunch_count: 2)
+      booking = Booking.last
+
+      expect(response).to redirect_to(booking_confirmation_path)
+      expect(booking.lunch_count).to eq(2)
+      expect(booking.lunch_unit_price_cents).to eq(tour.lunch_price_cents)
+    end
+
+    it "recusa lunch_count quando o passeio nao oferece almoco" do
+      departure = create(:departure, tour: create(:tour, lunch_price_cents: nil))
+
+      post departure_bookings_path(departure), params: valid_params(lunch_count: 1)
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include(I18n.t("bookings.errors.invalid_lunch_count"))
+      expect(Booking.count).to eq(0)
+    end
+
     it "recusa nome em branco com mensagem legivel, sem criar a reserva" do
       departure = create(:departure)
 

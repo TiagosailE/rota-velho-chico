@@ -15,6 +15,7 @@ class Tour < ApplicationRecord
   validates :min_age, numericality: { greater_than_or_equal_to: 0 }
   validates :lat, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }, allow_nil: true
   validates :lng, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_nil: true
+  validates :lunch_price_cents, numericality: { greater_than: 0 }, allow_nil: true
 
   # A foto de menor position e a capa: e ela que aparece no card do catalogo
   # e no topo da pagina de detalhe. Nil quando o passeio ainda nao tem foto,
@@ -25,6 +26,10 @@ class Tour < ApplicationRecord
 
   def coordinates?
     lat.present? && lng.present?
+  end
+
+  def lunch_available?
+    lunch_price_cents.present?
   end
 
   # Nil (nao 0) quando nao ha avaliacao nenhuma -- a view usa isso pra
@@ -41,5 +46,15 @@ class Tour < ApplicationRecord
 
   def base_price_reais=(value)
     self.base_price_cents = value.present? ? (value.to_f * 100).round : nil
+  end
+
+  # Mesmo atributo virtual do preco base, mas para o almoco opcional --
+  # em branco desliga o add-on (lunch_price_cents fica nil).
+  def lunch_price_reais
+    lunch_price_cents && (lunch_price_cents / 100.0)
+  end
+
+  def lunch_price_reais=(value)
+    self.lunch_price_cents = value.present? ? (value.to_f * 100).round : nil
   end
 end

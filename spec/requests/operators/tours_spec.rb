@@ -86,6 +86,26 @@ RSpec.describe "Operators::Tours", type: :request do
       expect(tour.reload.base_price_cents).to eq(9_990)
     end
 
+    it "liga o almoco como add-on, convertendo reais para centavos" do
+      operator = create(:operator)
+      tour = create(:tour, operator:, lunch_price_cents: nil)
+      sign_in operator
+
+      patch operators_tour_path(tour), params: { tour: { lunch_price_reais: "75.00" } }
+
+      expect(tour.reload.lunch_price_cents).to eq(7_500)
+    end
+
+    it "desliga o almoco como add-on quando o campo fica em branco" do
+      operator = create(:operator)
+      tour = create(:tour, :with_lunch, operator:)
+      sign_in operator
+
+      patch operators_tour_path(tour), params: { tour: { lunch_price_reais: "" } }
+
+      expect(tour.reload.lunch_price_cents).to be_nil
+    end
+
     it "salva as coordenadas do ponto de encontro" do
       operator = create(:operator)
       tour = create(:tour, operator:, lat: nil, lng: nil)

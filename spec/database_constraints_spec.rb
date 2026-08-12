@@ -21,13 +21,13 @@ RSpec.describe "Constraints do banco" do
     SQL
   end
 
-  def create_tour(operator_id, base_price_cents: 13_500, duration_minutes: 240)
+  def create_tour(operator_id, base_price_cents: 13_500, duration_minutes: 240, lunch_price_cents: nil)
     connection.select_value(<<~SQL.squish)
       INSERT INTO tours (operator_id, title, slug, category, duration_minutes,
-                         base_price_cents, meeting_point, min_age, includes_lunch,
+                         base_price_cents, meeting_point, min_age, lunch_price_cents,
                          active, created_at, updated_at)
       VALUES (#{operator_id}, 'Catamara no Canion', '#{unique}', 0, #{duration_minutes},
-              #{base_price_cents}, 'Pier do Rio do Sal', 0, false, true, now(), now())
+              #{base_price_cents}, 'Pier do Rio do Sal', 0, #{lunch_price_cents || "NULL"}, true, now(), now())
       RETURNING id
     SQL
   end
@@ -41,15 +41,16 @@ RSpec.describe "Constraints do banco" do
   end
 
   def create_booking(departure_id, adults: 2, children_5_9: 0, children_0_4: 0,
-                     unit_price_cents: 13_500, total_cents: 27_000, deposit_cents: 8_100)
+                     unit_price_cents: 13_500, total_cents: 27_000, deposit_cents: 8_100,
+                     lunch_count: 0, lunch_unit_price_cents: 0)
     connection.select_value(<<~SQL.squish)
       INSERT INTO bookings (departure_id, code, customer_name, customer_email,
-                            adults, children_5_9, children_0_4,
-                            unit_price_cents, total_cents, deposit_cents,
+                            adults, children_5_9, children_0_4, lunch_count,
+                            unit_price_cents, total_cents, deposit_cents, lunch_unit_price_cents,
                             status, created_at, updated_at)
       VALUES (#{departure_id}, '#{unique}', 'Turista', 'turista@exemplo.com',
-              #{adults}, #{children_5_9}, #{children_0_4},
-              #{unit_price_cents}, #{total_cents}, #{deposit_cents},
+              #{adults}, #{children_5_9}, #{children_0_4}, #{lunch_count},
+              #{unit_price_cents}, #{total_cents}, #{deposit_cents}, #{lunch_unit_price_cents},
               0, now(), now())
       RETURNING id
     SQL
@@ -57,6 +58,17 @@ RSpec.describe "Constraints do banco" do
 
   let(:operator_id) { create_operator }
   let(:tour_id)     { create_tour(operator_id) }
+
+  describe "tours" do
+    it "aceita lunch_price_cents nulo (sem almoco opcional)" do
+      expect { create_tour(operator_id, lunch_price_cents: nil) }.not_to raise_error
+    end
+
+    it "recusa lunch_price_cents zero ou negativo" do
+      expect { create_tour(operator_id, lunch_price_cents: 0) }
+        .to raise_error(ActiveRecord::StatementInvalid, /tours_lunch_price_positive/)
+    end
+  end
 
   describe "departures" do
     it "aceita ocupacao dentro da capacidade" do
@@ -103,6 +115,16 @@ RSpec.describe "Constraints do banco" do
     it "recusa sinal maior que o total" do
       expect { create_booking(departure_id, total_cents: 10_000, deposit_cents: 10_001) }
         .to raise_error(ActiveRecord::StatementInvalid, /bookings_deposit_within_total/)
+    end
+
+    it "recusa lunch_count negativo" do
+      expect { create_booking(departure_id, lunch_count: -1) }
+        .to raise_error(ActiveRecord::StatementInvalid, /bookings_lunch_count_non_negative/)
+    end
+
+    it "recusa lunch_count maior que o total de pessoas na reserva" do
+      expect { create_booking(departure_id, adults: 2, children_5_9: 0, children_0_4: 0, lunch_count: 3) }
+        .to raise_error(ActiveRecord::StatementInvalid, /bookings_lunch_count_within_party/)
     end
 
     it "recusa codigo repetido" do

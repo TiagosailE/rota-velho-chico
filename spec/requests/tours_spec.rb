@@ -127,6 +127,22 @@ RSpec.describe "Tours", type: :request do
       expect(response.body).to include("1h30")
     end
 
+    it "mostra o preco do almoco quando o passeio oferece o add-on" do
+      tour = create(:tour, :with_lunch, slug: "passeio-com-almoco")
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(I18n.t("tours.show.lunch_price", price: "R$ 75,00"))
+    end
+
+    it "nao mostra o bloco de almoco quando o passeio nao oferece o add-on" do
+      tour = create(:tour, slug: "passeio-sem-almoco", lunch_price_cents: nil)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).not_to include(I18n.t("tours.show.lunch_label"))
+    end
+
     it "devolve 404 para slug inexistente" do
       get tour_path("nao-existe")
 

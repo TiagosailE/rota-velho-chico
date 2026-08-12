@@ -8,7 +8,9 @@ FactoryBot.define do
     adults { 2 }
     children_5_9 { 0 }
     children_0_4 { 0 }
+    lunch_count { 0 }
     unit_price_cents { 13_500 }
+    lunch_unit_price_cents { 0 }
     total_cents { 27_000 }
     deposit_cents { 8_100 }
     status { :pending }

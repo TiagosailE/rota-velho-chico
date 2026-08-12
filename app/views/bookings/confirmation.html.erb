@@ -29,6 +29,14 @@
       <dt class="text-stone-500"><%= t("bookings.new.children_0_4") %></dt>
       <dd class="font-medium text-stone-900"><%= @booking.children_0_4 %></dd>
     </div>
+    <% if @booking.lunch_count.positive? %>
+      <div class="flex justify-between">
+        <dt class="text-stone-500"><%= t("bookings.confirmation.lunch") %></dt>
+        <dd class="font-medium text-stone-900">
+          <%= t("bookings.confirmation.lunch_value", count: @booking.lunch_count, price: format_price_cents(@booking.lunch_unit_price_cents)) %>
+        </dd>
+      </div>
+    <% end %>
     <div class="flex justify-between border-t border-stone-100 pt-3">
       <dt class="text-stone-500"><%= t("bookings.confirmation.total") %></dt>
       <dd class="font-medium text-stone-900"><%= format_price_cents(@booking.total_cents) %></dd>

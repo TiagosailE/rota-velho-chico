@@ -62,12 +62,13 @@
     <%= f.number_field :min_age, min: 0, class: "field-input max-w-[8rem]" %>
   </div>
 
-  <div class="flex flex-col gap-2 border-t border-stone-100 pt-4">
-    <label class="flex items-center gap-2 text-sm text-stone-700">
-      <%= f.check_box :includes_lunch %>
-      <%= t("operators.tours.form.includes_lunch") %>
-    </label>
+  <div>
+    <%= f.label :lunch_price_reais, t("operators.tours.form.lunch_price_reais"), class: "field-label" %>
+    <%= f.number_field :lunch_price_reais, min: 0, step: 0.01, class: "field-input max-w-[10rem]" %>
+    <p class="field-hint"><%= t("operators.tours.form.lunch_price_hint") %></p>
+  </div>
 
+  <div class="flex flex-col gap-2 border-t border-stone-100 pt-4">
     <label class="flex items-center gap-2 text-sm text-stone-700">
       <%= f.check_box :active %>
       <%= t("operators.tours.form.active") %>

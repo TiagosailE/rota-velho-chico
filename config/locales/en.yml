@@ -46,6 +46,9 @@ en:
               empty_party: "must include at least one passenger"
             deposit_cents:
               greater_than_total: "cannot be greater than the total"
+            lunch_count:
+              exceeds_party: "cannot be greater than the total number of people in the booking"
+              not_available: "this tour does not offer lunch as an add-on"
         payment:
           attributes:
             refunded_amount_cents:
@@ -92,7 +95,8 @@ en:
         lng: "Longitude (optional)"
         coordinates_hint: "Fill in both to show the map on the tour page."
         min_age: "Minimum age"
-        includes_lunch: "Includes lunch"
+        lunch_price_reais: "Lunch price (R$, optional)"
+        lunch_price_hint: "Leave blank if the tour does not offer lunch as an add-on."
         active: "Active (visible to tourists)"
         submit: "Save"
     tour_photos:
@@ -167,11 +171,15 @@ en:
       adults: "Adults"
       children_5_9: "Children aged 5 to 9"
       children_0_4: "Children aged 0 to 4"
+      lunch_count: "How many people want lunch (%{price} each)"
+      lunch_hint: "Optional -- up to the total number of people in the booking."
       submit: "Confirm booking"
       submitting: "Submitting..."
     confirmation:
       title: "Booking created"
       keep_code: "Keep this code. It is used to look up your booking."
+      lunch: "Lunch"
+      lunch_value: "%{count} x %{price}"
       total: "Total"
       deposit: "Deposit (30%)"
       status: "Status"
@@ -183,6 +191,7 @@ en:
       cancel_confirm: "Are you sure you want to cancel this booking?"
     errors:
       invalid_party: "Enter at least one passenger, with no negative values."
+      invalid_lunch_count: "Invalid lunch quantity."
       departure_not_scheduled: "This departure is no longer available."
       departure_in_the_past: "This departure has already happened."
       sold_out: "There are not enough seats left for this departure."
@@ -265,7 +274,7 @@ en:
       min_age_label: "Minimum age"
       age_years: "%{age} years"
       lunch_label: "Meal"
-      lunch_included: "Lunch included"
+      lunch_price: "Optional lunch (+%{price})"
       price: "Price per person"
       operated_by: "Operated by %{name}"
       calendar_title: "Availability calendar"
