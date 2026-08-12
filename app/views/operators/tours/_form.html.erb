@@ -1,4 +1,4 @@
-<%= form_with model: [ :operators, tour ], class: "card p-6 sm:p-8 grid gap-5 max-w-lg" do |f| %>
+<%= form_with model: [ :operators, tour ], class: "card p-6 sm:p-8 grid gap-5 max-w-lg mx-auto" do |f| %>
   <% if tour.errors.any? %>
     <div class="alert-error">
       <% tour.errors.full_messages.each do |message| %>

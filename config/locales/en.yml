@@ -107,8 +107,8 @@ en:
       alt_submit: "Save"
       move_up: "Up"
       move_down: "Down"
-      destroy: "Remove"
-      destroy_confirm: "Remove this photo?"
+      remove_button: "Remove"
+      remove_confirm: "Remove this photo?"
       create:
         success:
           one: "1 photo uploaded."

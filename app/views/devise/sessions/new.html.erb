@@ -1,0 +1,28 @@
+<div class="w-full max-w-sm mx-auto">
+  <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900 mb-6"><%= t(".sign_in") %></h1>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "card p-6 grid gap-5" }) do |f| %>
+    <div>
+      <%= f.label :email, class: "field-label" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "field-input" %>
+    </div>
+
+    <div>
+      <%= f.label :password, class: "field-label" %>
+      <%= f.password_field :password, autocomplete: "current-password", class: "field-input" %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <label class="flex items-center gap-2 text-sm text-stone-700">
+        <%= f.check_box :remember_me %>
+        <%= f.object.class.human_attribute_name(:remember_me) %>
+      </label>
+    <% end %>
+
+    <%= f.submit t(".sign_in"), class: "btn btn-primary w-full" %>
+  <% end %>
+
+  <div class="mt-4 text-sm">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
