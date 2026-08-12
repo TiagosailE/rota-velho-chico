@@ -5,13 +5,13 @@
 
   <%= render "form", tour: @tour %>
 
-  <div class="max-w-lg mt-10">
+  <div class="max-w-lg mt-10 mx-auto">
     <h2 class="text-lg font-semibold text-stone-900 mb-1"><%= t("operators.tour_photos.title") %></h2>
     <p class="text-sm text-stone-500 mb-4"><%= t("operators.tour_photos.hint") %></p>
 
-    <%= form_with url: operators_tour_photos_path(@tour), method: :post, class: "card p-4 mb-5" do |f| %>
+    <%= form_with url: operators_tour_photos_path(@tour), scope: :tour_photo, method: :post, class: "card p-4 mb-5" do |f| %>
       <%= f.label :images, t("operators.tour_photos.upload_label"), class: "field-label" %>
-      <%= f.file_field "tour_photo[images][]", multiple: true, accept: "image/jpeg,image/png,image/webp", class: "field-input" %>
+      <%= f.file_field :images, multiple: true, accept: "image/jpeg,image/png,image/webp", class: "field-input" %>
       <%= f.submit t("operators.tour_photos.upload_submit"), class: "btn btn-primary mt-3" %>
     <% end %>
 
@@ -43,9 +43,9 @@
                     method: :patch, class: "btn btn-secondary", disabled: index.zero? %>
               <%= button_to t("operators.tour_photos.move_down"), move_down_operators_tour_photo_path(@tour, photo),
                     method: :patch, class: "btn btn-secondary", disabled: index == @tour.tour_photos.size - 1 %>
-              <%= button_to t("operators.tour_photos.destroy"), operators_tour_photo_path(@tour, photo),
+              <%= button_to t("operators.tour_photos.remove_button"), operators_tour_photo_path(@tour, photo),
                     method: :delete, class: "btn btn-danger",
-                    form: { data: { turbo_confirm: t("operators.tour_photos.destroy_confirm") } } %>
+                    form: { data: { turbo_confirm: t("operators.tour_photos.remove_confirm") } } %>
             </div>
           </li>
         <% end %>

@@ -107,8 +107,8 @@ pt-BR:
       alt_submit: "Salvar"
       move_up: "Subir"
       move_down: "Descer"
-      destroy: "Remover"
-      destroy_confirm: "Remover esta foto?"
+      remove_button: "Remover"
+      remove_confirm: "Remover esta foto?"
       create:
         success:
           one: "1 foto enviada."
