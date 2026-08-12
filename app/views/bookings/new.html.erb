@@ -51,6 +51,14 @@
       </div>
     </div>
 
+    <% if @departure.tour.lunch_available? %>
+      <div>
+        <%= f.label :lunch_count, t("bookings.new.lunch_count", price: format_price_cents(@departure.tour.lunch_price_cents)), class: "field-label" %>
+        <%= f.number_field :lunch_count, min: 0, class: "field-input max-w-[8rem]" %>
+        <p class="field-hint"><%= t("bookings.new.lunch_hint") %></p>
+      </div>
+    <% end %>
+
     <%= f.submit t("bookings.new.submit"), class: "btn btn-primary w-full mt-2",
           data: { turbo_submits_with: t("bookings.new.submitting") } %>
   <% end %>

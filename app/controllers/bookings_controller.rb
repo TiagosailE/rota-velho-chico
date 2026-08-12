@@ -1,7 +1,7 @@
 class BookingsController < ApplicationController
   def new
     @departure = active_departure
-    @booking = Booking.new(adults: 1, children_5_9: 0, children_0_4: 0)
+    @booking = Booking.new(adults: 1, children_5_9: 0, children_0_4: 0, lunch_count: 0)
   end
 
   def create
@@ -14,7 +14,8 @@ class BookingsController < ApplicationController
       customer_phone: booking_params[:customer_phone],
       adults: booking_params[:adults].to_i,
       children_5_9: booking_params[:children_5_9].to_i,
-      children_0_4: booking_params[:children_0_4].to_i
+      children_0_4: booking_params[:children_0_4].to_i,
+      lunch_count: booking_params[:lunch_count].to_i
     ).call
 
     if result.success?
@@ -50,6 +51,6 @@ class BookingsController < ApplicationController
 
   def booking_params
     params.require(:booking).permit(:customer_name, :customer_email, :customer_phone,
-                                     :adults, :children_5_9, :children_0_4)
+                                     :adults, :children_5_9, :children_0_4, :lunch_count)
   end
 end

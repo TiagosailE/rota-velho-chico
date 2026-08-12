@@ -8,7 +8,10 @@ FactoryBot.define do
     base_price_cents { 13_500 }
     meeting_point { "Pier do Rio do Sal" }
     min_age { 0 }
-    includes_lunch { false }
     active { true }
+
+    trait :with_lunch do
+      lunch_price_cents { 7_500 }
+    end
   end
 end

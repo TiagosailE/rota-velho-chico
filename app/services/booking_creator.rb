@@ -1,6 +1,6 @@
 class BookingCreator
   def initialize(departure:, customer_name:, customer_email:, customer_phone:,
-                 adults:, children_5_9:, children_0_4:)
+                 adults:, children_5_9:, children_0_4:, lunch_count: 0)
     @departure = departure
     @customer_name = customer_name
     @customer_email = customer_email
@@ -8,11 +8,15 @@ class BookingCreator
     @adults = adults
     @children_5_9 = children_5_9
     @children_0_4 = children_0_4
+    @lunch_count = lunch_count
   end
 
   def call
     party_error = validate_party
     return Result.new(false, nil, party_error) if party_error
+
+    lunch_error = validate_lunch
+    return Result.new(false, nil, lunch_error) if lunch_error
 
     @departure.with_lock do
       return Result.new(false, nil, :departure_not_scheduled) unless @departure.scheduled?
@@ -27,7 +31,9 @@ class BookingCreator
         adults: @adults,
         children_5_9: @children_5_9,
         children_0_4: @children_0_4,
+        lunch_count: @lunch_count,
         unit_price_cents: @departure.unit_price_cents,
+        lunch_unit_price_cents: lunch_price_cents,
         total_cents: price.total_cents,
         deposit_cents: price.deposit_cents,
         status: :pending
@@ -46,18 +52,34 @@ class BookingCreator
     @adults + @children_5_9 + @children_0_4
   end
 
+  # Resolvido uma vez so, fora do lock -- preco do almoco nao depende do
+  # estado concorrente da saida, so do passeio.
+  def lunch_price_cents
+    @departure.tour.lunch_price_cents || 0
+  end
+
   def price
     PriceCalculator.new(
       unit_price_cents: @departure.unit_price_cents,
       adults: @adults,
       children_5_9: @children_5_9,
-      children_0_4: @children_0_4
+      children_0_4: @children_0_4,
+      lunch_count: @lunch_count,
+      lunch_price_cents: lunch_price_cents
     )
   end
 
   def validate_party
     return :invalid_party if [ @adults, @children_5_9, @children_0_4 ].any?(&:negative?)
     return :invalid_party if total_seats.zero?
+
+    nil
+  end
+
+  def validate_lunch
+    return :invalid_lunch_count if @lunch_count.negative?
+    return :invalid_lunch_count if @lunch_count > total_seats
+    return :invalid_lunch_count if @lunch_count.positive? && @departure.tour.lunch_price_cents.nil?
 
     nil
   end

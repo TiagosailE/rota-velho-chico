@@ -46,6 +46,9 @@ pt-BR:
               empty_party: "deve incluir pelo menos um passageiro"
             deposit_cents:
               greater_than_total: "nao pode ser maior que o total"
+            lunch_count:
+              exceeds_party: "nao pode ser maior que o total de pessoas na reserva"
+              not_available: "este passeio nao oferece almoco como opcional"
         payment:
           attributes:
             refunded_amount_cents:
@@ -92,7 +95,8 @@ pt-BR:
         lng: "Longitude (opcional)"
         coordinates_hint: "Preencha os dois para mostrar o mapa na pagina do passeio."
         min_age: "Idade minima"
-        includes_lunch: "Inclui almoco"
+        lunch_price_reais: "Preco do almoco (R$, opcional)"
+        lunch_price_hint: "Deixe em branco se o passeio nao oferece almoco como opcional."
         active: "Ativo (visivel para turistas)"
         submit: "Salvar"
     tour_photos:
@@ -167,11 +171,15 @@ pt-BR:
       adults: "Adultos"
       children_5_9: "Criancas de 5 a 9 anos"
       children_0_4: "Criancas de 0 a 4 anos"
+      lunch_count: "Quantas pessoas querem almoco (%{price} cada)"
+      lunch_hint: "Opcional -- ate o total de pessoas na reserva."
       submit: "Confirmar reserva"
       submitting: "Enviando..."
     confirmation:
       title: "Reserva criada"
       keep_code: "Guarde este codigo. Ele e usado para consultar sua reserva."
+      lunch: "Almoco"
+      lunch_value: "%{count} x %{price}"
       total: "Total"
       deposit: "Sinal (30%)"
       status: "Status"
@@ -183,6 +191,7 @@ pt-BR:
       cancel_confirm: "Tem certeza que quer cancelar esta reserva?"
     errors:
       invalid_party: "Informe pelo menos um passageiro, sem valores negativos."
+      invalid_lunch_count: "Quantidade de almoco invalida."
       departure_not_scheduled: "Esta saida nao esta mais disponivel."
       departure_in_the_past: "Esta saida ja aconteceu."
       sold_out: "Nao ha vagas suficientes para essa saida."
@@ -265,7 +274,7 @@ pt-BR:
       min_age_label: "Idade minima"
       age_years: "%{age} anos"
       lunch_label: "Refeicao"
-      lunch_included: "Almoco incluso"
+      lunch_price: "Almoco opcional (+%{price})"
       price: "Preco por pessoa"
       operated_by: "Operado por %{name}"
       calendar_title: "Calendario de disponibilidade"

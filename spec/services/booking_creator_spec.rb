@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe BookingCreator do
-  def build_creator(departure:, adults: 1, children_5_9: 0, children_0_4: 0)
+  def build_creator(departure:, adults: 1, children_5_9: 0, children_0_4: 0, lunch_count: 0)
     described_class.new(
       departure:,
       customer_name: "Turista Teste",
@@ -9,7 +9,8 @@ RSpec.describe BookingCreator do
       customer_phone: "+55 75 99999-0000",
       adults:,
       children_5_9:,
-      children_0_4:
+      children_0_4:,
+      lunch_count:
     )
   end
 
@@ -51,6 +52,28 @@ RSpec.describe BookingCreator do
 
       expect(result.value.total_cents).to eq(departure.unit_price_cents)
       expect(departure.reload.seats_taken).to eq(4)
+    end
+
+    it "soma o almoco ao total e guarda o snapshot do preco por pessoa" do
+      tour = create(:tour, :with_lunch, base_price_cents: 13_500)
+      departure = create(:departure, tour:, capacity: 10, seats_taken: 0)
+
+      result = build_creator(departure:, adults: 2, lunch_count: 2).call
+
+      booking = result.value
+      expect(booking.lunch_count).to eq(2)
+      expect(booking.lunch_unit_price_cents).to eq(7_500)
+      expect(booking.total_cents).to eq(2 * 13_500 + 2 * 7_500)
+    end
+
+    it "reserva antiga nao muda se o preco do almoco for reajustado depois" do
+      tour = create(:tour, :with_lunch, base_price_cents: 13_500)
+      departure = create(:departure, tour:, capacity: 10, seats_taken: 0)
+
+      booking = build_creator(departure:, adults: 1, lunch_count: 1).call.value
+      tour.update!(lunch_price_cents: 9_900)
+
+      expect(booking.reload.lunch_unit_price_cents).to eq(7_500)
     end
   end
 
@@ -111,6 +134,33 @@ RSpec.describe BookingCreator do
 
       expect(result.success?).to be(true)
       expect(departure.reload.seats_taken).to eq(5)
+    end
+
+    it "recusa com :invalid_lunch_count quando lunch_count e negativo" do
+      departure = create(:departure, tour: create(:tour, :with_lunch))
+
+      result = build_creator(departure:, adults: 1, lunch_count: -1).call
+
+      expect(result.error).to eq(:invalid_lunch_count)
+      expect(Booking.count).to eq(0)
+    end
+
+    it "recusa com :invalid_lunch_count quando lunch_count passa do total de pessoas" do
+      departure = create(:departure, tour: create(:tour, :with_lunch))
+
+      result = build_creator(departure:, adults: 1, lunch_count: 2).call
+
+      expect(result.error).to eq(:invalid_lunch_count)
+      expect(Booking.count).to eq(0)
+    end
+
+    it "recusa com :invalid_lunch_count quando o passeio nao oferece almoco" do
+      departure = create(:departure, tour: create(:tour, lunch_price_cents: nil))
+
+      result = build_creator(departure:, adults: 1, lunch_count: 1).call
+
+      expect(result.error).to eq(:invalid_lunch_count)
+      expect(Booking.count).to eq(0)
     end
   end
 end

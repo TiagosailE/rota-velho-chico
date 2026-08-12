@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_11_030000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_12_000100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,6 +54,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_030000) do
     t.string "customer_phone"
     t.bigint "departure_id", null: false
     t.integer "deposit_cents", null: false
+    t.integer "lunch_count", default: 0, null: false
+    t.integer "lunch_unit_price_cents", default: 0, null: false
     t.integer "status", default: 0, null: false
     t.integer "total_cents", null: false
     t.integer "unit_price_cents", null: false
@@ -64,6 +66,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_030000) do
     t.check_constraint "(adults + children_5_9 + children_0_4) > 0", name: "bookings_party_not_empty"
     t.check_constraint "adults >= 0 AND children_5_9 >= 0 AND children_0_4 >= 0", name: "bookings_party_counts_non_negative"
     t.check_constraint "deposit_cents <= total_cents", name: "bookings_deposit_within_total"
+    t.check_constraint "lunch_count <= (adults + children_5_9 + children_0_4)", name: "bookings_lunch_count_within_party"
+    t.check_constraint "lunch_count >= 0", name: "bookings_lunch_count_non_negative"
+    t.check_constraint "lunch_unit_price_cents >= 0", name: "bookings_lunch_unit_price_non_negative"
     t.check_constraint "unit_price_cents >= 0 AND total_cents >= 0 AND deposit_cents >= 0", name: "bookings_money_non_negative"
   end
 
@@ -159,9 +164,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_030000) do
     t.datetime "created_at", null: false
     t.text "description"
     t.integer "duration_minutes", null: false
-    t.boolean "includes_lunch", default: false, null: false
     t.decimal "lat", precision: 10, scale: 6
     t.decimal "lng", precision: 10, scale: 6
+    t.integer "lunch_price_cents"
     t.string "meeting_point", null: false
     t.integer "min_age", default: 0, null: false
     t.bigint "operator_id", null: false
@@ -175,6 +180,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_030000) do
     t.check_constraint "duration_minutes > 0", name: "tours_duration_positive"
     t.check_constraint "lat IS NULL OR lat >= '-90'::integer::numeric AND lat <= 90::numeric", name: "tours_lat_valid_range"
     t.check_constraint "lng IS NULL OR lng >= '-180'::integer::numeric AND lng <= 180::numeric", name: "tours_lng_valid_range"
+    t.check_constraint "lunch_price_cents IS NULL OR lunch_price_cents > 0", name: "tours_lunch_price_positive"
     t.check_constraint "min_age >= 0", name: "tours_min_age_non_negative"
   end
 

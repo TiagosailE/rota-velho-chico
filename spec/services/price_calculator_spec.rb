@@ -3,12 +3,14 @@ require_relative "../../app/services/price_calculator"
 # Ruby puro: sem rails_helper de proposito, para o spec rodar em milissegundos
 # (NOTES.md, convencoes de teste).
 RSpec.describe PriceCalculator do
-  def calculator(unit:, adults: 0, children_5_9: 0, children_0_4: 0)
+  def calculator(unit:, adults: 0, children_5_9: 0, children_0_4: 0, lunch_count: 0, lunch_price_cents: 0)
     described_class.new(
       unit_price_cents: unit,
       adults:,
       children_5_9:,
-      children_0_4:
+      children_0_4:,
+      lunch_count:,
+      lunch_price_cents:
     )
   end
 
@@ -57,6 +59,29 @@ RSpec.describe PriceCalculator do
 
       expect(com_bebes.total_cents).to eq(sem_bebes.total_cents)
       expect(com_bebes.deposit_cents).to eq(sem_bebes.deposit_cents)
+    end
+  end
+
+  describe "almoco (add-on)" do
+    it "soma lunch_count * lunch_price_cents ao total, sem desconto por idade" do
+      subject = calculator(unit: 13_500, adults: 2, lunch_count: 3, lunch_price_cents: 7_500)
+
+      expect(subject.lunch_total_cents).to eq(22_500)
+      expect(subject.total_cents).to eq(2 * 13_500 + 22_500)
+    end
+
+    it "nao altera o total quando ninguem pede almoco" do
+      sem_almoco = calculator(unit: 13_500, adults: 2)
+      com_almoco_zero = calculator(unit: 13_500, adults: 2, lunch_count: 0, lunch_price_cents: 7_500)
+
+      expect(com_almoco_zero.total_cents).to eq(sem_almoco.total_cents)
+    end
+
+    it "entra no calculo do sinal, ja que o sinal e uma fracao do total" do
+      subject = calculator(unit: 13_500, adults: 1, lunch_count: 1, lunch_price_cents: 7_500)
+
+      expect(subject.total_cents).to eq(21_000)
+      expect(subject.deposit_cents).to eq(6_300)
     end
   end
 

@@ -70,14 +70,14 @@ tours = [
     description: "Passeio de catamara pelo canion do Rio Sao Francisco, com " \
                   "parede de granito de ate 170 metros e parada de 2 horas " \
                   "para banho no Espaco Ecologico Vale do Sal. Almoco em " \
-                  "buffet livre disponivel como opcional, pago a bordo.",
+                  "buffet livre disponivel como opcional na reserva.",
     duration_minutes: 240,
     base_price_cents: 13_500,
     meeting_point: "Pier do Povoado Rio do Sal",
     lat: -9.4130,
     lng: -38.2050,
     min_age: 0,
-    includes_lunch: false,
+    lunch_price_cents: 7_500,
     departure_hour: 8
   },
   {
@@ -94,7 +94,6 @@ tours = [
     lat: -9.4025,
     lng: -38.2260,
     min_age: 5,
-    includes_lunch: false,
     departure_hour: 16
   },
   {
@@ -113,7 +112,6 @@ tours = [
     lat: -9.7450,
     lng: -38.5050,
     min_age: 5,
-    includes_lunch: false,
     departure_hour: 5
   },
   {
@@ -130,7 +128,6 @@ tours = [
     lat: -9.39694,
     lng: -38.20222,
     min_age: 10,
-    includes_lunch: false,
     departure_hour: 9
   },
   {
@@ -147,7 +144,6 @@ tours = [
     lat: -9.4000,
     lng: -38.2250,
     min_age: 0,
-    includes_lunch: false,
     departure_hour: 9
   },
   {
@@ -163,7 +159,6 @@ tours = [
     lat: -9.4350,
     lng: -38.1850,
     min_age: 12,
-    includes_lunch: false,
     departure_hour: 7
   }
 ].map do |attrs|

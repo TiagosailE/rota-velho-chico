@@ -16,10 +16,13 @@ class Booking < ApplicationRecord
   validates :customer_email, presence: true
   validates :adults, :children_5_9, :children_0_4,
             numericality: { greater_than_or_equal_to: 0 }
-  validates :unit_price_cents, :total_cents, :deposit_cents,
+  validates :lunch_count, numericality: { greater_than_or_equal_to: 0 }
+  validates :unit_price_cents, :total_cents, :deposit_cents, :lunch_unit_price_cents,
             presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :party_not_empty
   validate :deposit_within_total
+  validate :lunch_count_within_party
+  validate :lunch_requires_availability
 
   # So avalia quem realmente foi: reserva confirmada, saida ja aconteceu,
   # e ainda sem avaliacao (has_one :review + indice unico impedem duas,
@@ -58,5 +61,19 @@ class Booking < ApplicationRecord
     return if deposit_cents <= total_cents
 
     errors.add(:deposit_cents, :greater_than_total)
+  end
+
+  def lunch_count_within_party
+    return if lunch_count.to_i <= (adults.to_i + children_5_9.to_i + children_0_4.to_i)
+
+    errors.add(:lunch_count, :exceeds_party)
+  end
+
+  def lunch_requires_availability
+    return if lunch_count.to_i.zero?
+    return if departure.nil? # belongs_to ja cobre esse erro, sem duplicar mensagem
+    return if departure.tour.lunch_available?
+
+    errors.add(:lunch_count, :not_available)
   end
 end

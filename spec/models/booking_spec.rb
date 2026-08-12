@@ -21,10 +21,12 @@ RSpec.describe Booking, type: :model do
   it { is_expected.to validate_numericality_of(:adults).is_greater_than_or_equal_to(0) }
   it { is_expected.to validate_numericality_of(:children_5_9).is_greater_than_or_equal_to(0) }
   it { is_expected.to validate_numericality_of(:children_0_4).is_greater_than_or_equal_to(0) }
+  it { is_expected.to validate_numericality_of(:lunch_count).is_greater_than_or_equal_to(0) }
 
   it { is_expected.to validate_presence_of(:unit_price_cents) }
   it { is_expected.to validate_presence_of(:total_cents) }
   it { is_expected.to validate_presence_of(:deposit_cents) }
+  it { is_expected.to validate_presence_of(:lunch_unit_price_cents) }
 
   describe "party nao pode ser vazio" do
     it "e invalido sem nenhum passageiro" do
@@ -81,6 +83,54 @@ RSpec.describe Booking, type: :model do
       booking = build(:booking, total_cents: 10_000, deposit_cents: 10_000)
 
       expect(booking).to be_valid
+    end
+  end
+
+  describe "almoco nao pode passar do total de pessoas" do
+    it "e invalido com lunch_count maior que adults + children_5_9 + children_0_4" do
+      booking = build(:booking, adults: 2, children_5_9: 0, children_0_4: 0, lunch_count: 3)
+
+      expect(booking).not_to be_valid
+      expect(booking.errors[:lunch_count]).to be_present
+    end
+
+    it "e valido com lunch_count igual ao total de pessoas" do
+      departure = create(:departure, tour: create(:tour, :with_lunch))
+      booking = build(:booking, departure:, adults: 2, children_5_9: 1, children_0_4: 0, lunch_count: 3)
+
+      expect(booking).to be_valid
+    end
+  end
+
+  describe "almoco exige passeio que oferece o add-on" do
+    it "e invalido pedir almoco num passeio sem lunch_price_cents" do
+      departure = create(:departure, tour: create(:tour, lunch_price_cents: nil))
+      booking = build(:booking, departure:, adults: 1, lunch_count: 1)
+
+      expect(booking).not_to be_valid
+      expect(booking.errors[:lunch_count]).to be_present
+    end
+
+    it "e valido pedir almoco num passeio que oferece o add-on" do
+      departure = create(:departure, tour: create(:tour, :with_lunch))
+      booking = build(:booking, departure:, adults: 1, lunch_count: 1)
+
+      expect(booking).to be_valid
+    end
+
+    it "e valido sem pedir almoco, mesmo que o passeio nao ofereca" do
+      departure = create(:departure, tour: create(:tour, lunch_price_cents: nil))
+      booking = build(:booking, departure:, adults: 1, lunch_count: 0)
+
+      expect(booking).to be_valid
+    end
+
+    it "nao duplica mensagem quando a reserva nem tem saida (belongs_to ja cobre isso)" do
+      booking = build(:booking, departure: nil, adults: 1, lunch_count: 1)
+
+      expect(booking).not_to be_valid
+      expect(booking.errors[:lunch_count]).to be_empty
+      expect(booking.errors[:departure]).to be_present
     end
   end
 

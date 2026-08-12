@@ -38,10 +38,10 @@
               <dd class="text-stone-800"><%= t("tours.show.age_years", age: @tour.min_age) %></dd>
             </div>
           <% end %>
-          <% if @tour.includes_lunch %>
+          <% if @tour.lunch_available? %>
             <div>
               <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("tours.show.lunch_label") %></dt>
-              <dd class="text-stone-800"><%= t("tours.show.lunch_included") %></dd>
+              <dd class="text-stone-800"><%= t("tours.show.lunch_price", price: format_price_cents(@tour.lunch_price_cents)) %></dd>
             </div>
           <% end %>
         </dl>

@@ -30,6 +30,7 @@ RSpec.describe Tour, type: :model do
 
   it { is_expected.to validate_numericality_of(:lat).is_greater_than_or_equal_to(-90).is_less_than_or_equal_to(90).allow_nil }
   it { is_expected.to validate_numericality_of(:lng).is_greater_than_or_equal_to(-180).is_less_than_or_equal_to(180).allow_nil }
+  it { is_expected.to validate_numericality_of(:lunch_price_cents).is_greater_than(0).allow_nil }
 
   describe "#coordinates?" do
     it "e falso quando falta lat ou lng" do
@@ -93,6 +94,38 @@ RSpec.describe Tour, type: :model do
       tour.base_price_reais = ""
 
       expect(tour.base_price_cents).to be_nil
+    end
+  end
+
+  describe "#lunch_available?" do
+    it "e falso quando o passeio nao tem preco de almoco" do
+      expect(build(:tour, lunch_price_cents: nil).lunch_available?).to be false
+    end
+
+    it "e verdadeiro quando o passeio tem preco de almoco" do
+      expect(build(:tour, :with_lunch).lunch_available?).to be true
+    end
+  end
+
+  describe "#lunch_price_reais" do
+    it "converte reais para centavos" do
+      tour = build(:tour, lunch_price_reais: "75.50")
+
+      expect(tour.lunch_price_cents).to eq(7_550)
+    end
+
+    it "le o preco do almoco em reais a partir dos centavos" do
+      tour = build(:tour, lunch_price_cents: 7_550)
+
+      expect(tour.lunch_price_reais).to eq(75.50)
+    end
+
+    it "fica nil quando o valor em reais fica em branco" do
+      tour = build(:tour, :with_lunch)
+
+      tour.lunch_price_reais = ""
+
+      expect(tour.lunch_price_cents).to be_nil
     end
   end
 end
