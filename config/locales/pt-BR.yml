@@ -199,6 +199,13 @@ pt-BR:
       submit: "Consultar"
     not_found: "Nenhuma reserva encontrada com esse codigo e e-mail."
 
+  operator_profiles:
+    show:
+      phone: "Telefone"
+      whatsapp: "WhatsApp"
+      tours_title: "Passeios desta agencia"
+      tours_empty: "Esta agencia ainda nao tem passeios ativos."
+
   reviews:
     form:
       title: "Avalie este passeio"

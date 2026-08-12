@@ -199,6 +199,13 @@ en:
       submit: "Look up"
     not_found: "No booking found with that code and email."
 
+  operator_profiles:
+    show:
+      phone: "Phone"
+      whatsapp: "WhatsApp"
+      tours_title: "Tours from this agency"
+      tours_empty: "This agency doesn't have any active tours yet."
+
   reviews:
     form:
       title: "Rate this tour"
