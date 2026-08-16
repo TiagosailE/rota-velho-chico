@@ -4,10 +4,14 @@
 # migracao do Active Storage pro Cloudflare R2. Essa acao faz o mesmo por
 # HTTP, atras do login que o painel do operador ja exige. Remover depois de
 # usada uma vez -- ver PROGRESS.md.
+#
+# So enfileira -- nao roda no proprio request. Rodando sincrono (primeira
+# versao desta ferramenta), a instancia gratuita (512MB RAM, 0.1 CPU)
+# devolveu 500 tentando reenviar as 19 fotos de uma vez dentro da mesma
+# requisicao web. Ver ResetDemoPhotosJob.
 class Operators::MaintenanceController < Operators::BaseController
   def reset_photos
-    TourPhoto.destroy_all
-    Rails.application.load_seed
+    ResetDemoPhotosJob.perform_later
 
     redirect_to operators_root_path, notice: t("operators.maintenance.reset_photos.success")
   end

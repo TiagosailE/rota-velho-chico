@@ -73,7 +73,7 @@ en:
       sign_in: "Operator area"
     maintenance:
       reset_photos:
-        success: "Photos recreated on Cloudflare R2."
+        success: "Photo reset started in the background. It takes a few minutes -- refresh the page later."
     tours:
       index:
         title: "My tours"

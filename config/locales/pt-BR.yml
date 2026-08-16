@@ -73,7 +73,7 @@ pt-BR:
       sign_in: "Area do operador"
     maintenance:
       reset_photos:
-        success: "Fotos recriadas no Cloudflare R2."
+        success: "Recriacao das fotos iniciada em segundo plano. Leva alguns minutos -- atualize a pagina depois."
     tours:
       index:
         title: "Meus passeios"
