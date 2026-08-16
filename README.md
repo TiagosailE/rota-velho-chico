@@ -159,6 +159,9 @@ Kamal 2 em VPS única (Hetzner CX22), Postgres como accessory no mesmo host,
 sem domínio na primeira fase (acesso direto por IP). Passo a passo completo
 em [`docs/deploy.md`](docs/deploy.md).
 
+Para subir uma versão de teste sem custo (com as limitações que isso traz),
+ver [`docs/deploy-render.md`](docs/deploy-render.md).
+
 ## Estrutura do projeto
 
 ```
@@ -172,6 +175,7 @@ app/
 docs/
   architecture.md   # schema coluna a coluna, contratos, fluxos, decisões
   deploy.md         # passo a passo do deploy com Kamal
+  deploy-render.md  # deploy de teste gratuito no Render
 ```
 
 ## Roadmap pós-MVP
