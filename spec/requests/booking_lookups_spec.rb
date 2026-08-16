@@ -18,6 +18,7 @@ RSpec.describe "BookingLookups", type: :request do
       expect(response).to redirect_to(booking_confirmation_path)
       follow_redirect!
       expect(response.body).to include(booking.code)
+      expect(response.body).not_to include('class="toast toast-')
     end
 
     it "aceita e-mail em caixa diferente e codigo em minusculo" do
@@ -30,13 +31,14 @@ RSpec.describe "BookingLookups", type: :request do
       expect(response.body).to include(booking.code)
     end
 
-    it "recusa com mensagem generica quando o e-mail nao bate" do
+    it "recusa com mensagem generica quando o e-mail nao bate, mostrando o toast de erro" do
       create(:booking, code: "ABCDEF", customer_email: "ana@exemplo.com")
 
       post booking_lookup_path, params: { code: "ABCDEF", email: "outra@exemplo.com" }
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include(I18n.t("booking_lookups.not_found"))
+      expect(response.body).to include('class="toast toast-error"')
     end
 
     it "recusa com a mesma mensagem generica quando o codigo nao existe" do

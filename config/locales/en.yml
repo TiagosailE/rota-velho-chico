@@ -34,6 +34,8 @@ en:
     footer:
       tagline: "Tours and bookings in Paulo Afonso, Bahia."
       disclaimer: "Portfolio project. Agency names and booking data are fictional, with no affiliation to real operators in Paulo Afonso."
+    toasts:
+      dismiss: "Dismiss"
 
   activerecord:
     attributes:
