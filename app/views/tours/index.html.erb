@@ -1,16 +1,35 @@
 <% content_for(:title) { t("tours.index.title") } %>
 <div class="w-full">
-  <div class="-mx-5 -mt-8 px-5 pt-14 pb-24 mb-[-64px]
-              bg-gradient-to-br from-orange-900 via-orange-800 to-stone-900 text-white">
-    <div class="max-w-2xl">
-      <h1 class="text-3xl sm:text-4xl font-display font-semibold mb-3"><%= t("tours.index.hero.title") %></h1>
-      <p class="text-orange-50/90 text-lg mb-4"><%= t("tours.index.hero.subtitle") %></p>
-      <%= link_to t("booking_lookups.new.link"), new_booking_lookup_path, class: "text-sm font-medium text-white hover:text-orange-100 underline underline-offset-2" %>
+  <%# O hero mostra o lugar, nao uma cor: a foto e o argumento de venda do
+      passeio. Fundo solido embaixo para o texto continuar legivel enquanto a
+      imagem carrega -- e para o banco sem foto nenhuma nao virar caixa vazia. %>
+  <div class="relative overflow-hidden rounded-3xl bg-stone-900 pt-16 pb-28 sm:pt-24 sm:pb-32">
+    <% if @hero_photo %>
+      <%= image_tag @hero_photo.image.variant(:hero), alt: "", aria: { hidden: true },
+            class: "absolute inset-0 w-full h-full object-cover" %>
+    <% end %>
+
+    <%# Scrim: sem ele o texto branco cai em cima do ceu claro da foto. %>
+    <div class="absolute inset-0 bg-gradient-to-br from-stone-950/85 via-stone-950/55 to-orange-950/60"></div>
+
+    <div class="relative px-6 sm:px-10 max-w-2xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-orange-200 mb-3">
+        <%= t("tours.index.hero.eyebrow") %>
+      </p>
+      <h1 class="text-3xl sm:text-5xl font-display font-semibold text-white mb-4 text-balance">
+        <%= t("tours.index.hero.title") %>
+      </h1>
+      <p class="text-stone-200 text-base sm:text-lg mb-6 max-w-xl"><%= t("tours.index.hero.subtitle") %></p>
+      <%= link_to new_booking_lookup_path,
+            class: "inline-flex items-center gap-2 text-sm font-semibold text-white/90 hover:text-white underline underline-offset-4 decoration-orange-400/70 hover:decoration-orange-300" do %>
+        <%= t("booking_lookups.new.link") %>
+        <span aria-hidden="true">&rsaquo;</span>
+      <% end %>
     </div>
   </div>
 
   <%= form_with url: tours_path, method: :get,
-        class: "relative card p-5 mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end" do |f| %>
+        class: "relative z-10 -mt-16 sm:-mt-20 mx-0 sm:mx-6 card shadow-lg p-5 sm:p-6 mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end" do |f| %>
     <div>
       <%= f.label :category, t("tours.index.filter.category"), class: "field-label" %>
       <%= f.select :category,
@@ -35,14 +54,22 @@
     </div>
 
     <div class="flex gap-2">
-      <%= f.submit t("tours.index.filter.submit"), class: "btn btn-primary" %>
+      <%= f.submit t("tours.index.filter.submit"), class: "btn btn-primary flex-1" %>
       <%= link_to t("tours.index.filter.clear"), tours_path, class: "btn btn-secondary" %>
     </div>
   <% end %>
 
   <% if @tours.empty? %>
-    <p class="text-stone-500"><%= t("tours.index.empty") %></p>
+    <div class="card p-10 sm:p-14 text-center">
+      <p class="font-display text-lg text-stone-900 mb-2"><%= t("tours.index.empty") %></p>
+      <p class="text-sm text-stone-500 mb-6"><%= t("tours.index.empty_hint") %></p>
+      <%= link_to t("tours.index.filter.clear"), tours_path, class: "btn btn-primary" %>
+    </div>
   <% else %>
+    <h2 class="font-display text-xl font-semibold text-stone-900 mb-5">
+      <%= t("tours.index.results", count: @tours.size) %>
+    </h2>
+
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <%= render partial: "tours/card", collection: @tours, as: :tour %>
     </div>

@@ -113,6 +113,41 @@ RSpec.describe "Tours", type: :request do
 
       expect(response.body).to include(I18n.t("tours.index.card.rating", rating: 4.0, count: 1))
     end
+
+    it "mostra a contagem de passeios encontrados" do
+      create_list(:tour, 2)
+
+      get tours_path
+
+      expect(response.body).to include(I18n.t("tours.index.results", count: 2))
+    end
+
+    it "usa a capa de um passeio ativo como foto do hero" do
+      tour = create(:tour, active: true)
+      photo = create(:tour_photo, tour:, position: 0)
+
+      get tours_path
+
+      expect(response.body).to include(url_for(photo.image.variant(:hero)))
+    end
+
+    it "nao usa foto de passeio inativo no hero" do
+      inactive = create(:tour, active: false)
+      photo = create(:tour_photo, tour: inactive, position: 0)
+
+      get tours_path
+
+      expect(response.body).not_to include(url_for(photo.image.variant(:hero)))
+    end
+
+    it "renderiza o hero sem foto nenhuma sem quebrar" do
+      create(:tour, active: true)
+
+      get tours_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(I18n.t("tours.index.hero.title"))
+    end
   end
 
   describe "GET /tours/:slug" do

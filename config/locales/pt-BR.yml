@@ -1,6 +1,11 @@
 pt-BR:
   hello: "Ola mundo"
 
+  layout:
+    footer:
+      tagline: "Passeios e reservas em Paulo Afonso, Bahia."
+      disclaimer: "Projeto de portfolio. Nomes de agencia e dados de reserva sao ficticios, sem afiliacao com operadores reais de Paulo Afonso."
+
   date:
     month_names:
       - ~
@@ -251,9 +256,14 @@ pt-BR:
     index:
       title: "Passeios em Paulo Afonso"
       hero:
+        eyebrow: "Paulo Afonso, Bahia"
         title: "Descubra o sertao pelo Rio Sao Francisco"
         subtitle: "Passeios de barco, trilha e aventura com saida e reserva confirmada na hora."
+      results:
+        one: "1 passeio disponivel"
+        other: "%{count} passeios disponiveis"
       empty: "Nenhum passeio encontrado com esses filtros."
+      empty_hint: "Tente ampliar a faixa de preco ou escolher outra data."
       filter:
         category: "Categoria"
         all_categories: "Todas as categorias"
@@ -266,6 +276,7 @@ pt-BR:
         duration_label: "Duracao"
         details: "Ver detalhes"
         rating: "%{rating} (%{count})"
+        per_person: "por pessoa"
     show:
       back: "Voltar para os passeios"
       meeting_point: "Ponto de encontro"
