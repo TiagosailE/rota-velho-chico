@@ -25,3 +25,18 @@ local:
 #   service: Mirror
 #   primary: local
 #   mirrors: [ amazon, google, microsoft ]
+
+# Cloudflare R2: API compativel com S3, camada gratuita de 10GB. Usado em
+# producao porque o disco local do plano gratuito do Render nao e
+# persistente (some a cada vez que o servico dorme/acorda ou e redeployado)
+# -- ver docs/deploy-render.md. region "auto" e force_path_style: true sao
+# exigencia do R2, nao do S3 de verdade (bucket vira parte do path da URL,
+# nao subdominio).
+cloudflare:
+  service: S3
+  endpoint: <%= Rails.application.credentials.dig(:cloudflare, :endpoint) %>
+  access_key_id: <%= Rails.application.credentials.dig(:cloudflare, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:cloudflare, :secret_access_key) %>
+  bucket: <%= Rails.application.credentials.dig(:cloudflare, :bucket) %>
+  region: auto
+  force_path_style: true
