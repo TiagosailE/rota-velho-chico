@@ -21,8 +21,12 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # Cloudflare R2 (S3-compativel) -- o disco local nao sobrevive ao free
+  # tier do Render (some a cada sono/redeploy do servico, ver
+  # docs/deploy-render.md). Kamal/VPS tambem usa este service: o volume
+  # Docker de config/deploy.yml so protegia contra redeploy, nao contra
+  # perda de disco -- R2 fica bom pros dois caminhos de deploy.
+  config.active_storage.service = :cloudflare
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   # config.assume_ssl = true

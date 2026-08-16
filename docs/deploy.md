@@ -102,3 +102,14 @@ demonstração em produção.
 - **Backup do Postgres.** O accessory `db` guarda dados no volume Docker
   `data` — sobrevive a redeploys, mas não a perda da VPS. Sem rotina de
   backup automatizada ainda.
+
+## Active Storage aponta para o Cloudflare R2, não para o volume local
+
+`config/environments/production.rb` usa `service: :cloudflare`
+(`config/storage.yml`) em qualquer deploy de produção, Kamal incluído —
+decisão tomada ao corrigir as fotos quebradas no Render (disco não
+persistente lá), mas vale para os dois caminhos: a mesma credencial
+(`bin/rails credentials:edit`, chave `cloudflare:`) funciona aqui. O volume
+`rota_velho_chico_storage:/rails/storage` em `config/deploy.yml` fica sem
+uso — mantido por enquanto por não atrapalhar (o Kamal só monta um volume
+vazio), não removido porque revisitar isso não é o objetivo desta nota.

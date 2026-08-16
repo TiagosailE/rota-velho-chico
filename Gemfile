@@ -44,6 +44,11 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
+# Cliente S3 -- usado pelo Active Storage para falar com o Cloudflare R2 em
+# producao (API compativel com S3). Sem isso, o service :cloudflare do
+# storage.yml nao tem driver pra funcionar.
+gem "aws-sdk-s3", require: false
+
 # Stripe API client, para o Payment Intent do sinal [https://github.com/stripe/stripe-ruby]
 gem "stripe"
 
