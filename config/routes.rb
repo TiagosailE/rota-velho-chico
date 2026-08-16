@@ -25,6 +25,11 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    # Ferramenta temporaria, uso unico: recria as fotos das seeds depois da
+    # migracao pro Cloudflare R2, sem precisar de Shell (recurso pago no
+    # Render). Remover depois de usada -- ver PROGRESS.md.
+    get "maintenance/reset_photos", to: "maintenance#reset_photos"
   end
 
   resources :tours, only: [ :index, :show ], param: :slug

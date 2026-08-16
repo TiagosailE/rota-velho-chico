@@ -71,6 +71,9 @@ pt-BR:
       panel: "Painel"
       sign_out: "Sair"
       sign_in: "Area do operador"
+    maintenance:
+      reset_photos:
+        success: "Fotos recriadas no Cloudflare R2."
     tours:
       index:
         title: "Meus passeios"

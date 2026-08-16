@@ -71,6 +71,9 @@ en:
       panel: "Panel"
       sign_out: "Sign out"
       sign_in: "Operator area"
+    maintenance:
+      reset_photos:
+        success: "Photos recreated on Cloudflare R2."
     tours:
       index:
         title: "My tours"
