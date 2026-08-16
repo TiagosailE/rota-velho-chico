@@ -1,0 +1,38 @@
+# Blueprint do Render para um deploy gratuito de teste (nao substitui o Kamal
+# em config/deploy.yml, que continua sendo o caminho pra producao de verdade
+# numa VPS paga). Ver docs/deploy-render.md para o passo a passo.
+#
+# databaseName/user batem propositalmente com os valores ja hardcoded em
+# config/database.yml (producao) -- zero mudanca de codigo pra este deploy.
+databases:
+  - name: rota-velho-chico-db
+    plan: free
+    databaseName: rota_velho_chico_production
+    user: rota_velho_chico
+
+services:
+  - name: rota-velho-chico
+    type: web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /up
+    envVars:
+      # Gerado localmente com `bin/rails secret` na config full, mas aqui e
+      # so a master key -- copie o conteudo de config/master.key. sync: false
+      # faz o Render pedir o valor na hora de criar o blueprint, sem ficar
+      # escrito neste arquivo versionado.
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DB_HOST
+        fromDatabase:
+          name: rota-velho-chico-db
+          property: host
+      - key: ROTA_VELHO_CHICO_DATABASE_PASSWORD
+        fromDatabase:
+          name: rota-velho-chico-db
+          property: password
+      # Mesma logica do Kamal: sem worker separado no plano gratuito, o
+      # Solid Queue processa jobs dentro do proprio processo Puma.
+      - key: SOLID_QUEUE_IN_PUMA
+        value: "true"
