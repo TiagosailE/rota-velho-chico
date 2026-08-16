@@ -40,3 +40,13 @@ cloudflare:
   bucket: <%= Rails.application.credentials.dig(:cloudflare, :bucket) %>
   region: auto
   force_path_style: true
+
+  # Sem isto o upload falha com "You can only specify one non-default
+  # checksum at a time": o aws-sdk-s3 moderno manda um CRC32 alem do MD5 que
+  # o Active Storage ja envia, e o R2 recusa a requisicao com dois. Note que
+  # o upload chega a ser logado como concluido antes de estourar, o que faz
+  # o sintoma aparecer longe da causa -- os arquivos nunca chegam ao bucket,
+  # mas os registros ficam no banco, e a pagina quebra depois com
+  # ActiveStorage::FileNotFoundError ao gerar a variante.
+  request_checksum_calculation: when_required
+  response_checksum_validation: when_required
