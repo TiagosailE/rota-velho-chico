@@ -1,6 +1,7 @@
 class ToursController < ApplicationController
   def index
     @tours = filtered_tours
+    @hero_photo = hero_photo
     @category = params[:category] if Tour.categories.key?(params[:category])
     @date = parsed_date
     @min_price = params[:min_price]
@@ -19,6 +20,18 @@ class ToursController < ApplicationController
   end
 
   private
+
+  # Foto do hero da home. Nao depende dos filtros de proposito: o hero e a
+  # capa do site, nao um resultado de busca -- filtrar deixaria a primeira
+  # dobra piscando entre fotos a cada filtro aplicado. Determinista (menor
+  # tour_id entre as capas de passeio ativo) para nao trocar a cada request,
+  # e nil num banco sem foto, quando a view cai no fundo solido.
+  def hero_photo
+    TourPhoto.joins(:tour)
+             .where(tours: { active: true }, position: 0)
+             .order(:tour_id)
+             .first
+  end
 
   def parsed_month
     return Date.current.beginning_of_month if params[:month].blank?

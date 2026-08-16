@@ -30,6 +30,11 @@
 en:
   hello: "Hello world"
 
+  layout:
+    footer:
+      tagline: "Tours and bookings in Paulo Afonso, Bahia."
+      disclaimer: "Portfolio project. Agency names and booking data are fictional, with no affiliation to real operators in Paulo Afonso."
+
   activerecord:
     attributes:
       operator:
@@ -251,9 +256,14 @@ en:
     index:
       title: "Tours in Paulo Afonso"
       hero:
+        eyebrow: "Paulo Afonso, Bahia"
         title: "Discover the backlands along the Sao Francisco River"
         subtitle: "Boat, hiking and adventure tours with instant departure and booking confirmation."
+      results:
+        one: "1 tour available"
+        other: "%{count} tours available"
       empty: "No tours found for these filters."
+      empty_hint: "Try widening the price range or picking another date."
       filter:
         category: "Category"
         all_categories: "All categories"
@@ -266,6 +276,7 @@ en:
         duration_label: "Duration"
         details: "View details"
         rating: "%{rating} (%{count})"
+        per_person: "per person"
     show:
       back: "Back to tours"
       meeting_point: "Meeting point"

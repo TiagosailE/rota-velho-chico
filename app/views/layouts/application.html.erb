@@ -62,9 +62,13 @@
       <%= yield %>
     </main>
 
-    <footer class="border-t border-stone-200 mt-16">
-      <div class="container mx-auto px-5 py-6 text-xs text-stone-500">
-        Rota Velho Chico -- projeto de portfolio. Nomes de agencia e dados de reserva sao ficticios, sem afiliacao com operadores reais de Paulo Afonso.
+    <footer class="border-t border-stone-200 bg-white mt-16">
+      <div class="container mx-auto px-5 py-8 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p class="font-display text-base font-semibold text-stone-900">Rota Velho Chico</p>
+          <p class="text-xs text-stone-500"><%= t("layout.footer.tagline") %></p>
+        </div>
+        <p class="text-xs text-stone-400 sm:max-w-md sm:text-right"><%= t("layout.footer.disclaimer") %></p>
       </div>
     </footer>
   </body>
