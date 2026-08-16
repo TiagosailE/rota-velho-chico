@@ -3,12 +3,18 @@ class TourPhoto < ApplicationRecord
 
   belongs_to :tour
 
-  # As variantes sao preprocessadas para a primeira visita nao pagar a conta
-  # de gerar tres tamanhos -- o catalogo e a primeira tela que o turista ve.
+  # Variantes geradas sob demanda, nao preprocessadas. Preprocessar era a
+  # escolha original (a primeira visita nao pagaria a conta de gerar tres
+  # tamanhos), mas cada foto anexada enfileirava 3 TransformJobs de libvips
+  # de uma vez: recriar as 19 fotos viravam ~57 jobs de redimensionamento
+  # simultaneos, e a instancia de producao caiu com Bad Gateway no meio
+  # disso -- ela tem 512MB e roda o Solid Queue dentro do proprio Puma.
+  # Sob demanda o custo vira uma variante por vez, na primeira visita, e o
+  # resultado fica gravado igual. Ver PROGRESS.md.
   has_one_attached :image do |attachable|
-    attachable.variant :thumb, resize_to_fill: [ 200, 150 ], preprocessed: true
-    attachable.variant :card,  resize_to_fill: [ 800, 600 ], preprocessed: true
-    attachable.variant :hero,  resize_to_fill: [ 1600, 1000 ], preprocessed: true
+    attachable.variant :thumb, resize_to_fill: [ 200, 150 ]
+    attachable.variant :card,  resize_to_fill: [ 800, 600 ]
+    attachable.variant :hero,  resize_to_fill: [ 1600, 1000 ]
   end
 
   validates :image, presence: true

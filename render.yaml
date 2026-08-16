@@ -36,3 +36,11 @@ services:
       # Solid Queue processa jobs dentro do proprio processo Puma.
       - key: SOLID_QUEUE_IN_PUMA
         value: "true"
+
+      # Puma em modo single em vez de cluster. O Render injeta
+      # WEB_CONCURRENCY=1 por padrao, o que sobe master + 1 worker e
+      # duplica memoria sem ganhar paralelismo -- o proprio Puma avisa isso
+      # no log ("often a misconfiguration"). Num container de 512MB que
+      # ainda roda o Solid Queue junto, essa sobra importa.
+      - key: WEB_CONCURRENCY
+        value: "0"
