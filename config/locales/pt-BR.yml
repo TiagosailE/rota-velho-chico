@@ -5,6 +5,8 @@ pt-BR:
     footer:
       tagline: "Passeios e reservas em Paulo Afonso, Bahia."
       disclaimer: "Projeto de portfolio. Nomes de agencia e dados de reserva sao ficticios, sem afiliacao com operadores reais de Paulo Afonso."
+    toasts:
+      dismiss: "Fechar"
 
   date:
     month_names:

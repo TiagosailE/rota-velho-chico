@@ -11,6 +11,7 @@ RSpec.describe "Reviews", type: :request do
       expect(response).to redirect_to(booking_confirmation_path)
       follow_redirect!
       expect(response.body).to include(I18n.t("reviews.thanks"))
+      expect(response.body).not_to include('class="toast toast-')
       expect(booking.reload.review).to have_attributes(rating: 4, comment: "Muito bom")
     end
 

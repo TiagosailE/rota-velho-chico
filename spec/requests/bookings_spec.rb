@@ -47,6 +47,15 @@ RSpec.describe "Bookings", type: :request do
       expect(departure.reload.seats_taken).to eq(3)
     end
 
+    it "nao vaza o flash[:booking_id] interno como toast na tela de confirmacao" do
+      departure = create(:departure, capacity: 10, seats_taken: 0)
+
+      post departure_bookings_path(departure), params: valid_params
+      follow_redirect!
+
+      expect(response.body).not_to include('class="toast toast-')
+    end
+
     it "recusa quando nao ha vagas suficientes" do
       departure = create(:departure, capacity: 1, seats_taken: 1)
 
