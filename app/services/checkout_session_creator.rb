@@ -20,6 +20,17 @@ class CheckoutSessionCreator
   def call
     application_fee = application_fee_cents
 
+    # payment_method_types de proposito omitido, nao travado em ["card"] --
+    # sem esse parametro, o Checkout resolve sozinho os metodos habilitados
+    # nas configuracoes da conta Stripe (Settings > Payment methods) pra
+    # moeda/pais da sessao. Confirmado contra a API de teste de verdade:
+    # hoje resolve pra ["card"] porque o Pix ainda nao esta ligado na conta;
+    # no dia que for ligado, passa a incluir "pix" sozinho, sem deploy.
+    # Fixar a lista aqui (`payment_method_types: ["card", "pix"]`) foi
+    # tentado e rejeitado pela API com "ensure the provided type is
+    # activated in your dashboard" -- travar um metodo nao habilitado
+    # quebraria o checkout inteiro (cartao incluso) ate a ativacao
+    # acontecer, o oposto do que se quer aqui.
     session = Stripe::Checkout::Session.create(
       mode: "payment",
       line_items: [ {

@@ -323,7 +323,7 @@ Instabilidade nesse teste é quase sempre um desses três, não o `BookingCreato
 
 ## 6. Pagamento
 
-Sinal de **30%** via Stripe Payment Intents (modo teste).
+Sinal de **30%** via Stripe Checkout + Connect (modo teste).
 
 - Valor em centavos, moeda `brl`.
 - **Assinatura do webhook sempre verificada**, inclusive em desenvolvimento.
@@ -331,6 +331,18 @@ Sinal de **30%** via Stripe Payment Intents (modo teste).
 - Nenhum teste toca a rede — Stripe é stubado.
 
 O sinal parcial não é só realismo de mercado: torna a regra de estorno **binária** (devolve ou não devolve) em vez de escalonada por percentual. Menos superfície de bug, política mais fácil de explicar.
+
+### Connect: destination charge
+
+O sinal entra na conta da plataforma e é transferido pra conta conectada do operador (Stripe Connect Express, onboarding hospedado via Account Links), descontada uma comissão de 15% (`CheckoutSessionCreator::COMMISSION_RATE`). `application_fee_cents` é snapshotado no `Payment` no momento do checkout — mesmo princípio do preço congelado da reserva (1.4): se a taxa mudar depois, pagamento já criado não muda.
+
+Estorno desfaz os dois lados do split (`reverse_transfer` + `refund_application_fee` na chamada a `Stripe::Refund`) — sem isso o Stripe só devolveria a parte retida na plataforma, deixando o repasse já transferido e a comissão intactos numa reserva cancelada.
+
+Sem conta conectada com `charges_enabled`, o checkout é recusado antes de chegar no Stripe (`CheckoutController`), com mensagem que não promete uma tentativa futura resolver sozinha.
+
+### Métodos de pagamento: cartão e Pix
+
+`Stripe::Checkout::Session.create` não fixa `payment_method_types` de propósito. Sem esse parâmetro, o Checkout resolve os métodos habilitados nas configurações da conta Stripe (Settings > Payment methods) para a moeda/país da sessão — hoje resolve para cartão porque o Pix ainda não foi ativado na conta; no dia em que for, passa a incluir Pix automaticamente, sem deploy. Fixar a lista (`["card", "pix"]`) foi tentado contra a API de teste e rejeitado ("ensure the provided type is activated in your dashboard") — travar um método ainda não habilitado quebraria o checkout inteiro, cartão incluso, até a ativação acontecer.
 
 ---
 
