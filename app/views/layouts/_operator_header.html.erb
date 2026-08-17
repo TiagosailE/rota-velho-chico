@@ -1,0 +1,28 @@
+<%# Fundo escuro de proposito -- e o unico sinal que precisa de zero atencao
+    pra notar: operador logado achava que a sessao tinha caido porque o
+    header do painel era pixel a pixel igual ao do visitante anonimo, so com
+    "Painel"/"Sair" enfiados no fim da lista. Cor, nao so texto, resolve isso
+    numa olhada. %>
+<header class="border-b border-ink-950 bg-ink-900 sticky top-0 z-10">
+  <div class="container mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <%# Logo leva pra home do painel aqui, nao pro site publico -- o
+          oposto do header publico de proposito. Ela ser a mesma "saida" nos
+          dois contextos (sempre tours_path) era outra causa da confusao. %>
+      <%= link_to operators_root_path, class: "font-display text-xl font-semibold text-white hover:text-brand-300 transition-colors" do %>
+        Rota Velho Chico
+      <% end %>
+      <span class="badge bg-brand-500/20 text-brand-200"><%= t("operators.nav.panel") %></span>
+    </div>
+
+    <nav class="text-sm flex items-center gap-4 text-ink-300">
+      <span class="hidden sm:inline text-ink-100"><%= current_operator.name %></span>
+      <%= link_to t("operators.nav.view_site"), tours_path, class: "font-medium hover:text-white" %>
+      <%= button_to t("operators.nav.sign_out"), destroy_operator_session_path, method: :delete,
+            class: "font-medium hover:text-white underline-offset-2 hover:underline bg-transparent p-0" %>
+      <span aria-hidden="true" class="text-ink-600">|</span>
+      <%= link_to "PT", url_for(locale: "pt-BR"), lang: "pt-BR", class: "font-medium hover:text-white" %>
+      <%= link_to "EN", url_for(locale: "en"), lang: "en", class: "font-medium hover:text-white" %>
+    </nav>
+  </div>
+</header>

@@ -5,6 +5,24 @@
 
 DEPARTURE_OFFSETS_IN_DAYS = (1..10).map { |i| i * 9 } # 10 saidas por passeio, ate 90 dias a frente
 
+# A senha dos operadores de demonstracao NAO pode viver neste arquivo: ele e
+# versionado num repositorio publico, e as mesmas seeds rodam no ambiente
+# publicado -- uma senha literal aqui e uma credencial valida entregue a
+# qualquer pessoa que abra o repo, com acesso ao painel que edita preco,
+# cancela saida e dispara estorno de verdade no Stripe.
+#
+# Em desenvolvimento/teste a senha fixa continua (banco local, sem valor pra
+# ninguem, e os specs dependem dela). Fora disso ela e obrigatoria via
+# ambiente, e a ausencia interrompe o seed em vez de cair num padrao
+# adivinhavel -- falha fechada, nao aberta.
+SEED_OPERATOR_PASSWORD = ENV.fetch("SEED_OPERATOR_PASSWORD") do
+  unless Rails.env.local?
+    raise "Defina SEED_OPERATOR_PASSWORD para semear operadores fora de desenvolvimento."
+  end
+
+  "password123"
+end
+
 operators = [
   {
     name: "Catamarã Paulo Afonso Turismo",
@@ -49,13 +67,13 @@ operators = [
     o.whatsapp = attrs[:whatsapp]
     o.bio = attrs[:bio]
     o.active = true
-    o.password = "password123" # Devise exige senha na criacao; banco 100% novo sem isso falha aqui
+    o.password = SEED_OPERATOR_PASSWORD # Devise exige senha na criacao; banco 100% novo sem isso falha aqui
   end
 
   # Fora do bloco de criacao de proposito: roda em toda execucao, nao so na
   # primeira, entao um banco com operadores semeados antes do Devise
   # existir (senha placeholder invalida) tambem fica utilizavel.
-  operator.update!(password: "password123") # senha de desenvolvimento, nunca usada em producao
+  operator.update!(password: SEED_OPERATOR_PASSWORD)
   operator
 end
 

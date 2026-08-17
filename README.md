@@ -153,6 +153,15 @@ destaques:
 | Estorno em job assíncrono, fora da transação | Chamada de rede não pode segurar transação de banco; job falho é reprocessável, transação abortada no meio de 40 estornos não |
 | Sem conta para o turista reservar | Quem reserva um passeio de barco não quer criar login — código de 6 caracteres + e-mail é suficiente para consultar depois |
 
+## Segurança
+
+Turista não tem login — a credencial dele é um código de 6 caracteres mais o
+e-mail —, e o painel do operador mexe em preço, cancelamento e estorno. O que
+isso exige (HTTPS obrigatório, CSP montada a partir do que o site realmente
+carrega, limite de tentativas nos endpoints públicos, segredo de seed fora do
+repositório) e o que ficou deliberadamente em aberto está em
+[`docs/security.md`](docs/security.md).
+
 ## Deploy
 
 Kamal 2 em VPS única (Hetzner CX22), Postgres como accessory no mesmo host,
@@ -174,6 +183,7 @@ app/
   jobs/          # Solid Queue -- estorno e e-mail assíncronos
 docs/
   architecture.md   # schema coluna a coluna, contratos, fluxos, decisões
+  security.md       # modelo de ameaça, controles e o que ficou em aberto
   deploy.md         # passo a passo do deploy com Kamal
   deploy-render.md  # deploy de teste gratuito no Render
 ```

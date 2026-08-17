@@ -30,6 +30,9 @@
 en:
   hello: "Hello world"
 
+  rate_limit:
+    exceeded: "Too many attempts in a short time. Wait a few minutes and try again."
+
   layout:
     nav:
       tours: "Tours"
@@ -72,13 +75,9 @@ en:
     nav:
       signed_in_as: "Signed in as %{name}"
       panel: "Panel"
+      view_site: "View site"
       sign_out: "Sign out"
       sign_in: "Operator area"
-    maintenance:
-      reset_photos:
-        success: "Photo reset started in the background. It takes a few minutes -- refresh the page later."
-      fix_accents:
-        success: "Accent fix started in the background. It takes a few seconds -- refresh the page later."
     tours:
       index:
         title: "My tours"

@@ -1,6 +1,9 @@
 pt-BR:
   hello: "Olá mundo"
 
+  rate_limit:
+    exceeded: "Muitas tentativas em pouco tempo. Espere alguns minutos e tente de novo."
+
   layout:
     nav:
       tours: "Passeios"
@@ -72,13 +75,9 @@ pt-BR:
     nav:
       signed_in_as: "Logado como %{name}"
       panel: "Painel"
+      view_site: "Ver site"
       sign_out: "Sair"
       sign_in: "Área do operador"
-    maintenance:
-      reset_photos:
-        success: "Recriação das fotos iniciada em segundo plano. Leva alguns minutos -- atualize a página depois."
-      fix_accents:
-        success: "Correção de acentuação iniciada em segundo plano. Leva alguns segundos -- atualize a página depois."
     tours:
       index:
         title: "Meus passeios"
