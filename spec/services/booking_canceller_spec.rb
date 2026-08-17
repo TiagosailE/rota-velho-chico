@@ -72,6 +72,16 @@ RSpec.describe BookingCanceller do
     end
   end
 
+  describe "libera vaga com a saida ainda agendada" do
+    it "agenda a promocao da lista de espera" do
+      departure = create(:departure, capacity: 10, seats_taken: 1)
+      booking = create(:booking, departure:, status: :pending, adults: 1, children_5_9: 0, children_0_4: 0)
+
+      expect { described_class.new(booking:).call }
+        .to have_enqueued_job(PromoteWaitlistJob).with(departure.id)
+    end
+  end
+
   describe "reserva ja cancelada ou estornada" do
     it "recusa com :already_cancelled e nao mexe na vaga" do
       departure = create(:departure, capacity: 10, seats_taken: 1)

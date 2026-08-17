@@ -295,6 +295,16 @@ RSpec.describe "Tours", type: :request do
       expect(response.body).to include(I18n.t("tours.show.seats_available", count: 10))
     end
 
+    it "oferece a lista de espera no lugar do link de reservar quando a saida esta esgotada" do
+      tour = create(:tour, slug: "passeio-esgotado")
+      departure = create(:departure, tour:, starts_at: 5.days.from_now.change(hour: 9), capacity: 5, seats_taken: 5)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(I18n.t("tours.show.join_waitlist"))
+      expect(response.body).not_to include(new_departure_booking_path(departure))
+    end
+
     it "nao mostra no calendario uma saida cancelada ou concluida" do
       tour = create(:tour, slug: "passeio-sem-disponibilidade")
       create(:departure, tour:, starts_at: 5.days.from_now.change(hour: 9), status: :cancelled)

@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     resources :bookings, only: [ :new, :create ] do
       get :price_summary, on: :collection
     end
+    resources :waitlist_entries, only: [ :new, :create ]
   end
 
   get "bookings/confirmation", to: "bookings#confirmation", as: :booking_confirmation

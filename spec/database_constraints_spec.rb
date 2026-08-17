@@ -56,6 +56,16 @@ RSpec.describe "Constraints do banco" do
     SQL
   end
 
+  def create_waitlist_entry(departure_id, adults: 1, children_5_9: 0, children_0_4: 0)
+    connection.select_value(<<~SQL.squish)
+      INSERT INTO waitlist_entries (departure_id, customer_name, customer_email,
+                                    adults, children_5_9, children_0_4, status, created_at, updated_at)
+      VALUES (#{departure_id}, 'Turista', 'turista@exemplo.com',
+              #{adults}, #{children_5_9}, #{children_0_4}, 0, now(), now())
+      RETURNING id
+    SQL
+  end
+
   let(:operator_id) { create_operator }
   let(:tour_id)     { create_tour(operator_id) }
 
@@ -148,6 +158,20 @@ RSpec.describe "Constraints do banco" do
                   13500, 13500, 4050, 0, now(), now())
         SQL
       }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+  end
+
+  describe "waitlist_entries" do
+    let(:departure_id) { create_departure(tour_id, capacity: 20) }
+
+    it "recusa entrada sem nenhum passageiro" do
+      expect { create_waitlist_entry(departure_id, adults: 0, children_5_9: 0, children_0_4: 0) }
+        .to raise_error(ActiveRecord::StatementInvalid, /waitlist_entries_party_not_empty/)
+    end
+
+    it "recusa contagem negativa de passageiros" do
+      expect { create_waitlist_entry(departure_id, adults: -1, children_5_9: 2) }
+        .to raise_error(ActiveRecord::StatementInvalid, /waitlist_entries_party_counts_non_negative/)
     end
   end
 

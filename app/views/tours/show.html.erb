@@ -82,6 +82,9 @@
                               <% if remaining_seats.positive? %>
                                 <%= link_to t("tours.show.book"), new_departure_booking_path(departure),
                                       data: { turbo_frame: "_top" }, class: "btn-link text-xs" %>
+                              <% else %>
+                                <%= link_to t("tours.show.join_waitlist"), new_departure_waitlist_entry_path(departure),
+                                      data: { turbo_frame: "_top" }, class: "btn-link text-xs" %>
                               <% end %>
                             </div>
                           <% end %>
@@ -112,6 +115,9 @@
                     </div>
                     <% if remaining_seats.positive? %>
                       <%= link_to t("tours.show.book"), new_departure_booking_path(departure),
+                            data: { turbo_frame: "_top" }, class: "btn btn-secondary px-3 py-1.5 text-xs shrink-0" %>
+                    <% else %>
+                      <%= link_to t("tours.show.join_waitlist"), new_departure_waitlist_entry_path(departure),
                             data: { turbo_frame: "_top" }, class: "btn btn-secondary px-3 py-1.5 text-xs shrink-0" %>
                     <% end %>
                   </div>

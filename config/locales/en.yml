@@ -62,6 +62,10 @@ en:
             lunch_count:
               exceeds_party: "cannot be greater than the total number of people in the booking"
               not_available: "this tour does not offer lunch as an add-on"
+        waitlist_entry:
+          attributes:
+            base:
+              empty_party: "must include at least one passenger"
         payment:
           attributes:
             refunded_amount_cents:
@@ -259,6 +263,14 @@ en:
       submit: "Look up"
     not_found: "No booking found with that code and email."
 
+  waitlist_entries:
+    new:
+      title: "Waitlist"
+      explanation: "This departure is sold out. Leave your details and we'll email you if a spot opens -- first come, first served."
+      submit: "Join the waitlist"
+    create:
+      success: "You're on the waitlist. We'll email you if a spot opens."
+
   operator_profiles:
     show:
       phone: "Phone"
@@ -356,6 +368,7 @@ en:
       no_departures: "No departures scheduled this month."
       book: "Book"
       book_next: "Book next departure"
+      join_waitlist: "Join the waitlist"
       no_upcoming_departures: "No departures scheduled right now."
       seats_available:
         one: "1 seat available"

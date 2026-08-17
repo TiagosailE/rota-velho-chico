@@ -115,4 +115,25 @@ RSpec.describe "Rate limiting", type: :request do
       expect(response.body).to include(I18n.t("rate_limit.exceeded"))
     end
   end
+
+  describe "POST /departures/:departure_id/waitlist_entries" do
+    it "corta o laco de entradas de fila vazias" do
+      departure = create(:departure, capacity: 5, seats_taken: 5)
+      attempt = {
+        waitlist_entry: {
+          customer_name: "Ana Turista", customer_email: "ana@exemplo.com",
+          customer_phone: "+55 75 99999-0000", adults: 0, children_5_9: 0, children_0_4: 0
+        }
+      }
+
+      10.times { post departure_waitlist_entries_path(departure), params: attempt }
+      expect(response).to have_http_status(:unprocessable_content)
+
+      post departure_waitlist_entries_path(departure), params: attempt
+
+      expect(response).to redirect_to(new_departure_booking_path(departure))
+      follow_redirect!
+      expect(response.body).to include(I18n.t("rate_limit.exceeded"))
+    end
+  end
 end
