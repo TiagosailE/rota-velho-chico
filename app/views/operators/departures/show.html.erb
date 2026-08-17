@@ -9,6 +9,8 @@
       </div>
 
       <div class="flex gap-2">
+        <%= link_to t("operators.departures.show.manifest_button"), manifest_operators_tour_departure_path(@tour, @departure),
+              target: "_blank", rel: "noopener", class: "btn btn-secondary" %>
         <%= link_to t("operators.departures.form.submit"), edit_operators_tour_departure_path(@tour, @departure), class: "btn btn-secondary" %>
         <% if @departure.scheduled? %>
           <%= button_to t("operators.departures.show.cancel_button"), operators_tour_departure_path(@tour, @departure),

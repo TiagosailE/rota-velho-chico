@@ -52,6 +52,12 @@ gem "aws-sdk-s3", require: false
 # Stripe API client, para o Payment Intent do sinal [https://github.com/stripe/stripe-ruby]
 gem "stripe"
 
+# Geracao da lista de embarque em PDF, no painel do operador. Ruby puro, sem
+# binario de sistema (ao contrario de wicked_pdf/wkhtmltopdf) -- roda igual
+# no Docker de producao sem instalar nada a mais.
+gem "prawn"
+gem "prawn-table"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -81,6 +87,11 @@ group :test do
 
   # System specs no caminho feliz da reserva [https://github.com/teamcapybara/capybara]
   gem "capybara"
+
+  # Le texto de volta de um PDF gerado pelo Prawn -- sem isso o spec da
+  # lista de embarque so provaria que "gerou bytes", nao que o conteudo
+  # certo (codigo, nome, quem foi excluido) esta la de verdade.
+  gem "pdf-inspector", require: "pdf/inspector"
 end
 
 group :development do

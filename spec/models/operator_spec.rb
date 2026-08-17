@@ -4,6 +4,8 @@ RSpec.describe Operator, type: :model do
   subject { create(:operator) }
 
   it { is_expected.to have_many(:tours) }
+  it { is_expected.to have_many(:departures).through(:tours) }
+  it { is_expected.to have_many(:bookings).through(:tours) }
 
   it { is_expected.to validate_presence_of(:name) }
 

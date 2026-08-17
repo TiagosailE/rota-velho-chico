@@ -1,6 +1,6 @@
 class Operators::DeparturesController < Operators::BaseController
   before_action :set_tour
-  before_action :set_departure, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_departure, only: [ :show, :edit, :update, :destroy, :manifest ]
 
   def new
     @departure = @tour.departures.new
@@ -19,6 +19,13 @@ class Operators::DeparturesController < Operators::BaseController
   def show
     @bookings = @departure.bookings.order(:created_at)
     @occupancy_percentage = (@departure.seats_taken * 100.0 / @departure.capacity).round
+  end
+
+  def manifest
+    send_data DepartureManifestPdf.new(@departure).render,
+              filename: "lista-embarque-#{@departure.id}.pdf",
+              type: "application/pdf",
+              disposition: "inline"
   end
 
   def edit

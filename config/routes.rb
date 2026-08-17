@@ -18,9 +18,15 @@ Rails.application.routes.draw do
   # namespace :operator geraria controllers no modulo Operator::, que o
   # Zeitwerk nao consegue distinguir da classe do model.
   namespace :operators do
-    root to: "tours#index"
+    # Painel de operacao (receita, ocupacao, proximas saidas), nao mais a
+    # grade de cadastro de passeios -- essa continua em /operators/tours.
+    root to: "dashboard#show"
     resources :tours, only: [ :index, :new, :create, :edit, :update ] do
-      resources :departures, only: [ :new, :create, :show, :edit, :update, :destroy ]
+      resources :departures, only: [ :new, :create, :show, :edit, :update, :destroy ] do
+        member do
+          get :manifest
+        end
+      end
       resources :photos, only: [ :create, :update, :destroy ], controller: "tour_photos" do
         member do
           patch :move_up
