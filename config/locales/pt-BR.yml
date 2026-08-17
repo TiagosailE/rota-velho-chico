@@ -75,6 +75,7 @@ pt-BR:
     nav:
       signed_in_as: "Logado como %{name}"
       panel: "Painel"
+      view_site: "Ver site"
       sign_out: "Sair"
       sign_in: "Área do operador"
     tours:
