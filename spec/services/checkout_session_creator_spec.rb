@@ -30,7 +30,26 @@ RSpec.describe CheckoutSessionCreator do
       expect(result).to eq("https://checkout.stripe.com/pay/cs_test_abc")
     end
 
-    it "cria o Payment associado com o id da sessao, mesmo sem payment_intent ainda" do
+    it "monta o destination charge com a comissao da plataforma e a conta conectada do operador" do
+      operator = create(:operator, stripe_account_id: "acct_test_xyz")
+      tour = create(:tour, operator:)
+      departure = create(:departure, tour:)
+      booking = create(:booking, departure:, deposit_cents: 8_100)
+      stub_stripe_session
+
+      described_class.new(booking:, success_url: "https://example.com/s", cancel_url: "https://example.com/c").call
+
+      expect(Stripe::Checkout::Session).to have_received(:create).with(
+        hash_including(
+          payment_intent_data: {
+            application_fee_amount: 1_215, # 15% de 8_100
+            transfer_data: { destination: "acct_test_xyz" }
+          }
+        )
+      )
+    end
+
+    it "cria o Payment associado com o id da sessao e o snapshot da comissao, mesmo sem payment_intent ainda" do
       booking = create(:booking, deposit_cents: 8_100)
       stub_stripe_session(id: "cs_test_456", payment_intent: nil)
 
@@ -40,6 +59,7 @@ RSpec.describe CheckoutSessionCreator do
       expect(payment.stripe_checkout_session_id).to eq("cs_test_456")
       expect(payment.stripe_payment_intent_id).to be_nil
       expect(payment.amount_cents).to eq(8_100)
+      expect(payment.application_fee_cents).to eq(1_215)
       expect(payment).to be_pending
     end
 

@@ -16,7 +16,12 @@ RSpec.describe BookingCanceller do
       result = described_class.new(booking:).call
 
       expect(result.success?).to be(true)
-      expect(Stripe::Refund).to have_received(:create).with(payment_intent: "pi_test_123")
+      # reverse_transfer/refund_application_fee desfazem os dois lados do
+      # split do Connect -- sem eles o repasse pro operador e a comissao da
+      # plataforma ficariam intactos numa reserva que nao aconteceu mais.
+      expect(Stripe::Refund).to have_received(:create).with(
+        payment_intent: "pi_test_123", reverse_transfer: true, refund_application_fee: true
+      )
       expect(payment.reload).to be_refunded
       expect(payment.stripe_refund_id).to eq("re_test_123")
       expect(payment.refunded_amount_cents).to eq(8_100)

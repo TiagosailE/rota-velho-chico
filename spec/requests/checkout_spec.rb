@@ -49,6 +49,22 @@ RSpec.describe "Checkout", type: :request do
       expect(response).to redirect_to(new_booking_lookup_path)
     end
 
+    it "recusa quando o operador ainda nao conectou a conta Stripe" do
+      operator = create(:operator, :stripe_disconnected)
+      tour = create(:tour, operator:)
+      departure = create(:departure, tour:)
+      booking = create(:booking, departure:, code: "ABCDEF", status: :pending)
+      allow(Stripe::Checkout::Session).to receive(:create)
+
+      post pay_booking_path("ABCDEF")
+
+      expect(response).to redirect_to(new_booking_lookup_path)
+      follow_redirect!
+      expect(response.body).to include(I18n.t("checkout.errors.operator_not_connected"))
+      expect(Stripe::Checkout::Session).not_to have_received(:create)
+      expect(booking.reload.payment).to be_nil
+    end
+
     it "mostra mensagem generica quando o Stripe falha" do
       booking = create(:booking, code: "ABCDEF", status: :pending)
       allow(Stripe::Checkout::Session).to receive(:create).and_raise(Stripe::APIConnectionError.new("timeout"))

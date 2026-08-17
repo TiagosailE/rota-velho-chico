@@ -95,6 +95,17 @@ pt-BR:
       top_tour_empty: "Ainda sem reservas confirmadas."
       upcoming_departures_title: "Próximas saídas"
       upcoming_departures_empty: "Nenhuma saída futura agendada."
+    stripe_connect:
+      connected: "Pagamentos conectados"
+      prompt:
+        title: "Configure pagamentos"
+        body: "Para receber reservas pagas online, conecte sua conta Stripe. Leva poucos minutos."
+        button: "Conectar conta Stripe"
+      return:
+        success: "Conta conectada! Você já pode receber reservas pagas online."
+        incomplete: "Cadastro ainda incompleto. Termine a configuração para receber pagamentos."
+      errors:
+        unavailable: "Não foi possível iniciar a conexão com o Stripe agora. Tente de novo em instantes."
     tours:
       index:
         title: "Meus passeios"
@@ -321,6 +332,7 @@ pt-BR:
       not_payable: "Essa reserva já não está mais pendente de pagamento."
       unavailable: "Não foi possível iniciar o pagamento agora. Tente novamente em instantes."
       not_configured: "O pagamento online ainda não está disponível. Sua reserva continua garantida - entre em contato com a agência para combinar o sinal."
+      operator_not_connected: "Esta agência ainda não configurou pagamento online. Sua reserva continua garantida - entre em contato com a agência para combinar o sinal."
 
   tours:
     cover:

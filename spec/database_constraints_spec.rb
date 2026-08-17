@@ -69,6 +69,22 @@ RSpec.describe "Constraints do banco" do
   let(:operator_id) { create_operator }
   let(:tour_id)     { create_tour(operator_id) }
 
+  describe "operators" do
+    it "recusa duas contas com o mesmo stripe_account_id" do
+      connection.execute(<<~SQL.squish)
+        INSERT INTO operators (name, slug, email, encrypted_password, stripe_account_id, active, created_at, updated_at)
+        VALUES ('Agencia A', '#{unique}', '#{unique}@exemplo.com', 'x', 'acct_test_dup', true, now(), now())
+      SQL
+
+      expect {
+        connection.execute(<<~SQL.squish)
+          INSERT INTO operators (name, slug, email, encrypted_password, stripe_account_id, active, created_at, updated_at)
+          VALUES ('Agencia B', '#{unique}', '#{unique}@exemplo.com', 'x', 'acct_test_dup', true, now(), now())
+        SQL
+      }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+  end
+
   describe "tours" do
     it "aceita lunch_price_cents nulo (sem almoco opcional)" do
       expect { create_tour(operator_id, lunch_price_cents: nil) }.not_to raise_error
@@ -201,6 +217,16 @@ RSpec.describe "Constraints do banco" do
           VALUES (#{booking_id}, 'cs_test_second', 8100, 0, now(), now())
         SQL
       }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it "recusa application_fee_cents negativo" do
+      expect {
+        connection.execute(<<~SQL.squish)
+          INSERT INTO payments (booking_id, stripe_checkout_session_id, amount_cents, status,
+                                application_fee_cents, created_at, updated_at)
+          VALUES (#{booking_id}, 'cs_test_fee', 8100, 0, -1, now(), now())
+        SQL
+      }.to raise_error(ActiveRecord::StatementInvalid, /payments_application_fee_non_negative/)
     end
   end
 

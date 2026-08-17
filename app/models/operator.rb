@@ -10,4 +10,5 @@ class Operator < ApplicationRecord
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true
+  validates :stripe_account_id, uniqueness: true, allow_nil: true
 end

@@ -41,8 +41,16 @@ class BookingCanceller
     ).refundable?
   end
 
+  # reverse_transfer/refund_application_fee desfazem os dois lados do split
+  # do Connect (CheckoutSessionCreator): sem eles, o Stripe so estornaria a
+  # parte que ficou na conta da plataforma, deixando o repasse pro operador
+  # e a comissao intactos numa reserva que nao aconteceu mais.
   def process_refund
-    refund = Stripe::Refund.create(payment_intent: @booking.payment.stripe_payment_intent_id)
+    refund = Stripe::Refund.create(
+      payment_intent: @booking.payment.stripe_payment_intent_id,
+      reverse_transfer: true,
+      refund_application_fee: true
+    )
     @booking.payment.update!(
       status: :refunded,
       stripe_refund_id: refund.id,
