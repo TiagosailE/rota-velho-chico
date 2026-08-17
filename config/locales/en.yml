@@ -74,6 +74,8 @@ en:
     maintenance:
       reset_photos:
         success: "Photo reset started in the background. It takes a few minutes -- refresh the page later."
+      fix_accents:
+        success: "Accent fix started in the background. It takes a few seconds -- refresh the page later."
     tours:
       index:
         title: "My tours"

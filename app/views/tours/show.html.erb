@@ -57,7 +57,7 @@
             <%= link_to "›", tour_path(@tour.slug, month: @month.next_month.strftime("%Y-%m")), class: "btn btn-secondary px-3 py-1.5" %>
           </div>
 
-          <table class="w-full table-fixed text-center border-collapse text-sm">
+          <table class="hidden sm:table w-full table-fixed text-center border-collapse text-sm">
             <thead>
               <tr>
                 <% I18n.t("date.abbr_day_names").each do |day_name| %>
@@ -94,6 +94,32 @@
             </tbody>
           </table>
 
+          <%# Mobile: tabela de 7 colunas fica ilegivel a ~375px (celula com
+              ~45px). Lista vertical so com os dias que tem saida, estilo
+              agenda -- mesmo padrao de apps de reserva (Booking, Airbnb). %>
+          <ul class="sm:hidden flex flex-col gap-2">
+            <% calendar_weeks(@month).flatten.compact.each do |day| %>
+              <% departures = @departures_by_date[day] || [] %>
+              <% next if departures.empty? %>
+              <li class="rounded-lg p-3 bg-orange-50 border border-orange-100">
+                <div class="text-sm font-medium text-stone-900 mb-2"><%= l(day, format: "%A, %d/%m") %></div>
+                <% departures.each_with_index do |departure, index| %>
+                  <% remaining_seats = departure.capacity - departure.seats_taken %>
+                  <div class="flex items-center justify-between gap-3 py-1.5 <%= "border-t border-orange-100" unless index.zero? %>">
+                    <div class="text-sm">
+                      <div class="text-stone-700"><%= departure.starts_at.strftime("%H:%M") %></div>
+                      <div class="text-stone-500 text-xs"><%= t("tours.show.seats_available", count: remaining_seats) %></div>
+                    </div>
+                    <% if remaining_seats.positive? %>
+                      <%= link_to t("tours.show.book"), new_departure_booking_path(departure),
+                            data: { turbo_frame: "_top" }, class: "btn btn-secondary px-3 py-1.5 text-xs shrink-0" %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+
           <% if @departures_by_date.empty? %>
             <p class="text-stone-500 text-sm mt-4"><%= t("tours.show.no_departures") %></p>
           <% end %>
@@ -103,7 +129,11 @@
       <% if @tour.coordinates? %>
         <div class="card p-6 sm:p-8 mb-8">
           <h2 class="text-lg font-display font-semibold text-stone-900 mb-4"><%= t("tours.show.location_title") %></h2>
-          <div class="h-64 rounded-lg overflow-hidden" data-controller="map"
+          <%# isolate cria um stacking context novo pro mapa: os controles/panes
+              do Leaflet tem z-index proprio ate 1000 (CSS do CDN), que sem isso
+              competia com o z-10 da navbar sticky e vazava por cima dela
+              durante o scroll no mobile. %>
+          <div class="h-64 rounded-lg overflow-hidden isolate" data-controller="map"
                data-map-lat-value="<%= @tour.lat %>" data-map-lng-value="<%= @tour.lng %>"
                data-map-label-value="<%= @tour.meeting_point %>"></div>
         </div>

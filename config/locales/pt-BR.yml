@@ -1,10 +1,10 @@
 pt-BR:
-  hello: "Ola mundo"
+  hello: "Olá mundo"
 
   layout:
     footer:
       tagline: "Passeios e reservas em Paulo Afonso, Bahia."
-      disclaimer: "Projeto de portfolio. Nomes de agencia e dados de reserva sao ficticios, sem afiliacao com operadores reais de Paulo Afonso."
+      disclaimer: "Projeto de portfólio. Nomes de agência e dados de reserva são fictícios, sem afiliação com operadores reais de Paulo Afonso."
     toasts:
       dismiss: "Fechar"
 
@@ -13,7 +13,7 @@ pt-BR:
       - ~
       - "Janeiro"
       - "Fevereiro"
-      - "Marco"
+      - "Março"
       - "Abril"
       - "Maio"
       - "Junho"
@@ -30,7 +30,7 @@ pt-BR:
       - "Qua"
       - "Qui"
       - "Sex"
-      - "Sab"
+      - "Sáb"
 
   activerecord:
     attributes:
@@ -40,84 +40,86 @@ pt-BR:
       operator:
         email: "E-mail"
         password: "Senha"
-        password_confirmation: "Confirmacao de senha"
+        password_confirmation: "Confirmação de senha"
         remember_me: "Lembrar de mim"
         current_password: "Senha atual"
     errors:
       messages:
-        blank: "nao pode ficar em branco"
+        blank: "não pode ficar em branco"
       models:
         booking:
           attributes:
             base:
               empty_party: "deve incluir pelo menos um passageiro"
             deposit_cents:
-              greater_than_total: "nao pode ser maior que o total"
+              greater_than_total: "não pode ser maior que o total"
             lunch_count:
-              exceeds_party: "nao pode ser maior que o total de pessoas na reserva"
-              not_available: "este passeio nao oferece almoco como opcional"
+              exceeds_party: "não pode ser maior que o total de pessoas na reserva"
+              not_available: "este passeio não oferece almoço como opcional"
         payment:
           attributes:
             refunded_amount_cents:
-              greater_than_amount: "nao pode ser maior que o valor cobrado"
+              greater_than_amount: "não pode ser maior que o valor cobrado"
         departure:
           attributes:
             capacity:
-              below_seats_taken: "nao pode ser menor que as vagas ja ocupadas"
+              below_seats_taken: "não pode ser menor que as vagas já ocupadas"
 
   operators:
     nav:
       signed_in_as: "Logado como %{name}"
       panel: "Painel"
       sign_out: "Sair"
-      sign_in: "Area do operador"
+      sign_in: "Área do operador"
     maintenance:
       reset_photos:
-        success: "Recriacao das fotos iniciada em segundo plano. Leva alguns minutos -- atualize a pagina depois."
+        success: "Recriação das fotos iniciada em segundo plano. Leva alguns minutos -- atualize a página depois."
+      fix_accents:
+        success: "Correção de acentuação iniciada em segundo plano. Leva alguns segundos -- atualize a página depois."
     tours:
       index:
         title: "Meus passeios"
         new: "Novo passeio"
-        empty: "Voce ainda nao cadastrou nenhum passeio."
+        empty: "Você ainda não cadastrou nenhum passeio."
         manage: "Gerenciar"
         inactive: "Inativo"
       new:
         title: "Novo passeio"
       edit:
         title: "Editar %{title}"
-        departures_title: "Saidas"
-        new_departure: "Nova saida"
-        no_departures: "Nenhuma saida cadastrada."
+        departures_title: "Saídas"
+        new_departure: "Nova saída"
+        no_departures: "Nenhuma saída cadastrada."
       create:
         success: "Passeio criado."
       update:
         success: "Passeio atualizado."
       form:
         back: "Voltar para meus passeios"
-        title: "Titulo"
+        title: "Título"
         slug: "Slug"
-        description: "Descricao"
+        description: "Descrição"
         category: "Categoria"
-        duration_minutes: "Duracao (minutos)"
-        base_price_reais: "Preco base (R$)"
+        duration_minutes: "Duração (minutos)"
+        base_price_reais: "Preço base (R$)"
         meeting_point: "Ponto de encontro"
         lat: "Latitude (opcional)"
         lng: "Longitude (opcional)"
-        coordinates_hint: "Preencha os dois para mostrar o mapa na pagina do passeio."
-        min_age: "Idade minima"
-        lunch_price_reais: "Preco do almoco (R$, opcional)"
-        lunch_price_hint: "Deixe em branco se o passeio nao oferece almoco como opcional."
-        active: "Ativo (visivel para turistas)"
+        coordinates_hint: "Preencha os dois para mostrar o mapa na página do passeio."
+        min_age: "Idade mínima"
+        lunch_price_reais: "Preço do almoço (R$, opcional)"
+        lunch_price_hint: "Deixe em branco se o passeio não oferece almoço como opcional."
+        active: "Ativo (visível para turistas)"
         submit: "Salvar"
     tour_photos:
       title: "Fotos do passeio"
-      hint: "A primeira foto e a capa: e ela que aparece no catalogo. Use os botoes para reordenar."
+      hint: "A primeira foto é a capa: é ela que aparece no catálogo. Use os botões para reordenar."
       upload_label: "Adicionar fotos (JPEG, PNG ou WebP)"
       upload_submit: "Enviar fotos"
-      empty: "Este passeio ainda nao tem fotos."
+      empty: "Este passeio ainda não tem fotos."
       cover: "Capa"
       no_alt: "Foto do passeio"
-      alt_label: "Descricao da imagem (acessibilidade)"
+      alt_label: "Descrição da imagem (acessibilidade)"
       alt_submit: "Salvar"
       move_up: "Subir"
       move_down: "Descer"
@@ -131,64 +133,64 @@ pt-BR:
           one: "1 arquivo foi recusado: envie apenas JPEG, PNG ou WebP."
           other: "%{count} arquivos foram recusados: envie apenas JPEG, PNG ou WebP."
       update:
-        success: "Descricao da imagem atualizada."
+        success: "Descrição da imagem atualizada."
       destroy:
         success: "Foto removida."
     departures:
       new:
-        title: "Nova saida - %{tour}"
+        title: "Nova saída - %{tour}"
       edit:
-        title: "Editar saida - %{tour}"
+        title: "Editar saída - %{tour}"
       create:
-        success: "Saida criada."
+        success: "Saída criada."
       update:
-        success: "Saida atualizada."
+        success: "Saída atualizada."
       form:
         back: "Voltar para o passeio"
         starts_at: "Data e hora"
         capacity: "Capacidade"
-        price_override_reais: "Preco especial (R$, opcional)"
+        price_override_reais: "Preço especial (R$, opcional)"
         submit: "Salvar"
       show:
-        occupancy: "Ocupacao"
+        occupancy: "Ocupação"
         bookings_title: "Reservas"
-        no_bookings: "Nenhuma reserva para esta saida."
-        code: "Codigo"
+        no_bookings: "Nenhuma reserva para esta saída."
+        code: "Código"
         link: "Ver"
-        cancel_button: "Cancelar saida"
-        cancel_confirm: "Tem certeza? Isso cancela todas as reservas dessa saida e inicia os estornos."
+        cancel_button: "Cancelar saída"
+        cancel_confirm: "Tem certeza? Isso cancela todas as reservas dessa saída e inicia os estornos."
       destroy:
-        success: "Saida cancelada. %{count} reserva(s) canceladas -- estornos, quando aplicaveis, foram iniciados."
+        success: "Saída cancelada. %{count} reserva(s) canceladas -- estornos, quando aplicáveis, foram iniciados."
         errors:
-          already_cancelled: "Essa saida ja foi cancelada."
+          already_cancelled: "Essa saída já foi cancelada."
 
   booking_mailer:
     departure_cancelled:
-      subject: "Sua saida foi cancelada"
-      greeting: "Ola, %{name}."
-      body_html: "A saida do passeio <strong>%{tour}</strong> marcada para %{date} foi cancelada pelo operador. Sua reserva (codigo %{code}) foi cancelada."
-      body_text: "A saida do passeio %{tour} marcada para %{date} foi cancelada pelo operador. Sua reserva (codigo %{code}) foi cancelada."
+      subject: "Sua saída foi cancelada"
+      greeting: "Olá, %{name}."
+      body_html: "A saída do passeio <strong>%{tour}</strong> marcada para %{date} foi cancelada pelo operador. Sua reserva (código %{code}) foi cancelada."
+      body_text: "A saída do passeio %{tour} marcada para %{date} foi cancelada pelo operador. Sua reserva (código %{code}) foi cancelada."
       refunded: "O sinal pago foi estornado."
 
   bookings:
     new:
       title: "Reservar passeio"
       tour: "Passeio"
-      departure: "Saida"
+      departure: "Saída"
       customer_name: "Nome"
       customer_email: "E-mail"
       customer_phone: "Telefone (opcional)"
       adults: "Adultos"
-      children_5_9: "Criancas de 5 a 9 anos"
-      children_0_4: "Criancas de 0 a 4 anos"
-      lunch_count: "Quantas pessoas querem almoco (%{price} cada)"
-      lunch_hint: "Opcional -- ate o total de pessoas na reserva."
+      children_5_9: "Crianças de 5 a 9 anos"
+      children_0_4: "Crianças de 0 a 4 anos"
+      lunch_count: "Quantas pessoas querem almoço (%{price} cada)"
+      lunch_hint: "Opcional -- até o total de pessoas na reserva."
       submit: "Confirmar reserva"
       submitting: "Enviando..."
     confirmation:
       title: "Reserva criada"
-      keep_code: "Guarde este codigo. Ele e usado para consultar sua reserva."
-      lunch: "Almoco"
+      keep_code: "Guarde este código. Ele é usado para consultar sua reserva."
+      lunch: "Almoço"
       lunch_value: "%{count} x %{price}"
       total: "Total"
       deposit: "Sinal (30%)"
@@ -201,53 +203,53 @@ pt-BR:
       cancel_confirm: "Tem certeza que quer cancelar esta reserva?"
     errors:
       invalid_party: "Informe pelo menos um passageiro, sem valores negativos."
-      invalid_lunch_count: "Quantidade de almoco invalida."
-      departure_not_scheduled: "Esta saida nao esta mais disponivel."
-      departure_in_the_past: "Esta saida ja aconteceu."
-      sold_out: "Nao ha vagas suficientes para essa saida."
+      invalid_lunch_count: "Quantidade de almoço inválida."
+      departure_not_scheduled: "Esta saída não está mais disponível."
+      departure_in_the_past: "Esta saída já aconteceu."
+      sold_out: "Não há vagas suficientes para essa saída."
     cancellation:
       errors:
-        already_cancelled: "Essa reserva ja foi cancelada."
+        already_cancelled: "Essa reserva já foi cancelada."
 
   booking_lookups:
     new:
-      link: "Ja reservou? Consulte sua reserva"
+      link: "Já reservou? Consulte sua reserva"
       title: "Consultar reserva"
-      code: "Codigo da reserva"
+      code: "Código da reserva"
       email: "E-mail usado na reserva"
       submit: "Consultar"
-    not_found: "Nenhuma reserva encontrada com esse codigo e e-mail."
+    not_found: "Nenhuma reserva encontrada com esse código e e-mail."
 
   operator_profiles:
     show:
       phone: "Telefone"
       whatsapp: "WhatsApp"
-      tours_title: "Passeios desta agencia"
-      tours_empty: "Esta agencia ainda nao tem passeios ativos."
+      tours_title: "Passeios desta agência"
+      tours_empty: "Esta agência ainda não tem passeios ativos."
 
   reviews:
     form:
       title: "Avalie este passeio"
       rating: "Nota"
-      comment: "Comentario (opcional)"
-      submit: "Enviar avaliacao"
-    thanks: "Obrigado pela sua avaliacao!"
+      comment: "Comentário (opcional)"
+      submit: "Enviar avaliação"
+    thanks: "Obrigado pela sua avaliação!"
     errors:
-      not_reviewable: "Essa reserva nao pode ser avaliada."
+      not_reviewable: "Essa reserva não pode ser avaliada."
 
   checkout:
     line_item_name: "Sinal - %{tour}"
     pay_button: "Pagar sinal agora"
     success:
       title: "Pagamento enviado"
-      message: "Sua reserva %{code} sera confirmada assim que o pagamento for processado."
+      message: "Sua reserva %{code} será confirmada assim que o pagamento for processado."
     cancel:
       title: "Pagamento cancelado"
-      message: "Sua reserva %{code} continua pendente. Voce pode tentar pagar novamente pela consulta de reserva."
+      message: "Sua reserva %{code} continua pendente. Você pode tentar pagar novamente pela consulta de reserva."
     errors:
-      not_payable: "Essa reserva ja nao esta mais pendente de pagamento."
-      unavailable: "Nao foi possivel iniciar o pagamento agora. Tente novamente em instantes."
-      not_configured: "O pagamento online ainda nao esta disponivel. Sua reserva continua garantida - entre em contato com a agencia para combinar o sinal."
+      not_payable: "Essa reserva já não está mais pendente de pagamento."
+      unavailable: "Não foi possível iniciar o pagamento agora. Tente novamente em instantes."
+      not_configured: "O pagamento online ainda não está disponível. Sua reserva continua garantida - entre em contato com a agência para combinar o sinal."
 
   tours:
     cover:
@@ -262,56 +264,56 @@ pt-BR:
       title: "Passeios em Paulo Afonso"
       hero:
         eyebrow: "Paulo Afonso, Bahia"
-        title: "Descubra o sertao pelo Rio Sao Francisco"
-        subtitle: "Passeios de barco, trilha e aventura com saida e reserva confirmada na hora."
+        title: "Descubra o sertão pelo Rio São Francisco"
+        subtitle: "Passeios de barco, trilha e aventura com saída e reserva confirmada na hora."
       results:
-        one: "1 passeio disponivel"
-        other: "%{count} passeios disponiveis"
+        one: "1 passeio disponível"
+        other: "%{count} passeios disponíveis"
       empty: "Nenhum passeio encontrado com esses filtros."
-      empty_hint: "Tente ampliar a faixa de preco ou escolher outra data."
+      empty_hint: "Tente ampliar a faixa de preço ou escolher outra data."
       filter:
         category: "Categoria"
         all_categories: "Todas as categorias"
-        date: "Data da saida"
-        min_price: "Preco minimo (R$)"
-        max_price: "Preco maximo (R$)"
+        date: "Data da saída"
+        min_price: "Preço mínimo (R$)"
+        max_price: "Preço máximo (R$)"
         submit: "Filtrar"
         clear: "Limpar filtros"
       card:
-        duration_label: "Duracao"
+        duration_label: "Duração"
         details: "Ver detalhes"
         rating: "%{rating} (%{count})"
         per_person: "por pessoa"
     show:
       back: "Voltar para os passeios"
       meeting_point: "Ponto de encontro"
-      duration: "Duracao"
-      min_age: "Idade minima: %{age} anos"
-      min_age_label: "Idade minima"
+      duration: "Duração"
+      min_age: "Idade mínima: %{age} anos"
+      min_age_label: "Idade mínima"
       age_years: "%{age} anos"
-      lunch_label: "Refeicao"
-      lunch_price: "Almoco opcional (+%{price})"
-      price: "Preco por pessoa"
+      lunch_label: "Refeição"
+      lunch_price: "Almoço opcional (+%{price})"
+      price: "Preço por pessoa"
       operated_by: "Operado por %{name}"
-      calendar_title: "Calendario de disponibilidade"
-      no_departures: "Nenhuma saida agendada neste mes."
+      calendar_title: "Calendário de disponibilidade"
+      no_departures: "Nenhuma saída agendada neste mês."
       book: "Reservar"
       seats_available:
-        one: "1 vaga disponivel"
-        other: "%{count} vagas disponiveis"
+        one: "1 vaga disponível"
+        other: "%{count} vagas disponíveis"
       about: "Sobre este passeio"
       whats_included: "O que inclui"
-      cancellation_policy: "Politica de cancelamento"
-      cancellation_policy_body: "Cancelamento gratuito ate 48 horas antes do horario de saida, com estorno integral do sinal pago. Cancelamentos com menos de 48 horas de antecedencia nao sao reembolsaveis."
+      cancellation_policy: "Política de cancelamento"
+      cancellation_policy_body: "Cancelamento gratuito até 48 horas antes do horário de saída, com estorno integral do sinal pago. Cancelamentos com menos de 48 horas de antecedência não são reembolsáveis."
       gallery:
         more_photos: "+%{count} fotos"
         open: "Ver foto em tela cheia"
         close: "Fechar"
         previous: "Foto anterior"
-        next: "Proxima foto"
-      location_title: "Localizacao"
-      reviews_title: "Avaliacoes"
-      reviews_empty: "Este passeio ainda nao tem avaliacoes."
+        next: "Próxima foto"
+      location_title: "Localização"
+      reviews_title: "Avaliações"
+      reviews_empty: "Este passeio ainda não tem avaliações."
       reviews_summary:
-        one: "%{rating} de 5 -- 1 avaliacao"
-        other: "%{rating} de 5 -- %{count} avaliacoes"
+        one: "%{rating} de 5 -- 1 avaliação"
+        other: "%{rating} de 5 -- %{count} avaliações"
