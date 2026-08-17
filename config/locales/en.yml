@@ -75,6 +75,7 @@ en:
     nav:
       signed_in_as: "Signed in as %{name}"
       panel: "Panel"
+      view_site: "View site"
       sign_out: "Sign out"
       sign_in: "Operator area"
     tours:
