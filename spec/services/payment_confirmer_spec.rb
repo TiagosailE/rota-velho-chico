@@ -25,5 +25,18 @@ RSpec.describe PaymentConfirmer do
 
       expect(booking.reload).to be_pending
     end
+
+    it "envia o recibo e agenda lembrete (24h antes) e pedido de avaliacao (1 dia depois da saida)" do
+      departure = create(:departure, starts_at: 10.days.from_now.change(hour: 9))
+      booking = create(:booking, departure:, status: :pending)
+      create(:payment, booking:, stripe_checkout_session_id: "cs_test_123", stripe_payment_intent_id: nil, status: :pending)
+
+      expect {
+        described_class.new(stripe_checkout_session_id: "cs_test_123", stripe_payment_intent_id: "pi_test_123").call
+      }
+        .to have_enqueued_mail(BookingMailer, :payment_received).with(booking)
+        .and have_enqueued_mail(BookingMailer, :departure_reminder).with(booking).at(departure.starts_at - 24.hours)
+        .and have_enqueued_mail(BookingMailer, :review_request).with(booking).at(departure.starts_at + 1.day)
+    end
   end
 end

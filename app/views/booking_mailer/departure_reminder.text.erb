@@ -1,0 +1,11 @@
+<%= t("booking_mailer.departure_reminder.greeting", name: @booking.customer_name) %>
+
+<%= t("booking_mailer.departure_reminder.body_text",
+      tour: @booking.departure.tour.title,
+      date: @booking.departure.starts_at.strftime("%d/%m/%Y %H:%M"),
+      place: @booking.departure.tour.meeting_point) %>
+
+<%= t("booking_mailer.departure_reminder.balance",
+      balance: format_price_cents(@booking.total_cents - @booking.deposit_cents)) %>
+
+<%= t("booking_mailer.departure_reminder.code", code: @booking.code) %>
