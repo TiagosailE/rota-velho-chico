@@ -25,10 +25,12 @@ e falha de propósito se o lock for removido (ver [`docs/architecture.md`](docs/
 - **PostgreSQL 18** — necessário de verdade: `SELECT ... FOR UPDATE` é o que
   sustenta a garantia de não-overbooking; SQLite (escritor único) tornaria a
   demonstração trivial e sem graça
-- **Stripe** (Payment Intents) para o sinal de 30%, com verificação de
-  assinatura de webhook e idempotência
-- **Devise** para o painel do operador (sem cadastro público — contas são
-  semeadas)
+- **Stripe Checkout + Connect** para o sinal de 30%: destination charge
+  repassa o valor pra conta conectada de cada operador, descontada a
+  comissão da plataforma, com verificação de assinatura de webhook e
+  idempotência
+- **Devise** para o painel do operador, com autocadastro (`/operators/sign_up`)
+  e aprovação manual antes da conta poder logar
 - **Tailwind CSS v4** via `tailwindcss-rails`, sem build de JS separado
 - **Solid Queue** para jobs assíncronos (estorno em cascata, e-mail)
 - **RSpec + FactoryBot + Capybara**, cobertura mínima de 85% travada no CI
@@ -112,6 +114,10 @@ Login do painel do operador em `/operators/sign_in`: qualquer e-mail semeado
 (ex.: `contato@catamarapauloafonso.example.com`) + senha `password123`
 — **senha de desenvolvimento, nunca usada em produção.**
 
+Autocadastro em `/operators/sign_up` entra com `active: false` — sem
+painel de administração, aprovar é `Operator.find_by(email:
+"...").update!(active: true)` via `bin/rails console`.
+
 ### Variáveis de ambiente (opcionais em dev)
 
 A aplicação funciona sem elas para navegar e reservar; só o pagamento de
@@ -152,6 +158,7 @@ destaques:
 | Snapshot de preço em cada reserva | Reserva de janeiro não pode mudar de valor porque o operador reajustou o passeio em março |
 | Estorno em job assíncrono, fora da transação | Chamada de rede não pode segurar transação de banco; job falho é reprocessável, transação abortada no meio de 40 estornos não |
 | Sem conta para o turista reservar | Quem reserva um passeio de barco não quer criar login — código de 6 caracteres + e-mail é suficiente para consultar depois |
+| Aprovação de operador manual (`active: false` + console), não painel de admin | Trust/safety real do autocadastro sem construir um sistema de auth/role paralelo só pra isso — resolve o mesmo problema no tamanho certo pro estágio do projeto |
 
 ## Segurança
 

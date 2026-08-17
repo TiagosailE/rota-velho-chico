@@ -47,7 +47,11 @@ pt-BR:
         customer_name: "Nome"
         customer_email: "E-mail"
       operator:
+        name: "Nome"
         email: "E-mail"
+        phone: "Telefone"
+        whatsapp: "WhatsApp"
+        bio: "Sobre a agência"
         password: "Senha"
         password_confirmation: "Confirmação de senha"
         remember_me: "Lembrar de mim"
@@ -77,6 +81,17 @@ pt-BR:
           attributes:
             capacity:
               below_seats_taken: "não pode ser menor que as vagas já ocupadas"
+
+  devise:
+    failure:
+      pending_approval: "Sua conta ainda está em análise. Você poderá entrar assim que for aprovada."
+    registrations:
+      new:
+        explanation: "Cadastre sua agência para anunciar passeios em Paulo Afonso. Sua conta passa por uma análise rápida antes de ficar visível."
+        minimum_password_length:
+          one: "1 caractere no mínimo"
+          other: "%{count} caracteres no mínimo"
+      signed_up_but_pending_approval: "Cadastro criado! Sua conta está em análise -- você poderá entrar assim que for aprovada."
 
   operators:
     nav:

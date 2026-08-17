@@ -46,7 +46,11 @@ en:
   activerecord:
     attributes:
       operator:
+        name: "Name"
         email: "Email"
+        phone: "Phone"
+        whatsapp: "WhatsApp"
+        bio: "About the agency"
         password: "Password"
         password_confirmation: "Password confirmation"
         remember_me: "Remember me"
@@ -74,6 +78,17 @@ en:
           attributes:
             capacity:
               below_seats_taken: "cannot be less than the seats already taken"
+
+  devise:
+    failure:
+      pending_approval: "Your account is still under review. You'll be able to sign in once it's approved."
+    registrations:
+      new:
+        explanation: "Register your agency to list tours in Paulo Afonso. Your account goes through a quick review before it becomes visible."
+        minimum_password_length:
+          one: "1 character minimum"
+          other: "%{count} characters minimum"
+      signed_up_but_pending_approval: "Account created! Your account is under review -- you'll be able to sign in once it's approved."
 
   operators:
     nav:
