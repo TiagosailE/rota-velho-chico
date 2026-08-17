@@ -167,6 +167,32 @@ en:
           already_cancelled: "This departure has already been cancelled."
 
   booking_mailer:
+    booking_created:
+      subject: "Your booking was registered — code %{code}"
+      greeting: "Hello, %{name}."
+      body_html: "Your booking for <strong>%{tour}</strong>, departing %{date}, was registered with code <strong>%{code}</strong>."
+      body_text: "Your booking for %{tour}, departing %{date}, was registered with code %{code}."
+      meeting_point: "Meeting point: %{place}."
+      keep_email: "Keep this email: your code and the email used for the booking are what you'll use to look it up, pay, or cancel later, on the \"My booking\" page."
+    payment_received:
+      subject: "Payment confirmed — code %{code}"
+      greeting: "Hello, %{name}."
+      body_html: "We've received the <strong>%{deposit}</strong> deposit for your booking (code <strong>%{code}</strong>) for %{tour}. Your spot is confirmed."
+      body_text: "We've received the %{deposit} deposit for your booking (code %{code}) for %{tour}. Your spot is confirmed."
+      balance: "The remaining %{balance} is paid directly to the %{operator} agency on the day of the tour."
+    departure_reminder:
+      subject: "Your tour is coming up — code %{code}"
+      greeting: "Hello, %{name}."
+      body_html: "Your tour <strong>%{tour}</strong> is scheduled for %{date}. Meeting point: %{place}."
+      body_text: "Your tour %{tour} is scheduled for %{date}. Meeting point: %{place}."
+      balance: "Don't forget: %{balance} is still due to the agency on the day."
+      code: "Keep your code %{code} handy."
+    review_request:
+      subject: "How was your tour?"
+      greeting: "Hello, %{name}."
+      body_html: "We hope you enjoyed <strong>%{tour}</strong>! Your feedback helps other travelers choose."
+      body_text: "We hope you enjoyed %{tour}! Your feedback helps other travelers choose."
+      cta: "Go to \"My booking\" on the site, enter your code and email, and leave your review."
     departure_cancelled:
       subject: "Your departure was cancelled"
       greeting: "Hello, %{name}."

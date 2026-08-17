@@ -1,0 +1,14 @@
+<p><%= t("booking_mailer.payment_received.greeting", name: @booking.customer_name) %></p>
+
+<p>
+  <%= t("booking_mailer.payment_received.body_html",
+        tour: @booking.departure.tour.title,
+        deposit: format_price_cents(@booking.deposit_cents),
+        code: @booking.code) %>
+</p>
+
+<p>
+  <%= t("booking_mailer.payment_received.balance",
+        balance: format_price_cents(@booking.total_cents - @booking.deposit_cents),
+        operator: @booking.departure.tour.operator.name) %>
+</p>

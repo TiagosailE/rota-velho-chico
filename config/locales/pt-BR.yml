@@ -167,6 +167,32 @@ pt-BR:
           already_cancelled: "Essa saída já foi cancelada."
 
   booking_mailer:
+    booking_created:
+      subject: "Sua reserva foi registrada — código %{code}"
+      greeting: "Olá, %{name}."
+      body_html: "Sua reserva para <strong>%{tour}</strong>, saída em %{date}, foi registrada com o código <strong>%{code}</strong>."
+      body_text: "Sua reserva para %{tour}, saída em %{date}, foi registrada com o código %{code}."
+      meeting_point: "Ponto de encontro: %{place}."
+      keep_email: "Guarde este e-mail: é com o código e o e-mail usado na reserva que você consulta, paga ou cancela depois, na página \"Minha reserva\" do site."
+    payment_received:
+      subject: "Pagamento confirmado — código %{code}"
+      greeting: "Olá, %{name}."
+      body_html: "Recebemos o sinal de <strong>%{deposit}</strong> da sua reserva (código <strong>%{code}</strong>) para %{tour}. Sua vaga está confirmada."
+      body_text: "Recebemos o sinal de %{deposit} da sua reserva (código %{code}) para %{tour}. Sua vaga está confirmada."
+      balance: "O restante, %{balance}, é pago diretamente à agência %{operator} no dia do passeio."
+    departure_reminder:
+      subject: "Seu passeio está chegando — código %{code}"
+      greeting: "Olá, %{name}."
+      body_html: "Seu passeio <strong>%{tour}</strong> está marcado para %{date}. Ponto de encontro: %{place}."
+      body_text: "Seu passeio %{tour} está marcado para %{date}. Ponto de encontro: %{place}."
+      balance: "Não esqueça: %{balance} ainda a pagar à agência no dia."
+      code: "Tenha o código %{code} à mão."
+    review_request:
+      subject: "O que você achou do seu passeio?"
+      greeting: "Olá, %{name}."
+      body_html: "Esperamos que tenha aproveitado <strong>%{tour}</strong>! Sua opinião ajuda outros viajantes a escolher."
+      body_text: "Esperamos que tenha aproveitado %{tour}! Sua opinião ajuda outros viajantes a escolher."
+      cta: "Acesse \"Minha reserva\" no site, informe seu código e e-mail, e deixe sua avaliação."
     departure_cancelled:
       subject: "Sua saída foi cancelada"
       greeting: "Olá, %{name}."

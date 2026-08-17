@@ -52,6 +52,7 @@ class BookingsController < ApplicationController
 
     if result.success?
       flash[:booking_id] = result.value.id
+      BookingMailer.booking_created(result.value).deliver_later
       redirect_to booking_confirmation_path
     else
       @booking = Booking.new(booking_params)

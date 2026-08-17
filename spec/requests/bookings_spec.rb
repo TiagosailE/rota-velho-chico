@@ -75,6 +75,13 @@ RSpec.describe "Bookings", type: :request do
       expect(departure.reload.seats_taken).to eq(3)
     end
 
+    it "envia o e-mail de reserva registrada com o codigo" do
+      departure = create(:departure, capacity: 10, seats_taken: 0)
+
+      expect { post departure_bookings_path(departure), params: valid_params }
+        .to have_enqueued_mail(BookingMailer, :booking_created)
+    end
+
     it "nao vaza o flash[:booking_id] interno como toast na tela de confirmacao" do
       departure = create(:departure, capacity: 10, seats_taken: 0)
 

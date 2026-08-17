@@ -1,0 +1,10 @@
+<%= t("booking_mailer.booking_created.greeting", name: @booking.customer_name) %>
+
+<%= t("booking_mailer.booking_created.body_text",
+      tour: @booking.departure.tour.title,
+      date: @booking.departure.starts_at.strftime("%d/%m/%Y %H:%M"),
+      code: @booking.code) %>
+
+<%= t("booking_mailer.booking_created.meeting_point", place: @booking.departure.tour.meeting_point) %>
+
+<%= t("booking_mailer.booking_created.keep_email") %>
