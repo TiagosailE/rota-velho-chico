@@ -3,8 +3,8 @@
     <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-teal-100 text-teal-700 text-2xl">
       &check;
     </div>
-    <h1 class="text-xl font-semibold text-stone-900 mb-2"><%= t("checkout.success.title") %></h1>
-    <p class="text-stone-600 mb-6"><%= t("checkout.success.message", code: @code) %></p>
+    <h1 class="text-xl font-semibold text-ink-900 mb-2"><%= t("checkout.success.title") %></h1>
+    <p class="text-ink-600 mb-6"><%= t("checkout.success.message", code: @code) %></p>
     <%= link_to t("booking_lookups.new.link"), new_booking_lookup_path, class: "btn btn-secondary" %>
   </div>
 </div>

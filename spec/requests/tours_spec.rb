@@ -103,6 +103,69 @@ RSpec.describe "Tours", type: :request do
       expect(response.body).to include(I18n.t("tours.index.empty"))
     end
 
+    it "aplica os filtros predefinidos de preco (chips)" do
+      cheap = create(:tour, base_price_cents: 10_000)
+      mid = create(:tour, base_price_cents: 20_000)
+      pricey = create(:tour, base_price_cents: 35_000)
+
+      get tours_path(max_price: "150")
+      expect(response.body).to include(cheap.title)
+      expect(response.body).not_to include(mid.title)
+
+      get tours_path(min_price: "150", max_price: "300")
+      expect(response.body).to include(mid.title)
+      expect(response.body).not_to include(cheap.title)
+
+      get tours_path(min_price: "300")
+      expect(response.body).to include(pricey.title)
+      expect(response.body).not_to include(mid.title)
+    end
+
+    it "filtra pelo fim de semana" do
+      today = Date.current
+      saturday = today + ((6 - today.wday) % 7)
+      sunday = saturday + 1
+
+      in_weekend = create(:tour)
+      create(:departure, tour: in_weekend, starts_at: saturday.in_time_zone.change(hour: 12))
+
+      out_of_weekend = create(:tour)
+      create(:departure, tour: out_of_weekend, starts_at: (sunday + 3).in_time_zone.change(hour: 12))
+
+      get tours_path(weekend: "1")
+
+      expect(response.body).to include(in_weekend.title)
+      expect(response.body).not_to include(out_of_weekend.title)
+    end
+
+    it "sugere ate 3 proximas datas quando a busca por data exata nao acha nada" do
+      target_date = 10.days.from_now.to_date
+      tour = create(:tour)
+      suggested = [ 15, 20, 25 ].map { |offset| offset.days.from_now.to_date }
+      suggested.each { |date| create(:departure, tour:, starts_at: date.in_time_zone.change(hour: 9)) }
+
+      get tours_path(date: target_date.to_s)
+
+      expect(response.body).to include(I18n.t("tours.index.empty_for_date", date: I18n.l(target_date, format: "%d/%m")))
+      suggested.each { |date| expect(response.body).to include(I18n.l(date, format: "%d/%m")) }
+    end
+
+    it "restringe as datas sugeridas a categoria filtrada" do
+      target_date = 10.days.from_now.to_date
+      matching = create(:tour, category: :boat)
+      matching_date = 15.days.from_now.to_date
+      create(:departure, tour: matching, starts_at: matching_date.in_time_zone.change(hour: 9))
+
+      other_category = create(:tour, category: :hiking)
+      other_date = 12.days.from_now.to_date
+      create(:departure, tour: other_category, starts_at: other_date.in_time_zone.change(hour: 9))
+
+      get tours_path(date: target_date.to_s, category: "boat")
+
+      expect(response.body).to include(I18n.l(matching_date, format: "%d/%m"))
+      expect(response.body).not_to include(I18n.l(other_date, format: "%d/%m"))
+    end
+
     it "mostra a nota media no card quando o passeio tem avaliacao" do
       tour = create(:tour)
       departure = create(:departure, tour:, starts_at: 2.days.ago)
@@ -190,6 +253,36 @@ RSpec.describe "Tours", type: :request do
       get tour_path(tour.slug)
 
       expect(response).to have_http_status(:not_found)
+    end
+
+    it "mostra CTA para a proxima saida com vaga" do
+      tour = create(:tour, slug: "passeio-com-cta")
+      earlier = create(:departure, tour:, starts_at: 5.days.from_now.change(hour: 9), capacity: 10, seats_taken: 0)
+      create(:departure, tour:, starts_at: 12.days.from_now.change(hour: 9), capacity: 10, seats_taken: 0)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(I18n.t("tours.show.book_next"))
+      expect(response.body).to include(new_departure_booking_path(earlier))
+    end
+
+    it "pula saida lotada ao escolher a proxima disponivel para o CTA" do
+      tour = create(:tour, slug: "passeio-com-lotada")
+      create(:departure, tour:, starts_at: 5.days.from_now.change(hour: 9), capacity: 10, seats_taken: 10)
+      available = create(:departure, tour:, starts_at: 12.days.from_now.change(hour: 9), capacity: 10, seats_taken: 0)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(new_departure_booking_path(available))
+    end
+
+    it "mostra estado sem saida no CTA quando nao ha vaga futura" do
+      tour = create(:tour, slug: "passeio-sem-cta")
+      create(:departure, tour:, starts_at: 5.days.from_now.change(hour: 9), capacity: 10, seats_taken: 10)
+
+      get tour_path(tour.slug)
+
+      expect(response.body).to include(I18n.t("tours.show.no_upcoming_departures"))
     end
 
     it "mostra o calendario do mes atual, com horario e vagas no dia da saida agendada" do

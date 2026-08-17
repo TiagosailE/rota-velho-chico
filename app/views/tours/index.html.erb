@@ -3,70 +3,113 @@
   <%# O hero mostra o lugar, nao uma cor: a foto e o argumento de venda do
       passeio. Fundo solido embaixo para o texto continuar legivel enquanto a
       imagem carrega -- e para o banco sem foto nenhuma nao virar caixa vazia. %>
-  <div class="relative overflow-hidden rounded-3xl bg-stone-900 pt-16 pb-28 sm:pt-24 sm:pb-32">
+  <div class="relative overflow-hidden rounded-3xl bg-ink-900 pt-16 pb-28 sm:pt-24 sm:pb-32">
     <% if @hero_photo %>
       <%= image_tag @hero_photo.image.variant(:hero), alt: "", aria: { hidden: true },
             class: "absolute inset-0 w-full h-full object-cover" %>
     <% end %>
 
     <%# Scrim: sem ele o texto branco cai em cima do ceu claro da foto. %>
-    <div class="absolute inset-0 bg-gradient-to-br from-stone-950/85 via-stone-950/55 to-orange-950/60"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-ink-950/85 via-ink-950/55 to-brand-950/60"></div>
 
     <div class="relative px-6 sm:px-10 max-w-2xl">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-orange-200 mb-3">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-200 mb-3">
         <%= t("tours.index.hero.eyebrow") %>
       </p>
       <h1 class="text-3xl sm:text-5xl font-display font-semibold text-white mb-4 text-balance">
         <%= t("tours.index.hero.title") %>
       </h1>
-      <p class="text-stone-200 text-base sm:text-lg mb-6 max-w-xl"><%= t("tours.index.hero.subtitle") %></p>
+      <p class="text-ink-200 text-base sm:text-lg mb-6 max-w-xl"><%= t("tours.index.hero.subtitle") %></p>
       <%= link_to new_booking_lookup_path,
-            class: "inline-flex items-center gap-2 text-sm font-semibold text-white/90 hover:text-white underline underline-offset-4 decoration-orange-400/70 hover:decoration-orange-300" do %>
+            class: "inline-flex items-center gap-2 text-sm font-semibold text-white/90 hover:text-white underline underline-offset-4 decoration-brand-400/70 hover:decoration-brand-300" do %>
         <%= t("booking_lookups.new.link") %>
         <span aria-hidden="true">&rsaquo;</span>
       <% end %>
     </div>
   </div>
 
-  <%= form_with url: tours_path, method: :get,
-        class: "relative z-10 -mt-16 sm:-mt-20 mx-0 sm:mx-6 card shadow-lg p-5 sm:p-6 mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end" do |f| %>
+  <%# Faixa de 3 passos -- numeracao se justifica aqui: e uma sequencia real
+      com ordem obrigatoria (escolher, reservar, pagar), nao decoracao. %>
+  <ol class="grid gap-6 sm:grid-cols-3 py-10 sm:py-12">
+    <% [ %w[choose 1], %w[book 2], %w[pay 3] ].each do |key, number| %>
+      <li class="flex gap-4">
+        <span class="shrink-0 w-9 h-9 rounded-full bg-brand-100 text-brand-800 font-display font-semibold flex items-center justify-center">
+          <%= number %>
+        </span>
+        <div>
+          <p class="font-display font-semibold text-ink-900"><%= t("tours.index.steps.#{key}.title") %></p>
+          <p class="text-sm text-ink-500"><%= t("tours.index.steps.#{key}.body") %></p>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+
+  <div class="card p-5 sm:p-6 mb-10 grid gap-5">
     <div>
-      <%= f.label :category, t("tours.index.filter.category"), class: "field-label" %>
-      <%= f.select :category,
-            Tour.categories.keys.map { |key| [ t("tours.categories.#{key}"), key ] },
-            { include_blank: t("tours.index.filter.all_categories"), selected: @category },
-            class: "field-input" %>
+      <p class="field-label"><%= t("tours.index.filter.category") %></p>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="<%= t('tours.index.filter.category') %>">
+        <%= link_to t("tours.index.filter.all_categories"), filter_link(category: nil), class: chip_classes(@category.nil?) %>
+        <% Tour.categories.each_key do |key| %>
+          <%= link_to t("tours.categories.#{key}"), filter_link(category: key), class: chip_classes(@category == key) %>
+        <% end %>
+      </div>
     </div>
 
     <div>
-      <%= f.label :date, t("tours.index.filter.date"), class: "field-label" %>
-      <%= f.date_field :date, value: @date, class: "field-input" %>
+      <p class="field-label"><%= t("tours.index.filter.when") %></p>
+      <div class="flex flex-wrap gap-2 items-center">
+        <%= link_to t("tours.index.filter.when_any"), filter_link(date: nil, weekend: nil), class: chip_classes(active_when_preset == :any) %>
+        <%= link_to t("tours.index.filter.when_weekend"), filter_link(date: nil, weekend: "1"), class: chip_classes(active_when_preset == :weekend) %>
+        <%= form_with url: tours_path, method: :get, class: "inline-flex" do |f| %>
+          <%= hidden_field_tag :category, @category if @category %>
+          <%= hidden_field_tag :min_price, @min_price if @min_price.present? %>
+          <%= hidden_field_tag :max_price, @max_price if @max_price.present? %>
+          <%= f.date_field :date, value: @date, class: "field-input py-1.5",
+                aria: { label: t("tours.index.filter.when_custom") },
+                onchange: "this.form.requestSubmit()" %>
+        <% end %>
+      </div>
     </div>
 
     <div>
-      <%= f.label :min_price, t("tours.index.filter.min_price"), class: "field-label" %>
-      <%= f.number_field :min_price, value: @min_price, min: 0, class: "field-input" %>
+      <p class="field-label"><%= t("tours.index.filter.price_range") %></p>
+      <div class="flex flex-wrap gap-2">
+        <%= link_to t("tours.index.filter.price_any"), filter_link(min_price: nil, max_price: nil), class: chip_classes(active_price_preset == :any) %>
+        <%= link_to t("tours.index.filter.price_under"), filter_link(min_price: nil, max_price: "150"), class: chip_classes(active_price_preset == :under) %>
+        <%= link_to t("tours.index.filter.price_mid"), filter_link(min_price: "150", max_price: "300"), class: chip_classes(active_price_preset == :mid) %>
+        <%= link_to t("tours.index.filter.price_over"), filter_link(min_price: "300", max_price: nil), class: chip_classes(active_price_preset == :over) %>
+      </div>
     </div>
 
-    <div>
-      <%= f.label :max_price, t("tours.index.filter.max_price"), class: "field-label" %>
-      <%= f.number_field :max_price, value: @max_price, min: 0, class: "field-input" %>
-    </div>
-
-    <div class="flex gap-2">
-      <%= f.submit t("tours.index.filter.submit"), class: "btn btn-primary flex-1" %>
-      <%= link_to t("tours.index.filter.clear"), tours_path, class: "btn btn-secondary" %>
-    </div>
-  <% end %>
+    <% if @category || @date || @weekend || @min_price.present? || @max_price.present? %>
+      <div>
+        <%= link_to t("tours.index.filter.clear"), tours_path, class: "btn-link" %>
+      </div>
+    <% end %>
+  </div>
 
   <% if @tours.empty? %>
-    <div class="card p-10 sm:p-14 text-center">
-      <p class="font-display text-lg text-stone-900 mb-2"><%= t("tours.index.empty") %></p>
-      <p class="text-sm text-stone-500 mb-6"><%= t("tours.index.empty_hint") %></p>
-      <%= link_to t("tours.index.filter.clear"), tours_path, class: "btn btn-primary" %>
-    </div>
+    <% if @suggested_dates.present? %>
+      <div class="card p-10 sm:p-14 text-center">
+        <p class="font-display text-lg text-ink-900 mb-2">
+          <%= t("tours.index.empty_for_date", date: l(@date, format: "%d/%m")) %>
+        </p>
+        <p class="text-sm text-ink-500 mb-5"><%= t("tours.index.empty_for_date_hint") %></p>
+        <div class="flex flex-wrap justify-center gap-2">
+          <% @suggested_dates.each do |date| %>
+            <%= link_to l(date, format: "%d/%m"), filter_link(date: date.iso8601), class: "btn btn-secondary" %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="card p-10 sm:p-14 text-center">
+        <p class="font-display text-lg text-ink-900 mb-2"><%= t("tours.index.empty") %></p>
+        <p class="text-sm text-ink-500 mb-6"><%= t("tours.index.empty_hint") %></p>
+        <%= link_to t("tours.index.filter.clear"), tours_path, class: "btn btn-primary" %>
+      </div>
+    <% end %>
   <% else %>
-    <h2 class="font-display text-xl font-semibold text-stone-900 mb-5">
+    <h2 class="font-display text-xl font-semibold text-ink-900 mb-5">
       <%= t("tours.index.results", count: @tours.size) %>
     </h2>
 

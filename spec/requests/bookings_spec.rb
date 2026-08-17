@@ -34,6 +34,34 @@ RSpec.describe "Bookings", type: :request do
     end
   end
 
+  describe "GET /departures/:departure_id/bookings/price_summary" do
+    it "recalcula o resumo de preco via GET, sem criar reserva" do
+      departure = create(:departure, capacity: 10, seats_taken: 0)
+
+      # O Stimulus controller manda o FormData do formulario inteiro, entao
+      # os campos chegam aninhados em booking[...] -- igual ao POST de
+      # create, nao soltos. Testar com o shape real evita reproduzir aqui o
+      # mesmo bug que so apareceu simulando o campo mudando no navegador.
+      get price_summary_departure_bookings_path(departure),
+          params: { booking: { adults: 3, children_5_9: 1, children_0_4: 0, lunch_count: 0 } }
+
+      calculator = PriceCalculator.new(unit_price_cents: departure.unit_price_cents, adults: 3, children_5_9: 1, children_0_4: 0)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(ApplicationController.helpers.format_price_cents(calculator.total_cents))
+      expect(Booking.count).to eq(0)
+    end
+
+    it "devolve 404 para saida de passeio inativo" do
+      tour = create(:tour, active: false)
+      departure = create(:departure, tour:)
+
+      get price_summary_departure_bookings_path(departure), params: { booking: { adults: 1 } }
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "POST /departures/:departure_id/bookings" do
     it "cria a reserva, incrementa seats_taken e redireciona para a confirmacao com o codigo" do
       departure = create(:departure, capacity: 10, seats_taken: 0)

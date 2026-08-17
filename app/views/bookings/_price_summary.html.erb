@@ -1,0 +1,19 @@
+<%# Partial reaproveitada nos dois lugares: dentro do formulario (render
+    direto) e como resposta do GET price_summary (Stimulus troca o src do
+    turbo-frame a cada mudanca de quantidade). O id precisa bater com o do
+    frame na pagina pra Turbo saber o que substituir. %>
+<%= turbo_frame_tag "price_summary", data: { price_summary_target: "frame" }, class: "card p-5 grid gap-2 text-sm" do %>
+  <p class="field-label mb-0"><%= t("bookings.new.price_summary.title") %></p>
+  <div class="flex justify-between">
+    <dt class="text-ink-500"><%= t("bookings.new.price_summary.subtotal") %></dt>
+    <dd class="font-medium text-ink-900"><%= format_price_cents(calculator.total_cents) %></dd>
+  </div>
+  <div class="flex justify-between border-t border-ink-100 pt-2">
+    <dt class="text-ink-500"><%= t("bookings.new.price_summary.deposit") %></dt>
+    <dd class="font-semibold text-ink-900"><%= format_price_cents(calculator.deposit_cents) %></dd>
+  </div>
+  <div class="flex justify-between text-xs">
+    <dt class="text-ink-400"><%= t("bookings.new.price_summary.balance") %></dt>
+    <dd class="text-ink-500"><%= format_price_cents(calculator.total_cents - calculator.deposit_cents) %></dd>
+  </div>
+<% end %>

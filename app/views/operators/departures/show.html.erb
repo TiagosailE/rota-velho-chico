@@ -4,8 +4,8 @@
   <div class="card p-6 sm:p-8 mb-8">
     <div class="flex items-start justify-between flex-wrap gap-4 mb-4">
       <div>
-        <h1 class="text-2xl font-semibold text-stone-900 mb-1"><%= @tour.title %></h1>
-        <p class="text-stone-500"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></p>
+        <h1 class="text-2xl font-semibold text-ink-900 mb-1"><%= @tour.title %></h1>
+        <p class="text-ink-500"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></p>
       </div>
 
       <div class="flex gap-2">
@@ -19,23 +19,23 @@
       </div>
     </div>
 
-    <div class="flex items-center gap-3 border-t border-stone-100 pt-4">
-      <span class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("operators.departures.show.occupancy") %></span>
-      <div class="flex-1 h-2 rounded-full bg-stone-100 overflow-hidden max-w-xs">
-        <div class="h-full bg-orange-500" style="width: <%= @occupancy_percentage %>%"></div>
+    <div class="flex items-center gap-3 border-t border-ink-100 pt-4">
+      <span class="text-xs font-medium uppercase tracking-wide text-ink-400"><%= t("operators.departures.show.occupancy") %></span>
+      <div class="flex-1 h-2 rounded-full bg-ink-100 overflow-hidden max-w-xs">
+        <div class="h-full bg-brand-500" style="width: <%= @occupancy_percentage %>%"></div>
       </div>
-      <span class="text-sm font-medium text-stone-700"><%= @departure.seats_taken %>/<%= @departure.capacity %> (<%= @occupancy_percentage %>%)</span>
+      <span class="text-sm font-medium text-ink-700"><%= @departure.seats_taken %>/<%= @departure.capacity %> (<%= @occupancy_percentage %>%)</span>
     </div>
   </div>
 
-  <h2 class="text-lg font-semibold text-stone-900 mb-4"><%= t("operators.departures.show.bookings_title") %></h2>
+  <h2 class="text-lg font-semibold text-ink-900 mb-4"><%= t("operators.departures.show.bookings_title") %></h2>
 
   <% if @bookings.empty? %>
-    <p class="text-stone-500"><%= t("operators.departures.show.no_bookings") %></p>
+    <p class="text-ink-500"><%= t("operators.departures.show.no_bookings") %></p>
   <% else %>
     <div class="card overflow-x-auto">
       <table class="w-full text-left text-sm">
-        <thead class="bg-stone-50 text-stone-500 text-xs uppercase tracking-wide">
+        <thead class="bg-ink-50 text-ink-500 text-xs uppercase tracking-wide">
           <tr>
             <th class="px-4 py-2 font-medium"><%= t("operators.departures.show.code") %></th>
             <th class="px-4 py-2 font-medium"><%= t("bookings.new.customer_name") %></th>
@@ -46,15 +46,15 @@
             <th class="px-4 py-2 font-medium"><%= t("bookings.confirmation.status") %></th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-stone-100">
+        <tbody class="divide-y divide-ink-100">
           <% @bookings.each do |booking| %>
             <tr>
-              <td class="px-4 py-2.5 font-mono text-stone-800"><%= booking.code %></td>
-              <td class="px-4 py-2.5 text-stone-800"><%= booking.customer_name %></td>
-              <td class="px-4 py-2.5 text-stone-600"><%= booking.adults %></td>
-              <td class="px-4 py-2.5 text-stone-600"><%= booking.children_5_9 %></td>
-              <td class="px-4 py-2.5 text-stone-600"><%= booking.children_0_4 %></td>
-              <td class="px-4 py-2.5 text-stone-800"><%= format_price_cents(booking.total_cents) %></td>
+              <td class="px-4 py-2.5 font-mono text-ink-800"><%= booking.code %></td>
+              <td class="px-4 py-2.5 text-ink-800"><%= booking.customer_name %></td>
+              <td class="px-4 py-2.5 text-ink-600"><%= booking.adults %></td>
+              <td class="px-4 py-2.5 text-ink-600"><%= booking.children_5_9 %></td>
+              <td class="px-4 py-2.5 text-ink-600"><%= booking.children_0_4 %></td>
+              <td class="px-4 py-2.5 text-ink-800"><%= format_price_cents(booking.total_cents) %></td>
               <td class="px-4 py-2.5">
                 <% status_badge = { "pending" => "badge-warning", "confirmed" => "badge-success",
                                      "cancelled" => "badge-neutral", "refunded" => "badge-neutral" }.fetch(booking.status) %>

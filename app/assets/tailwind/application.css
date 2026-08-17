@@ -1,13 +1,55 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Paleta "Canion" -- tirada do lugar, nao de gosto. Registro completo da
+     origem de cada cor na sessao de /grilling (PROGRESS.md). Nomes de escala
+     genericos (brand/ink/clay/accent) de proposito: a proxima troca de
+     paleta e redefinir estes valores, sem tocar nas ~170 classes que os
+     usam pelas views. */
+  --color-brand-50: #eef5f4;
+  --color-brand-100: #d7e9e7;
+  --color-brand-200: #b0d3cf;
+  --color-brand-300: #82b7b2;
+  --color-brand-400: #4f9490;
+  --color-brand-500: #2d726f;
+  --color-brand-600: #0b5157; /* remanso -- agua represada do canion */
+  --color-brand-700: #0a4348;
+  --color-brand-800: #0a3639;
+  --color-brand-900: #0b2b2c;
+  --color-brand-950: #061a1b;
+
+  --color-ink-50: #eff1ee; /* pedra -- papel claro e frio */
+  --color-ink-100: #e4e7e2;
+  --color-ink-200: #cbd0c9;
+  --color-ink-300: #aeb5ac;
+  --color-ink-400: #8b948a;
+  --color-ink-500: #6b7469;
+  --color-ink-600: #4f584d;
+  --color-ink-700: #3a4238;
+  --color-ink-800: #232a21;
+  --color-ink-900: #17211f; /* basalto -- rocha escura do canion */
+  --color-ink-950: #0e1513;
+
+  --color-clay-100: #f3e4d0;
+  --color-clay-600: #c0762b; /* sertao -- ocre, rebaixado a apoio secundario */
+  --color-clay-700: #9c5d1e;
+  --color-clay-800: #7a4818;
+
+  /* Arara-azul-de-lear, endemica do Raso da Catarina (um dos passeios do
+     catalogo) -- por isso o accent e cobalto, nao um azul generico. Uso
+     deliberadamente raro: elemento de assinatura, nao cor de botao. */
+  --color-accent-100: #e1e5fb;
+  --color-accent-500: #2946d4;
+  --color-accent-600: #22399e;
 }
 
 @layer base {
   body {
-    @apply bg-stone-50 text-stone-800;
+    @apply bg-ink-50 text-ink-800;
   }
 
   h1, h2, h3 {
@@ -16,11 +58,11 @@
 
   input[type="checkbox"],
   input[type="radio"] {
-    accent-color: var(--color-orange-600);
+    accent-color: var(--color-brand-600);
   }
 
   ::selection {
-    @apply bg-orange-200 text-orange-950;
+    @apply bg-brand-200 text-brand-950;
   }
 }
 
@@ -33,37 +75,60 @@
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
   }
   .btn-primary {
-    @apply bg-orange-600 text-white hover:bg-orange-700 focus-visible:ring-orange-400;
+    @apply bg-brand-600 text-white hover:bg-brand-700 focus-visible:ring-brand-400;
   }
   .btn-secondary {
-    @apply bg-white text-stone-700 border border-stone-300 hover:bg-stone-50 focus-visible:ring-stone-300;
+    @apply bg-white text-ink-700 border border-ink-300 hover:bg-ink-50 focus-visible:ring-ink-300;
   }
   .btn-danger {
     @apply bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 focus-visible:ring-red-300;
   }
   .btn-link {
-    @apply inline-flex items-center gap-1 text-sm font-medium text-orange-700 hover:text-orange-800 hover:underline underline-offset-2;
+    @apply inline-flex items-center gap-1 text-sm font-medium text-brand-700 hover:text-brand-800 hover:underline underline-offset-2;
   }
 
   /* Cartoes -- combine "card card-hover" quando quiser o efeito de hover. */
   .card {
-    @apply bg-white rounded-2xl border border-stone-200 shadow-sm;
+    @apply bg-white rounded-2xl border border-ink-200 shadow-sm;
   }
   .card-hover {
-    @apply transition-shadow duration-150 hover:shadow-md hover:border-stone-300;
+    @apply transition-shadow duration-150 hover:shadow-md hover:border-ink-300;
   }
 
   /* Formularios */
   .field-label {
-    @apply block text-sm font-medium text-stone-700 mb-1.5;
+    @apply block text-sm font-medium text-ink-700 mb-1.5;
   }
   .field-input {
-    @apply block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900
-           placeholder-stone-400 shadow-sm transition-colors
-           focus:border-orange-500 focus:ring-2 focus:ring-orange-100 focus:outline-none;
+    @apply block w-full rounded-lg border border-ink-300 bg-white px-3 py-2 text-ink-900
+           placeholder-ink-400 shadow-sm transition-colors
+           focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none;
   }
   .field-hint {
-    @apply mt-1.5 text-xs text-stone-500;
+    @apply mt-1.5 text-xs text-ink-500;
+  }
+
+  /* Bilhete da confirmacao -- o codigo da reserva e o elemento de assinatura
+     do design (substitui a conta de usuario que este produto nao tem). Os
+     "furos" simulam o picote de um ingresso de verdade; a cor precisa bater
+     com o fundo por tras do cartao (bg-ink-50 do body) pra parecer recorte
+     de verdade, nao um circulo solto. */
+  .ticket-notch::before,
+  .ticket-notch::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 22px;
+    height: 22px;
+    background: var(--color-ink-50);
+    border-radius: 9999px;
+    transform: translateY(-50%);
+  }
+  .ticket-notch::before {
+    left: -11px;
+  }
+  .ticket-notch::after {
+    right: -11px;
   }
 
   /* Selos de categoria e status -- combine "badge badge-*". */
@@ -71,16 +136,16 @@
     @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wide;
   }
   .badge-category {
-    @apply bg-orange-100 text-orange-800;
+    @apply bg-brand-100 text-brand-800;
   }
   .badge-neutral {
-    @apply bg-stone-100 text-stone-600;
+    @apply bg-ink-100 text-ink-600;
   }
   .badge-success {
     @apply bg-teal-100 text-teal-800;
   }
   .badge-warning {
-    @apply bg-amber-100 text-amber-800;
+    @apply bg-clay-100 text-clay-800;
   }
   .badge-danger {
     @apply bg-red-100 text-red-700;
@@ -126,10 +191,10 @@
     @apply text-red-600;
   }
   .toast-message {
-    @apply flex-1 pt-0.5 text-sm text-stone-700;
+    @apply flex-1 pt-0.5 text-sm text-ink-700;
   }
   .toast-close {
-    @apply shrink-0 rounded-md p-0.5 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600;
+    @apply shrink-0 rounded-md p-0.5 text-ink-400 transition-colors hover:bg-ink-100 hover:text-ink-600;
   }
   .toast-progress {
     @apply absolute inset-x-0 bottom-0 h-0.5 origin-left bg-current opacity-30;

@@ -6,8 +6,8 @@
   <%= image_tag photo.image.variant(variant), class: css,
         alt: photo.alt_text.presence || tour.title, loading: "lazy" %>
 <% else %>
-  <div class="<%= css %> bg-stone-100 flex items-center justify-center" role="img"
+  <div class="<%= css %> bg-ink-100 flex items-center justify-center" role="img"
        aria-label="<%= t("tours.cover.placeholder", title: tour.title) %>">
-    <span class="text-stone-400 text-sm"><%= t("tours.cover.no_photo") %></span>
+    <span class="text-ink-400 text-sm"><%= t("tours.cover.no_photo") %></span>
   </div>
 <% end %>

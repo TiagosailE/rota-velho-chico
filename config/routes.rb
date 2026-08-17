@@ -43,7 +43,9 @@ Rails.application.routes.draw do
   get "agencias/:slug", to: "operator_profiles#show", as: :operator_profile
 
   resources :departures, only: [] do
-    resources :bookings, only: [ :new, :create ]
+    resources :bookings, only: [ :new, :create ] do
+      get :price_summary, on: :collection
+    end
   end
 
   get "bookings/confirmation", to: "bookings#confirmation", as: :booking_confirmation

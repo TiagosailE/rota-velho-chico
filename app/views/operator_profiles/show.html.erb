@@ -1,33 +1,33 @@
 <% content_for(:title) { @operator.name } %>
 <div class="w-full max-w-4xl mx-auto">
   <div class="card p-6 sm:p-8 mb-10">
-    <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900 mb-4"><%= @operator.name %></h1>
+    <h1 class="text-2xl sm:text-3xl font-semibold text-ink-900 mb-4"><%= @operator.name %></h1>
 
     <% if @operator.bio.present? %>
-      <p class="text-stone-700 leading-relaxed mb-6"><%= @operator.bio %></p>
+      <p class="text-ink-700 leading-relaxed mb-6"><%= @operator.bio %></p>
     <% end %>
 
-    <dl class="grid gap-3 sm:grid-cols-2 border-t border-stone-100 pt-6">
+    <dl class="grid gap-3 sm:grid-cols-2 border-t border-ink-100 pt-6">
       <% if @operator.phone.present? %>
         <div>
-          <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("operator_profiles.show.phone") %></dt>
+          <dt class="text-xs font-medium uppercase tracking-wide text-ink-400"><%= t("operator_profiles.show.phone") %></dt>
           <dd><%= link_to @operator.phone, "tel:#{@operator.phone.gsub(/\D/, '')}", class: "btn-link" %></dd>
         </div>
       <% end %>
 
       <% if @operator.whatsapp.present? %>
         <div>
-          <dt class="text-xs font-medium uppercase tracking-wide text-stone-400"><%= t("operator_profiles.show.whatsapp") %></dt>
+          <dt class="text-xs font-medium uppercase tracking-wide text-ink-400"><%= t("operator_profiles.show.whatsapp") %></dt>
           <dd><%= link_to @operator.whatsapp, "https://wa.me/#{@operator.whatsapp.gsub(/\D/, '')}", class: "btn-link" %></dd>
         </div>
       <% end %>
     </dl>
   </div>
 
-  <h2 class="text-lg font-display font-semibold text-stone-900 mb-4"><%= t("operator_profiles.show.tours_title") %></h2>
+  <h2 class="text-lg font-display font-semibold text-ink-900 mb-4"><%= t("operator_profiles.show.tours_title") %></h2>
 
   <% if @tours.empty? %>
-    <p class="text-stone-500"><%= t("operator_profiles.show.tours_empty") %></p>
+    <p class="text-ink-500"><%= t("operator_profiles.show.tours_empty") %></p>
   <% else %>
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <%= render partial: "tours/card", collection: @tours, as: :tour %>

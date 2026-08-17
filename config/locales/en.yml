@@ -31,9 +31,23 @@ en:
   hello: "Hello world"
 
   layout:
+    nav:
+      tours: "Tours"
+      my_booking: "My booking"
     footer:
       tagline: "Tours and bookings in Paulo Afonso, Bahia."
       disclaimer: "Portfolio project. Agency names and booking data are fictional, with no affiliation to real operators in Paulo Afonso."
+      portfolio:
+        eyebrow: "Portfolio project"
+        body: "Built to show real engineering, not just an interface: booking under concurrency, payment via Stripe, and a full panel for the operator."
+        point_reservation: "Pessimistic locking, tested with 20 real threads competing for the last seat"
+        point_payment: "Stripe payment (30% deposit), cascading refund on cancellation"
+        point_panel: "Operator panel: tours, departures, photos and bookings"
+        repo_link: "View code on GitHub"
+        architecture_link: "View architecture decisions"
+        demo_access: "Demo access to the operator panel"
+        demo_email: "Email"
+        demo_password: "Password"
     toasts:
       dismiss: "Dismiss"
 
@@ -176,29 +190,40 @@ en:
     new:
       title: "Book this tour"
       tour: "Tour"
-      departure: "Departure"
+      departure: "Date and time"
       customer_name: "Name"
       customer_email: "Email"
       customer_phone: "Phone (optional)"
       adults: "Adults"
       children_5_9: "Children aged 5 to 9"
       children_0_4: "Children aged 0 to 4"
+      children_0_4_hint: "They don't pay, but they take up a seat (safety vest count)."
       lunch_count: "How many people want lunch (%{price} each)"
       lunch_hint: "Optional -- up to the total number of people in the booking."
-      submit: "Confirm booking"
+      submit: "Book now"
       submitting: "Submitting..."
+      price_summary:
+        title: "Summary"
+        subtotal: "Tour total"
+        deposit: "You pay now (30% deposit)"
+        balance: "Remainder, with the agency later"
     confirmation:
       title: "Booking created"
       keep_code: "Keep this code. It is used to look up your booking."
       lunch: "Lunch"
       lunch_value: "%{count} x %{price}"
       total: "Total"
-      deposit: "Deposit (30%)"
+      deposit: "Deposit (30%, paid now)"
+      balance: "Remainder (paid to the agency)"
       status: "Status"
       status_pending: "Pending"
       status_confirmed: "Confirmed"
       status_cancelled: "Cancelled"
       status_refunded: "Refunded"
+      status_hint_pending: "Pay the deposit to secure your spot."
+      status_hint_confirmed: "Deposit paid. Your spot is secured."
+      status_hint_cancelled: "This booking is no longer active."
+      status_hint_refunded: "The deposit has been refunded."
       cancel_button: "Cancel booking"
       cancel_confirm: "Are you sure you want to cancel this booking?"
     errors:
@@ -264,20 +289,38 @@ en:
       title: "Tours in Paulo Afonso"
       hero:
         eyebrow: "Paulo Afonso, Bahia"
-        title: "Discover the backlands along the Sao Francisco River"
-        subtitle: "Boat, hiking and adventure tours with instant departure and booking confirmation."
+        title: "Book your tour on the Sao Francisco Canyon"
+        subtitle: "Pick a date, pay 30% now, and get a code right away. No account, no password."
+      steps:
+        eyebrow: "How it works"
+        choose:
+          title: "Pick a date"
+          body: "Real availability on each tour's calendar."
+        book:
+          title: "Book without an account"
+          body: "Just a name, email and phone number."
+        pay:
+          title: "Pay 30% now"
+          body: "Settle the rest with the agency. Keep the code."
       results:
         one: "1 tour available"
         other: "%{count} tours available"
       empty: "No tours found for these filters."
-      empty_hint: "Try widening the price range or picking another date."
+      empty_hint: "Try another category or a wider price range."
+      empty_for_date: "No departures on %{date}."
+      empty_for_date_hint: "Next available dates:"
       filter:
         category: "Category"
-        all_categories: "All categories"
-        date: "Departure date"
-        min_price: "Minimum price (R$)"
-        max_price: "Maximum price (R$)"
-        submit: "Filter"
+        all_categories: "All"
+        when: "When"
+        when_any: "Any date"
+        when_weekend: "This weekend"
+        when_custom: "Pick a date"
+        price_range: "Price range"
+        price_any: "Any price"
+        price_under: "Up to R$ 150"
+        price_mid: "R$ 150 to R$ 300"
+        price_over: "Over R$ 300"
         clear: "Clear filters"
       card:
         duration_label: "Duration"
@@ -298,6 +341,8 @@ en:
       calendar_title: "Availability calendar"
       no_departures: "No departures scheduled this month."
       book: "Book"
+      book_next: "Book next departure"
+      no_upcoming_departures: "No departures scheduled right now."
       seats_available:
         one: "1 seat available"
         other: "%{count} seats available"
