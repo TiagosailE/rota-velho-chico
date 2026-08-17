@@ -1,11 +1,11 @@
 <div class="w-full">
   <div class="flex items-center justify-between mb-8 flex-wrap gap-3">
-    <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900"><%= t("operators.tours.index.title") %></h1>
+    <h1 class="text-2xl sm:text-3xl font-semibold text-ink-900"><%= t("operators.tours.index.title") %></h1>
     <%= link_to t("operators.tours.index.new"), new_operators_tour_path, class: "btn btn-primary" %>
   </div>
 
   <% if @tours.empty? %>
-    <p class="text-stone-500"><%= t("operators.tours.index.empty") %></p>
+    <p class="text-ink-500"><%= t("operators.tours.index.empty") %></p>
   <% else %>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <% @tours.each do |tour| %>
@@ -16,7 +16,7 @@
               <span class="badge badge-danger"><%= t("operators.tours.index.inactive") %></span>
             <% end %>
           </div>
-          <h2 class="text-lg font-display font-semibold text-stone-900 mb-3"><%= tour.title %></h2>
+          <h2 class="text-lg font-display font-semibold text-ink-900 mb-3"><%= tour.title %></h2>
           <span class="btn-link mt-auto"><%= t("operators.tours.index.manage") %></span>
         <% end %>
       <% end %>

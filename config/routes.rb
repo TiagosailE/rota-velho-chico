@@ -9,7 +9,10 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  devise_for :operators, skip: [ :registrations ]
+  # Controller proprio existe so pra limitar tentativas de login -- ver
+  # Operators::SessionsController. O resto do Devise segue o padrao.
+  devise_for :operators, skip: [ :registrations ],
+             controllers: { sessions: "operators/sessions" }
 
   # Plural para nao colidir com a constante do model Operator -- um
   # namespace :operator geraria controllers no modulo Operator::, que o
@@ -25,17 +28,6 @@ Rails.application.routes.draw do
         end
       end
     end
-
-    # Ferramenta temporaria, uso unico: recria as fotos das seeds depois da
-    # migracao pro Cloudflare R2, sem precisar de Shell (recurso pago no
-    # Render). Remover depois de usada -- ver PROGRESS.md.
-    get "maintenance/reset_photos", to: "maintenance#reset_photos"
-
-    # Ferramenta temporaria, uso unico: corrige a acentuacao de operadores/
-    # passeios/fotos ja publicados no Render (db:seed nao atualiza registro
-    # existente). Sem Shell no free tier -- mesma razao da rota acima.
-    # Remover depois de usada -- ver PROGRESS.md.
-    get "maintenance/fix_accents", to: "maintenance#fix_accents"
   end
 
   resources :tours, only: [ :index, :show ], param: :slug
@@ -43,7 +35,9 @@ Rails.application.routes.draw do
   get "agencias/:slug", to: "operator_profiles#show", as: :operator_profile
 
   resources :departures, only: [] do
-    resources :bookings, only: [ :new, :create ]
+    resources :bookings, only: [ :new, :create ] do
+      get :price_summary, on: :collection
+    end
   end
 
   get "bookings/confirmation", to: "bookings#confirmation", as: :booking_confirmation

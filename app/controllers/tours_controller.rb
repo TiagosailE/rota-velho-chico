@@ -4,8 +4,10 @@ class ToursController < ApplicationController
     @hero_photo = hero_photo
     @category = params[:category] if Tour.categories.key?(params[:category])
     @date = parsed_date
+    @weekend = params[:weekend].present?
     @min_price = params[:min_price]
     @max_price = params[:max_price]
+    @suggested_dates = suggested_dates if @tours.empty? && @date.present?
   end
 
   def show
@@ -17,6 +19,11 @@ class ToursController < ApplicationController
                                 .where(starts_at: range_start..range_end)
                                 .order(:starts_at)
                                 .group_by { |departure| departure.starts_at.to_date }
+    @next_departure = @tour.departures.scheduled
+                            .where(starts_at: Time.current..)
+                            .where("seats_taken < capacity")
+                            .order(:starts_at)
+                            .first
   end
 
   private
@@ -31,6 +38,22 @@ class ToursController < ApplicationController
              .where(tours: { active: true }, position: 0)
              .order(:tour_id)
              .first
+  end
+
+  # Ate 3 proximas datas com saida, respeitando a categoria filtrada -- so
+  # calculado quando a busca por data exata zerou o catalogo, pra sugerir uma
+  # data com vaga em vez de deixar o visitante num beco sem saida.
+  def suggested_dates
+    tours_scope = Tour.where(active: true)
+    tours_scope = tours_scope.where(category: params[:category]) if Tour.categories.key?(params[:category])
+
+    Departure.scheduled.joins(:tour).merge(tours_scope)
+             .where(starts_at: Time.current..)
+             .order(:starts_at)
+             .limit(60)
+             .map { |departure| departure.starts_at.to_date }
+             .uniq
+             .first(3)
   end
 
   def parsed_month
@@ -50,9 +73,20 @@ class ToursController < ApplicationController
   end
 
   def filter_by_date(tours)
+    return filter_by_weekend(tours) if params[:weekend].present?
     return tours unless parsed_date
 
     range = parsed_date.beginning_of_day..parsed_date.end_of_day
+    tours.joins(:departures).merge(Departure.scheduled.where(starts_at: range)).distinct
+  end
+
+  # "Este fim de semana" = proximo sabado-domingo. Simplificacao deliberada:
+  # se hoje for domingo, aponta pro fim de semana seguinte em vez de so hoje
+  # -- uma formula so, sem branch extra pra um caso de borda que nao muda o
+  # produto.
+  def filter_by_weekend(tours)
+    saturday = Date.current + ((6 - Date.current.wday) % 7)
+    range = saturday.beginning_of_day..(saturday + 1).end_of_day
     tours.joins(:departures).merge(Departure.scheduled.where(starts_at: range)).distinct
   end
 

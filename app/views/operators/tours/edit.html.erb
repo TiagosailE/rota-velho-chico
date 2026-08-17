@@ -1,13 +1,13 @@
 <div class="w-full">
   <%= link_to t("operators.tours.form.back"), operators_tours_path, class: "btn-link mb-6 inline-flex" %>
 
-  <h1 class="text-2xl sm:text-3xl font-semibold text-stone-900 mb-6"><%= t("operators.tours.edit.title", title: @tour.title) %></h1>
+  <h1 class="text-2xl sm:text-3xl font-semibold text-ink-900 mb-6"><%= t("operators.tours.edit.title", title: @tour.title) %></h1>
 
   <%= render "form", tour: @tour %>
 
   <div class="max-w-lg mt-10 mx-auto">
-    <h2 class="text-lg font-semibold text-stone-900 mb-1"><%= t("operators.tour_photos.title") %></h2>
-    <p class="text-sm text-stone-500 mb-4"><%= t("operators.tour_photos.hint") %></p>
+    <h2 class="text-lg font-semibold text-ink-900 mb-1"><%= t("operators.tour_photos.title") %></h2>
+    <p class="text-sm text-ink-500 mb-4"><%= t("operators.tour_photos.hint") %></p>
 
     <%= form_with url: operators_tour_photos_path(@tour), scope: :tour_photo, method: :post, class: "card p-4 mb-5" do |f| %>
       <%= f.label :images, t("operators.tour_photos.upload_label"), class: "field-label" %>
@@ -16,7 +16,7 @@
     <% end %>
 
     <% if @tour.tour_photos.empty? %>
-      <p class="text-stone-500 mb-10"><%= t("operators.tour_photos.empty") %></p>
+      <p class="text-ink-500 mb-10"><%= t("operators.tour_photos.empty") %></p>
     <% else %>
       <ul class="grid gap-3 mb-10">
         <% @tour.tour_photos.each_with_index do |photo, index| %>
@@ -53,27 +53,27 @@
     <% end %>
 
     <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-      <h2 class="text-lg font-semibold text-stone-900"><%= t("operators.tours.edit.departures_title") %></h2>
+      <h2 class="text-lg font-semibold text-ink-900"><%= t("operators.tours.edit.departures_title") %></h2>
       <%= link_to t("operators.tours.edit.new_departure"), new_operators_tour_departure_path(@tour), class: "btn btn-secondary" %>
     </div>
 
     <% if @departures.empty? %>
-      <p class="text-stone-500"><%= t("operators.tours.edit.no_departures") %></p>
+      <p class="text-ink-500"><%= t("operators.tours.edit.no_departures") %></p>
     <% else %>
       <div class="card overflow-hidden">
         <table class="w-full text-left text-sm">
-          <thead class="bg-stone-50 text-stone-500 text-xs uppercase tracking-wide">
+          <thead class="bg-ink-50 text-ink-500 text-xs uppercase tracking-wide">
             <tr>
               <th class="px-4 py-2 font-medium"><%= t("operators.departures.form.starts_at") %></th>
               <th class="px-4 py-2 font-medium"><%= t("operators.departures.show.occupancy") %></th>
               <th class="px-4 py-2"></th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-stone-100">
+          <tbody class="divide-y divide-ink-100">
             <% @departures.each do |departure| %>
               <tr>
-                <td class="px-4 py-2.5 text-stone-800"><%= departure.starts_at.strftime("%d/%m/%Y %H:%M") %></td>
-                <td class="px-4 py-2.5 text-stone-600"><%= departure.seats_taken %>/<%= departure.capacity %></td>
+                <td class="px-4 py-2.5 text-ink-800"><%= departure.starts_at.strftime("%d/%m/%Y %H:%M") %></td>
+                <td class="px-4 py-2.5 text-ink-600"><%= departure.seats_taken %>/<%= departure.capacity %></td>
                 <td class="px-4 py-2.5 text-right">
                   <%= link_to t("operators.departures.show.link"), operators_tour_departure_path(@tour, departure), class: "btn-link" %>
                 </td>

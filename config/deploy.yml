@@ -17,6 +17,12 @@ servers:
 
 # Sem proxy/SSL por enquanto -- sem dominio, nao ha certificado Let's Encrypt
 # pra emitir. Ver PROGRESS.md para o que muda quando um dominio entrar.
+#
+# ATENCAO ao subir esta configuracao como esta: producao roda com
+# `config.force_ssl` ligado, o que marca o cookie de sessao como `secure`. Num
+# acesso por IP em HTTP puro o navegador simplesmente nao devolve esse cookie,
+# e o login do operador falha em silencio -- sem erro, so nao entra. Ligue o
+# proxy com dominio e SSL abaixo antes do primeiro deploy real.
 # proxy:
 #   ssl: true
 #   host: app.example.com

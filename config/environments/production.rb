@@ -28,14 +28,19 @@ Rails.application.configure do
   # perda de disco -- R2 fica bom pros dois caminhos de deploy.
   config.active_storage.service = :cloudflare
 
-  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  # config.assume_ssl = true
+  # Os dois caminhos de deploy do projeto terminam TLS num proxy na frente
+  # (Render, e o kamal-proxy na VPS) e falam HTTP com o container. Sem isto o
+  # Rails enxerga a requisicao como insegura e o force_ssl abaixo entraria em
+  # loop de redirecionamento.
+  config.assume_ssl = true
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  # Redireciona HTTP para HTTPS, liga HSTS e -- o que mais importa aqui --
+  # marca o cookie de sessao como `secure`. Sem isso a sessao do operador
+  # trafega tambem em texto claro se alguem chegar ao site por http://.
+  config.force_ssl = true
 
   # Skip http-to-https redirect for the default health check endpoint.
-  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Log to STDOUT with the current request id as a default log tag.
   config.log_tags = [ :request_id ]
@@ -83,12 +88,15 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
+  # Protecao contra DNS rebinding e Host header injection (um Host forjado
+  # envenena os links absolutos que o app gera, inclusive os de e-mail).
   #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # Vem do ambiente em vez de hardcoded de proposito: o dominio muda entre os
+  # dois caminhos de deploy (Render x VPS) e nao vale um deploy pra trocar
+  # constante. Sem APP_HOST definido o Rails nao restringe nada, entao a
+  # ausencia da variavel nunca derruba o site -- so deixa de proteger.
+  if ENV["APP_HOST"].present?
+    config.hosts = [ ENV["APP_HOST"] ]
+    config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  end
 end

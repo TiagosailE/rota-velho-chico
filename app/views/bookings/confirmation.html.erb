@@ -1,58 +1,63 @@
 <div class="w-full max-w-lg mx-auto">
-  <div class="card p-6 sm:p-8 text-center mb-6">
-    <h1 class="text-xl font-semibold text-stone-900 mb-4"><%= t("bookings.confirmation.title") %></h1>
+  <h1 class="text-xl font-semibold text-ink-900 mb-4 text-center"><%= t("bookings.confirmation.title") %></h1>
 
-    <p class="font-mono text-3xl sm:text-4xl font-bold tracking-widest text-orange-700 bg-orange-50 rounded-xl py-4 mb-3">
-      <%= @booking.code %>
-    </p>
-    <p class="text-sm text-stone-500"><%= t("bookings.confirmation.keep_code") %></p>
+  <%# O codigo como bilhete -- elemento de assinatura do design. Substitui a
+      conta de usuario que este produto de proposito nao tem (NOTES.md: sem
+      login pro turista). %>
+  <div class="rounded-2xl overflow-hidden bg-white shadow-sm border border-ink-200 mb-6">
+    <div class="bg-ink-900 text-white px-6 py-5">
+      <p class="font-display text-lg font-semibold"><%= @booking.departure.tour.title %></p>
+      <p class="text-sm text-ink-300"><%= @booking.departure.starts_at.strftime("%d/%m/%Y %H:%M") %></p>
+    </div>
+    <div class="ticket-notch relative border-t-2 border-dashed border-ink-200"></div>
+    <div class="px-6 py-6 text-center">
+      <p class="font-mono text-4xl sm:text-5xl font-bold tracking-[0.3em] text-brand-800"><%= @booking.code %></p>
+      <p class="text-sm text-ink-500 mt-3"><%= t("bookings.confirmation.keep_code") %></p>
+    </div>
   </div>
 
   <dl class="card p-6 grid gap-3 mb-6 text-sm">
     <div class="flex justify-between">
-      <dt class="text-stone-500"><%= t("bookings.new.tour") %></dt>
-      <dd class="font-medium text-stone-900"><%= @booking.departure.tour.title %></dd>
+      <dt class="text-ink-500"><%= t("bookings.new.adults") %></dt>
+      <dd class="font-medium text-ink-900"><%= @booking.adults %></dd>
     </div>
     <div class="flex justify-between">
-      <dt class="text-stone-500"><%= t("bookings.new.departure") %></dt>
-      <dd class="font-medium text-stone-900"><%= @booking.departure.starts_at.strftime("%d/%m/%Y %H:%M") %></dd>
+      <dt class="text-ink-500"><%= t("bookings.new.children_5_9") %></dt>
+      <dd class="font-medium text-ink-900"><%= @booking.children_5_9 %></dd>
     </div>
     <div class="flex justify-between">
-      <dt class="text-stone-500"><%= t("bookings.new.adults") %></dt>
-      <dd class="font-medium text-stone-900"><%= @booking.adults %></dd>
-    </div>
-    <div class="flex justify-between">
-      <dt class="text-stone-500"><%= t("bookings.new.children_5_9") %></dt>
-      <dd class="font-medium text-stone-900"><%= @booking.children_5_9 %></dd>
-    </div>
-    <div class="flex justify-between">
-      <dt class="text-stone-500"><%= t("bookings.new.children_0_4") %></dt>
-      <dd class="font-medium text-stone-900"><%= @booking.children_0_4 %></dd>
+      <dt class="text-ink-500"><%= t("bookings.new.children_0_4") %></dt>
+      <dd class="font-medium text-ink-900"><%= @booking.children_0_4 %></dd>
     </div>
     <% if @booking.lunch_count.positive? %>
       <div class="flex justify-between">
-        <dt class="text-stone-500"><%= t("bookings.confirmation.lunch") %></dt>
-        <dd class="font-medium text-stone-900">
+        <dt class="text-ink-500"><%= t("bookings.confirmation.lunch") %></dt>
+        <dd class="font-medium text-ink-900">
           <%= t("bookings.confirmation.lunch_value", count: @booking.lunch_count, price: format_price_cents(@booking.lunch_unit_price_cents)) %>
         </dd>
       </div>
     <% end %>
-    <div class="flex justify-between border-t border-stone-100 pt-3">
-      <dt class="text-stone-500"><%= t("bookings.confirmation.total") %></dt>
-      <dd class="font-medium text-stone-900"><%= format_price_cents(@booking.total_cents) %></dd>
+    <div class="flex justify-between border-t border-ink-100 pt-3">
+      <dt class="text-ink-500"><%= t("bookings.confirmation.total") %></dt>
+      <dd class="font-medium text-ink-900"><%= format_price_cents(@booking.total_cents) %></dd>
     </div>
     <div class="flex justify-between">
-      <dt class="text-stone-500"><%= t("bookings.confirmation.deposit") %></dt>
-      <dd class="font-semibold text-stone-900"><%= format_price_cents(@booking.deposit_cents) %></dd>
+      <dt class="text-ink-500"><%= t("bookings.confirmation.deposit") %></dt>
+      <dd class="font-semibold text-ink-900"><%= format_price_cents(@booking.deposit_cents) %></dd>
     </div>
-    <div class="flex justify-between items-center border-t border-stone-100 pt-3">
-      <dt class="text-stone-500"><%= t("bookings.confirmation.status") %></dt>
+    <div class="flex justify-between text-xs">
+      <dt class="text-ink-400"><%= t("bookings.confirmation.balance") %></dt>
+      <dd class="text-ink-500"><%= format_price_cents(@booking.total_cents - @booking.deposit_cents) %></dd>
+    </div>
+    <div class="flex justify-between items-center border-t border-ink-100 pt-3">
+      <dt class="text-ink-500"><%= t("bookings.confirmation.status") %></dt>
       <dd>
         <% status_badge = { "pending" => "badge-warning", "confirmed" => "badge-success",
                              "cancelled" => "badge-neutral", "refunded" => "badge-neutral" }.fetch(@booking.status) %>
         <span class="badge <%= status_badge %>"><%= t("bookings.confirmation.status_#{@booking.status}") %></span>
       </dd>
     </div>
+    <p class="text-xs text-ink-500 -mt-1"><%= t("bookings.confirmation.status_hint_#{@booking.status}") %></p>
   </dl>
 
   <div class="grid gap-3">
@@ -70,12 +75,12 @@
   </div>
 
   <% if @booking.review.present? %>
-    <div class="card p-6 mt-6 text-center text-stone-700">
+    <div class="card p-6 mt-6 text-center text-ink-700">
       <%= t("reviews.thanks") %>
     </div>
   <% elsif @booking.reviewable? %>
     <div class="card p-6 mt-6">
-      <h2 class="text-lg font-semibold text-stone-900 mb-4"><%= t("reviews.form.title") %></h2>
+      <h2 class="text-lg font-semibold text-ink-900 mb-4"><%= t("reviews.form.title") %></h2>
       <%= form_with url: review_booking_path(@booking.code), method: :post, scope: :review, class: "grid gap-4" do |f| %>
         <%= hidden_field_tag :email, @booking.customer_email %>
         <div>

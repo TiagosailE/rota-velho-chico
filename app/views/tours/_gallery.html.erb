@@ -5,9 +5,9 @@
 <% photos = tour.tour_photos.to_a %>
 
 <% if photos.empty? %>
-  <div class="mb-8 rounded-2xl bg-stone-100 aspect-[21/9] flex items-center justify-center" role="img"
+  <div class="mb-8 rounded-2xl bg-ink-100 aspect-[21/9] flex items-center justify-center" role="img"
        aria-label="<%= t("tours.cover.placeholder", title: tour.title) %>">
-    <span class="text-stone-400"><%= t("tours.cover.no_photo") %></span>
+    <span class="text-ink-400"><%= t("tours.cover.no_photo") %></span>
   </div>
 <% else %>
   <div class="mb-8"
@@ -40,7 +40,7 @@
           <button type="button" class="relative" data-action="gallery#open" data-gallery-index-param="<%= real_index %>">
             <%= image_tag photo.image.variant(:card), class: "w-full h-full object-cover", alt: photo.alt_text.presence || tour.title %>
             <% if real_index == 4 && photos.size > 5 %>
-              <span class="absolute inset-0 bg-stone-950/60 flex items-center justify-center text-white font-semibold text-sm">
+              <span class="absolute inset-0 bg-ink-950/60 flex items-center justify-center text-white font-semibold text-sm">
                 <%= t("tours.show.gallery.more_photos", count: photos.size - 5) %>
               </span>
             <% end %>
@@ -50,7 +50,7 @@
     <% end %>
 
     <dialog data-gallery-target="dialog" data-action="click->gallery#backdropClose"
-            class="m-auto max-w-4xl w-[90vw] bg-transparent p-0 backdrop:bg-stone-950/85">
+            class="m-auto max-w-4xl w-[90vw] bg-transparent p-0 backdrop:bg-ink-950/85">
       <div class="relative">
         <%= image_tag "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",
               data: { gallery_target: "image" }, class: "w-full max-h-[80vh] object-contain rounded-lg" %>

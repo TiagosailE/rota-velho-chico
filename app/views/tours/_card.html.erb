@@ -4,33 +4,33 @@
         vizinhos da grade. %>
     <%= render "tours/cover", tour: tour, variant: :card,
           css: "w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-105" %>
-    <span class="badge badge-category absolute top-3 left-3 bg-white/90 text-orange-800 shadow-sm">
+    <span class="badge badge-category absolute top-3 left-3 bg-white/90 text-brand-800 shadow-sm">
       <%= t("tours.categories.#{tour.category}") %>
     </span>
   </div>
 
   <div class="p-5 flex flex-col flex-1">
-    <h2 class="text-lg font-display font-semibold text-stone-900 mb-1 group-hover:text-orange-800 transition-colors">
+    <h2 class="text-lg font-display font-semibold text-ink-900 mb-1 group-hover:text-brand-800 transition-colors">
       <%= tour.title %>
     </h2>
 
     <% if (rating = tour.average_rating) %>
-      <p class="text-sm text-amber-600 mb-1">
+      <p class="text-sm text-clay-600 mb-1">
         <span aria-hidden="true"><%= star_rating(rating) %></span>
-        <span class="text-stone-500"><%= t("tours.index.card.rating", rating: rating, count: tour.reviews.count) %></span>
+        <span class="text-ink-500"><%= t("tours.index.card.rating", rating: rating, count: tour.reviews.count) %></span>
       </p>
     <% end %>
 
-    <p class="text-sm text-stone-500 mb-4">
+    <p class="text-sm text-ink-500 mb-4">
       <%= t("tours.index.card.duration_label") %>: <%= format_duration(tour.duration_minutes) %>
     </p>
 
-    <div class="mt-auto flex items-end justify-between gap-3 pt-3 border-t border-stone-100">
+    <div class="mt-auto flex items-end justify-between gap-3 pt-3 border-t border-ink-100">
       <span>
-        <span class="block text-lg font-semibold text-stone-900 leading-tight">
+        <span class="block text-lg font-semibold text-ink-900 leading-tight">
           <%= format_price_cents(tour.base_price_cents) %>
         </span>
-        <span class="block text-xs text-stone-400"><%= t("tours.index.card.per_person") %></span>
+        <span class="block text-xs text-ink-400"><%= t("tours.index.card.per_person") %></span>
       </span>
       <span class="btn-link"><%= t("tours.index.card.details") %></span>
     </div>

@@ -21,7 +21,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
     <%# Leaflet.js e pinado via importmap (vendor/javascript/leaflet.js), mas
         a folha de estilo nao passa pelo importmap -- so lida com JS. Vem do
@@ -36,24 +36,30 @@
   </head>
 
   <body class="min-h-screen flex flex-col">
-    <header class="border-b border-stone-200 bg-white/90 backdrop-blur sticky top-0 z-10">
+    <header class="border-b border-ink-200 bg-white/90 backdrop-blur sticky top-0 z-10">
       <div class="container mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-3">
-        <%= link_to tours_path, class: "font-display text-xl font-semibold text-stone-900 hover:text-orange-700 transition-colors" do %>
+        <%= link_to tours_path, class: "font-display text-xl font-semibold text-ink-900 hover:text-brand-700 transition-colors" do %>
           Rota Velho Chico
         <% end %>
 
-        <nav class="text-sm flex items-center gap-4 text-stone-600">
+        <nav class="text-sm flex items-center gap-4 text-ink-600">
+          <%= link_to t("layout.nav.tours"), tours_path, class: "font-medium text-ink-700 hover:text-brand-700" %>
+          <%= link_to t("layout.nav.my_booking"), new_booking_lookup_path, class: "font-medium text-ink-700 hover:text-brand-700" %>
+
+          <%# Operador ja autenticado precisa de acesso rapido ao painel --
+              isso continua no topo. Quem nao esta logado nao ve "Area do
+              operador" aqui: esse link vive so no rodape, pro visitante nao
+              confundir a ferramenta do operador com o site publico. %>
           <% if operator_signed_in? %>
+            <span aria-hidden="true" class="text-ink-300">|</span>
             <span class="hidden sm:inline"><%= t("operators.nav.signed_in_as", name: current_operator.name) %></span>
-            <%= link_to t("operators.nav.panel"), operators_root_path, class: "font-medium text-stone-700 hover:text-orange-700" %>
+            <%= link_to t("operators.nav.panel"), operators_root_path, class: "font-medium text-ink-700 hover:text-brand-700" %>
             <%= button_to t("operators.nav.sign_out"), destroy_operator_session_path, method: :delete,
-                  class: "font-medium text-stone-700 hover:text-orange-700 underline-offset-2 hover:underline bg-transparent p-0" %>
-          <% else %>
-            <%= link_to t("operators.nav.sign_in"), new_operator_session_path, class: "font-medium text-stone-700 hover:text-orange-700" %>
+                  class: "font-medium text-ink-700 hover:text-brand-700 underline-offset-2 hover:underline bg-transparent p-0" %>
           <% end %>
-          <span aria-hidden="true" class="text-stone-300">|</span>
-          <%= link_to "PT", url_for(locale: "pt-BR"), lang: "pt-BR", class: "font-medium hover:text-orange-700" %>
-          <%= link_to "EN", url_for(locale: "en"), lang: "en", class: "font-medium hover:text-orange-700" %>
+          <span aria-hidden="true" class="text-ink-300">|</span>
+          <%= link_to "PT", url_for(locale: "pt-BR"), lang: "pt-BR", class: "font-medium hover:text-brand-700" %>
+          <%= link_to "EN", url_for(locale: "en"), lang: "en", class: "font-medium hover:text-brand-700" %>
         </nav>
       </div>
     </header>
@@ -63,13 +69,19 @@
       <%= yield %>
     </main>
 
-    <footer class="border-t border-stone-200 bg-white mt-16">
+    <footer class="border-t border-ink-200 bg-white mt-16">
       <div class="container mx-auto px-5 py-8 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p class="font-display text-base font-semibold text-stone-900">Rota Velho Chico</p>
-          <p class="text-xs text-stone-500"><%= t("layout.footer.tagline") %></p>
+          <p class="font-display text-base font-semibold text-ink-900">Rota Velho Chico</p>
+          <p class="text-xs text-ink-500 mt-1"><%= t("layout.footer.tagline") %></p>
+          <p class="text-xs text-ink-400 mt-4 sm:max-w-md"><%= t("layout.footer.disclaimer") %></p>
         </div>
-        <p class="text-xs text-stone-400 sm:max-w-md sm:text-right"><%= t("layout.footer.disclaimer") %></p>
+
+        <%# Link discreto, no padrao de rodape de marketplace (Booking/
+            Airbnb tem o equivalente "Torne-se parceiro") -- sem credencial
+            nem qualquer mencao a demonstracao/portfolio. %>
+        <%= link_to t("operators.nav.sign_in"), new_operator_session_path,
+              class: "text-xs font-medium text-ink-500 hover:text-brand-700 whitespace-nowrap" %>
       </div>
     </footer>
   </body>

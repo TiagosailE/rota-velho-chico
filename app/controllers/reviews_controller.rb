@@ -1,4 +1,9 @@
 class ReviewsController < ApplicationController
+  # Mesma varredura de codigo das outras acoes publicas, e aqui acertar o par
+  # publica texto no perfil de uma agencia em nome de outra pessoa.
+  rate_limit to: 10, within: 5.minutes, only: :create,
+             with: -> { redirect_to new_booking_lookup_path, alert: t("rate_limit.exceeded") }
+
   def create
     booking = Booking.find_by!(code: params[:code])
 
