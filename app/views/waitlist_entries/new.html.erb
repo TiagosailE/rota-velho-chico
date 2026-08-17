@@ -1,0 +1,54 @@
+<div class="w-full max-w-lg mx-auto">
+  <%= link_to t("tours.show.back"), tour_path(@departure.tour.slug), class: "btn-link mb-6 inline-flex" %>
+
+  <h1 class="text-2xl sm:text-3xl font-semibold text-ink-900 mb-2"><%= t("waitlist_entries.new.title") %></h1>
+  <p class="text-ink-500 text-sm mb-6"><%= t("waitlist_entries.new.explanation") %></p>
+
+  <dl class="card p-5 grid gap-2 mb-8 text-sm">
+    <div class="flex justify-between">
+      <dt class="text-ink-500"><%= t("bookings.new.tour") %></dt>
+      <dd class="font-medium text-ink-900"><%= @departure.tour.title %></dd>
+    </div>
+    <div class="flex justify-between">
+      <dt class="text-ink-500"><%= t("bookings.new.departure") %></dt>
+      <dd class="font-medium text-ink-900"><%= @departure.starts_at.strftime("%d/%m/%Y %H:%M") %></dd>
+    </div>
+  </dl>
+
+  <%= form_with model: @waitlist_entry, url: departure_waitlist_entries_path(@departure), class: "card p-6 grid gap-5" do |f| %>
+    <div>
+      <%= f.label :customer_name, t("bookings.new.customer_name"), class: "field-label" %>
+      <%= f.text_field :customer_name, required: true, class: "field-input" %>
+    </div>
+
+    <div>
+      <%= f.label :customer_email, t("bookings.new.customer_email"), class: "field-label" %>
+      <%= f.email_field :customer_email, required: true, class: "field-input" %>
+    </div>
+
+    <div>
+      <%= f.label :customer_phone, t("bookings.new.customer_phone"), class: "field-label" %>
+      <%= f.telephone_field :customer_phone, class: "field-input" %>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3">
+      <div class="flex flex-col justify-end">
+        <%= f.label :adults, t("bookings.new.adults"), class: "field-label" %>
+        <%= f.number_field :adults, min: 0, class: "field-input" %>
+      </div>
+
+      <div class="flex flex-col justify-end">
+        <%= f.label :children_5_9, t("bookings.new.children_5_9"), class: "field-label" %>
+        <%= f.number_field :children_5_9, min: 0, class: "field-input" %>
+      </div>
+
+      <div class="flex flex-col justify-end">
+        <%= f.label :children_0_4, t("bookings.new.children_0_4"), class: "field-label" %>
+        <%= f.number_field :children_0_4, min: 0, class: "field-input" %>
+      </div>
+    </div>
+    <p class="field-hint -mt-3"><%= t("bookings.new.children_0_4_hint") %></p>
+
+    <%= f.submit t("waitlist_entries.new.submit"), class: "btn btn-primary w-full mt-2" %>
+  <% end %>
+</div>

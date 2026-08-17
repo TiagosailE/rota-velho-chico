@@ -15,6 +15,12 @@ class BookingCanceller
       @booking.update!(status: refunded ? :refunded : :cancelled, cancelled_at: Time.current)
     end
 
+    # Fora do lock, depois do commit -- mesmo padrao do DepartureCanceller.
+    # So esse caminho libera vaga com a saida continuando agendada (o
+    # DepartureCanceller cancela a saida inteira, nao sobra vaga pra
+    # promover); e o unico gatilho real da lista de espera.
+    PromoteWaitlistJob.perform_later(@booking.departure_id)
+
     Result.new(true, @booking, nil)
   end
 

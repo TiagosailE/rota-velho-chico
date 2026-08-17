@@ -1,6 +1,7 @@
 class Departure < ApplicationRecord
   belongs_to :tour
   has_many :bookings
+  has_many :waitlist_entries
 
   enum :status, scheduled: 0, cancelled: 1, completed: 2
 
@@ -16,6 +17,10 @@ class Departure < ApplicationRecord
 
   def unit_price_cents
     price_override_cents || tour.base_price_cents
+  end
+
+  def full?
+    seats_taken >= capacity
   end
 
   # Atributo virtual para o formulario do operador aceitar reais em vez de

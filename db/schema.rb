@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_12_000100) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -184,6 +184,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_12_000100) do
     t.check_constraint "min_age >= 0", name: "tours_min_age_non_negative"
   end
 
+  create_table "waitlist_entries", force: :cascade do |t|
+    t.integer "adults", default: 0, null: false
+    t.bigint "booking_id"
+    t.integer "children_0_4", default: 0, null: false
+    t.integer "children_5_9", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.string "customer_email", null: false
+    t.string "customer_name", null: false
+    t.string "customer_phone"
+    t.bigint "departure_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_waitlist_entries_on_booking_id", unique: true
+    t.index ["departure_id", "status"], name: "index_waitlist_entries_on_departure_id_and_status"
+    t.check_constraint "(adults + children_5_9 + children_0_4) > 0", name: "waitlist_entries_party_not_empty"
+    t.check_constraint "adults >= 0 AND children_5_9 >= 0 AND children_0_4 >= 0", name: "waitlist_entries_party_counts_non_negative"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookings", "departures"
@@ -192,4 +210,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_12_000100) do
   add_foreign_key "reviews", "bookings"
   add_foreign_key "tour_photos", "tours"
   add_foreign_key "tours", "operators"
+  add_foreign_key "waitlist_entries", "bookings"
+  add_foreign_key "waitlist_entries", "departures"
 end

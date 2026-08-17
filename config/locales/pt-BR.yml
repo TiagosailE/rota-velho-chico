@@ -43,6 +43,9 @@ pt-BR:
       booking:
         customer_name: "Nome"
         customer_email: "E-mail"
+      waitlist_entry:
+        customer_name: "Nome"
+        customer_email: "E-mail"
       operator:
         email: "E-mail"
         password: "Senha"
@@ -62,6 +65,10 @@ pt-BR:
             lunch_count:
               exceeds_party: "não pode ser maior que o total de pessoas na reserva"
               not_available: "este passeio não oferece almoço como opcional"
+        waitlist_entry:
+          attributes:
+            base:
+              empty_party: "deve incluir pelo menos um passageiro"
         payment:
           attributes:
             refunded_amount_cents:
@@ -259,6 +266,14 @@ pt-BR:
       submit: "Consultar"
     not_found: "Nenhuma reserva encontrada com esse código e e-mail."
 
+  waitlist_entries:
+    new:
+      title: "Lista de espera"
+      explanation: "Essa saída está esgotada. Deixe seus dados e avisamos por e-mail se abrir vaga -- por ordem de chegada."
+      submit: "Entrar na lista de espera"
+    create:
+      success: "Você entrou na lista de espera. Avisaremos por e-mail se abrir vaga."
+
   operator_profiles:
     show:
       phone: "Telefone"
@@ -356,6 +371,7 @@ pt-BR:
       no_departures: "Nenhuma saída agendada neste mês."
       book: "Reservar"
       book_next: "Reservar próxima saída"
+      join_waitlist: "Entrar na lista de espera"
       no_upcoming_departures: "Sem saídas agendadas no momento."
       seats_available:
         one: "1 vaga disponível"
