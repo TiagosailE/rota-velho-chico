@@ -122,6 +122,33 @@ RSpec.describe "Operators::Departures", type: :request do
     end
   end
 
+  describe "GET /operators/tours/:tour_id/departures/:id/manifest" do
+    it "devolve a lista de embarque em PDF" do
+      operator = create(:operator)
+      tour = create(:tour, operator:)
+      departure = create(:departure, tour:)
+      create(:booking, departure:, customer_name: "Ana Turista", status: :confirmed)
+      sign_in operator
+
+      get manifest_operators_tour_departure_path(tour, departure)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq("application/pdf")
+      expect(response.body).to start_with("%PDF")
+    end
+
+    it "devolve 404 para saida de outro operador" do
+      operator = create(:operator)
+      other_tour = create(:tour, operator: create(:operator))
+      other_departure = create(:departure, tour: other_tour)
+      sign_in operator
+
+      get manifest_operators_tour_departure_path(other_tour, other_departure)
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "DELETE /operators/tours/:tour_id/departures/:id" do
     it "cancela a saida e as reservas ativas, com a contagem na mensagem" do
       operator = create(:operator)

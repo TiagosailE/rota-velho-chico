@@ -85,6 +85,16 @@ pt-BR:
       view_site: "Ver site"
       sign_out: "Sair"
       sign_in: "Área do operador"
+    dashboard:
+      title: "Painel"
+      deposits_received: "Sinal recebido"
+      confirmed_bookings: "Reservas confirmadas"
+      average_occupancy: "Ocupação média"
+      average_occupancy_empty: "Sem saídas futuras agendadas."
+      top_tour: "Passeio mais vendido"
+      top_tour_empty: "Ainda sem reservas confirmadas."
+      upcoming_departures_title: "Próximas saídas"
+      upcoming_departures_empty: "Nenhuma saída futura agendada."
     tours:
       index:
         title: "Meus passeios"
@@ -166,8 +176,15 @@ pt-BR:
         no_bookings: "Nenhuma reserva para esta saída."
         code: "Código"
         link: "Ver"
+        manifest_button: "Lista de embarque (PDF)"
         cancel_button: "Cancelar saída"
         cancel_confirm: "Tem certeza? Isso cancela todas as reservas dessa saída e inicia os estornos."
+      manifest:
+        total_passengers: "Total de passageiros: %{count}"
+        phone: "Telefone"
+        phone_missing: "-"
+        children_5_9: "5-9 anos"
+        children_0_4: "0-4 anos"
       destroy:
         success: "Saída cancelada. %{count} reserva(s) canceladas -- estornos, quando aplicáveis, foram iniciados."
         errors:

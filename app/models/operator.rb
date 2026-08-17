@@ -5,6 +5,8 @@ class Operator < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   has_many :tours
+  has_many :departures, through: :tours
+  has_many :bookings, through: :tours
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true

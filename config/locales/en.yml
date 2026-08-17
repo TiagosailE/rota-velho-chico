@@ -82,6 +82,16 @@ en:
       view_site: "View site"
       sign_out: "Sign out"
       sign_in: "Operator area"
+    dashboard:
+      title: "Panel"
+      deposits_received: "Deposits received"
+      confirmed_bookings: "Confirmed bookings"
+      average_occupancy: "Average occupancy"
+      average_occupancy_empty: "No upcoming departures scheduled."
+      top_tour: "Best-selling tour"
+      top_tour_empty: "No confirmed bookings yet."
+      upcoming_departures_title: "Upcoming departures"
+      upcoming_departures_empty: "No upcoming departures scheduled."
     tours:
       index:
         title: "My tours"
@@ -163,8 +173,15 @@ en:
         no_bookings: "No bookings for this departure."
         code: "Code"
         link: "View"
+        manifest_button: "Boarding list (PDF)"
         cancel_button: "Cancel departure"
         cancel_confirm: "Are you sure? This cancels every booking for this departure and starts refunds."
+      manifest:
+        total_passengers: "Total passengers: %{count}"
+        phone: "Phone"
+        phone_missing: "-"
+        children_5_9: "Ages 5-9"
+        children_0_4: "Ages 0-4"
       destroy:
         success: "Departure cancelled. %{count} booking(s) cancelled -- refunds, where applicable, have been started."
         errors:

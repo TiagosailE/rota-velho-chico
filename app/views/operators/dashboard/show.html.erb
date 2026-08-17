@@ -1,0 +1,64 @@
+<div class="w-full">
+  <h1 class="text-2xl sm:text-3xl font-semibold text-ink-900 mb-8"><%= t("operators.dashboard.title") %></h1>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <div class="card p-5">
+      <p class="text-xs font-medium uppercase tracking-wide text-ink-400 mb-1"><%= t("operators.dashboard.deposits_received") %></p>
+      <p class="text-2xl font-display font-semibold text-ink-900"><%= format_price_cents(@deposits_received_cents) %></p>
+    </div>
+
+    <div class="card p-5">
+      <p class="text-xs font-medium uppercase tracking-wide text-ink-400 mb-1"><%= t("operators.dashboard.confirmed_bookings") %></p>
+      <p class="text-2xl font-display font-semibold text-ink-900"><%= @confirmed_bookings_count %></p>
+    </div>
+
+    <div class="card p-5">
+      <p class="text-xs font-medium uppercase tracking-wide text-ink-400 mb-1"><%= t("operators.dashboard.average_occupancy") %></p>
+      <% if @average_occupancy_percentage %>
+        <p class="text-2xl font-display font-semibold text-ink-900"><%= @average_occupancy_percentage %>%</p>
+      <% else %>
+        <p class="text-sm text-ink-500 mt-2"><%= t("operators.dashboard.average_occupancy_empty") %></p>
+      <% end %>
+    </div>
+
+    <div class="card p-5">
+      <p class="text-xs font-medium uppercase tracking-wide text-ink-400 mb-1"><%= t("operators.dashboard.top_tour") %></p>
+      <% if @top_tour %>
+        <p class="text-lg font-display font-semibold text-ink-900"><%= @top_tour.title %></p>
+      <% else %>
+        <p class="text-sm text-ink-500 mt-2"><%= t("operators.dashboard.top_tour_empty") %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <h2 class="text-lg font-semibold text-ink-900 mb-4"><%= t("operators.dashboard.upcoming_departures_title") %></h2>
+
+  <% if @upcoming_departures.empty? %>
+    <p class="text-ink-500"><%= t("operators.dashboard.upcoming_departures_empty") %></p>
+  <% else %>
+    <div class="card overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-ink-50 text-ink-500 text-xs uppercase tracking-wide">
+          <tr>
+            <th class="px-4 py-2 font-medium"><%= t("bookings.new.tour") %></th>
+            <th class="px-4 py-2 font-medium"><%= t("bookings.new.departure") %></th>
+            <th class="px-4 py-2 font-medium"><%= t("operators.departures.show.occupancy") %></th>
+            <th class="px-4 py-2 font-medium"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-ink-100">
+          <% @upcoming_departures.each do |departure| %>
+            <tr>
+              <td class="px-4 py-2.5 text-ink-800"><%= departure.tour.title %></td>
+              <td class="px-4 py-2.5 text-ink-600"><%= departure.starts_at.strftime("%d/%m/%Y %H:%M") %></td>
+              <td class="px-4 py-2.5 text-ink-600"><%= departure.seats_taken %>/<%= departure.capacity %></td>
+              <td class="px-4 py-2.5">
+                <%= link_to t("operators.departures.show.link"), operators_tour_departure_path(departure.tour, departure), class: "btn-link" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

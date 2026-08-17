@@ -17,6 +17,8 @@
 
     <nav class="text-sm flex items-center gap-4 text-ink-300">
       <span class="hidden sm:inline text-ink-100"><%= current_operator.name %></span>
+      <%= link_to t("operators.nav.panel"), operators_root_path, class: "font-medium hover:text-white" %>
+      <%= link_to t("operators.tours.index.title"), operators_tours_path, class: "font-medium hover:text-white" %>
       <%= link_to t("operators.nav.view_site"), tours_path, class: "font-medium hover:text-white" %>
       <%= button_to t("operators.nav.sign_out"), destroy_operator_session_path, method: :delete,
             class: "font-medium hover:text-white underline-offset-2 hover:underline bg-transparent p-0" %>
