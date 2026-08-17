@@ -8,17 +8,6 @@ pt-BR:
     footer:
       tagline: "Passeios e reservas em Paulo Afonso, Bahia."
       disclaimer: "Projeto de portfólio. Nomes de agência e dados de reserva são fictícios, sem afiliação com operadores reais de Paulo Afonso."
-      portfolio:
-        eyebrow: "Projeto de portfólio"
-        body: "Construído para mostrar engenharia real, não só uma interface: reserva sob concorrência, pagamento via Stripe e um painel completo para o operador."
-        point_reservation: "Lock pessimista testado com 20 threads reais concorrendo pela última vaga"
-        point_payment: "Pagamento com Stripe (sinal de 30%), estorno em cascata no cancelamento"
-        point_panel: "Painel do operador: passeios, saídas, fotos e reservas"
-        repo_link: "Ver código no GitHub"
-        architecture_link: "Ver decisões de arquitetura"
-        demo_access: "Acesso de demonstração do painel"
-        demo_email: "E-mail"
-        demo_password: "Senha"
     toasts:
       dismiss: "Fechar"
 

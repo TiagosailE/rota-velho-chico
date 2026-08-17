@@ -37,17 +37,6 @@ en:
     footer:
       tagline: "Tours and bookings in Paulo Afonso, Bahia."
       disclaimer: "Portfolio project. Agency names and booking data are fictional, with no affiliation to real operators in Paulo Afonso."
-      portfolio:
-        eyebrow: "Portfolio project"
-        body: "Built to show real engineering, not just an interface: booking under concurrency, payment via Stripe, and a full panel for the operator."
-        point_reservation: "Pessimistic locking, tested with 20 real threads competing for the last seat"
-        point_payment: "Stripe payment (30% deposit), cascading refund on cancellation"
-        point_panel: "Operator panel: tours, departures, photos and bookings"
-        repo_link: "View code on GitHub"
-        architecture_link: "View architecture decisions"
-        demo_access: "Demo access to the operator panel"
-        demo_email: "Email"
-        demo_password: "Password"
     toasts:
       dismiss: "Dismiss"
 
