@@ -1,4 +1,10 @@
 class CheckoutSessionCreator
+  # Comissao da plataforma sobre o sinal -- 15% fica na faixa que
+  # marketplaces de turismo/hospedagem cobram (Booking/Airbnb ficam por
+  # volta de 15-20%). Constante isolada aqui de proposito: ajustar a taxa e
+  # mudar um numero, nao tocar o resto do fluxo de checkout.
+  COMMISSION_RATE = 0.15
+
   def initialize(booking:, success_url:, cancel_url:)
     @booking = booking
     @success_url = success_url
@@ -7,8 +13,13 @@ class CheckoutSessionCreator
 
   # Devolve a URL da sessao de checkout hospedada pelo Stripe. Deixa
   # Stripe::StripeError subir -- falha de rede/API nao e regra de negocio,
-  # quem chama decide como tratar.
+  # quem chama decide como tratar. Quem chama tambem garante que o operador
+  # ja completou o onboarding do Connect (CheckoutController) -- este
+  # servico nao reconfere, e confia no contrato como o BookingCreator confia
+  # que os parametros de reserva ja passaram por validacao basica.
   def call
+    application_fee = application_fee_cents
+
     session = Stripe::Checkout::Session.create(
       mode: "payment",
       line_items: [ {
@@ -19,6 +30,13 @@ class CheckoutSessionCreator
         },
         quantity: 1
       } ],
+      # Destination charge: o sinal entra na conta da plataforma e e
+      # transferido pra conta conectada do operador, descontada a comissao.
+      # Estorno (BookingCanceller) precisa desfazer os dois lados do split.
+      payment_intent_data: {
+        application_fee_amount: application_fee,
+        transfer_data: { destination: operator.stripe_account_id }
+      },
       success_url: @success_url,
       cancel_url: @cancel_url
     )
@@ -36,6 +54,7 @@ class CheckoutSessionCreator
       stripe_checkout_session_id: session.id,
       stripe_payment_intent_id: session.payment_intent,
       amount_cents: @booking.deposit_cents,
+      application_fee_cents: application_fee,
       status: :pending
     )
 
@@ -43,6 +62,14 @@ class CheckoutSessionCreator
   end
 
   private
+
+  def operator
+    @booking.departure.tour.operator
+  end
+
+  def application_fee_cents
+    (@booking.deposit_cents * COMMISSION_RATE).round
+  end
 
   def line_item_name
     I18n.t("checkout.line_item_name", tour: @booking.departure.tour.title)

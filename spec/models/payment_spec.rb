@@ -12,6 +12,7 @@ RSpec.describe Payment, type: :model do
 
   it { is_expected.to validate_presence_of(:amount_cents) }
   it { is_expected.to validate_numericality_of(:amount_cents).is_greater_than_or_equal_to(0) }
+  it { is_expected.to validate_numericality_of(:application_fee_cents).is_greater_than_or_equal_to(0).allow_nil }
 
   it { is_expected.to validate_uniqueness_of(:stripe_payment_intent_id).allow_nil }
   it { is_expected.to validate_uniqueness_of(:stripe_refund_id).allow_nil }

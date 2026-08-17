@@ -92,6 +92,17 @@ en:
       top_tour_empty: "No confirmed bookings yet."
       upcoming_departures_title: "Upcoming departures"
       upcoming_departures_empty: "No upcoming departures scheduled."
+    stripe_connect:
+      connected: "Payments connected"
+      prompt:
+        title: "Set up payments"
+        body: "To receive bookings paid online, connect your Stripe account. It takes a few minutes."
+        button: "Connect Stripe account"
+      return:
+        success: "Account connected! You can now receive bookings paid online."
+        incomplete: "Setup still incomplete. Finish onboarding to receive payments."
+      errors:
+        unavailable: "Could not start the connection with Stripe right now. Try again in a moment."
     tours:
       index:
         title: "My tours"
@@ -318,6 +329,7 @@ en:
       not_payable: "This booking is no longer pending payment."
       unavailable: "Could not start the payment right now. Please try again shortly."
       not_configured: "Online payment is not available yet. Your booking is still held - please contact the agency to arrange the deposit."
+      operator_not_connected: "This agency hasn't set up online payment yet. Your booking is still held - please contact the agency to arrange the deposit."
 
   tours:
     cover:

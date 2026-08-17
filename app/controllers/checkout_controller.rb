@@ -13,6 +13,15 @@ class CheckoutController < ApplicationController
       redirect_to(new_booking_lookup_path) and return
     end
 
+    # Sem conta conectada, o Stripe recusaria a Checkout Session na hora
+    # (transfer_data.destination invalido) -- checar aqui devolve uma
+    # mensagem que faz sentido pro turista, em vez do "tente de novo" que
+    # cai no rescue generico de erro de API.
+    unless booking.departure.tour.operator.stripe_charges_enabled?
+      flash[:alert] = t("checkout.errors.operator_not_connected")
+      redirect_to(new_booking_lookup_path) and return
+    end
+
     checkout_url = CheckoutSessionCreator.new(
       booking:,
       success_url: checkout_success_url(code: booking.code),

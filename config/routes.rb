@@ -34,6 +34,10 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    post "stripe_connect", to: "stripe_connect#create", as: :stripe_connect
+    get "stripe_connect/return", to: "stripe_connect#return", as: :stripe_connect_return
+    get "stripe_connect/refresh", to: "stripe_connect#refresh", as: :stripe_connect_refresh
   end
 
   resources :tours, only: [ :index, :show ], param: :slug

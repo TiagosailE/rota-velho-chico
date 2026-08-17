@@ -14,4 +14,6 @@ RSpec.describe Operator, type: :model do
 
   it { is_expected.to validate_presence_of(:email) }
   it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+
+  it { is_expected.to validate_uniqueness_of(:stripe_account_id).allow_nil }
 end

@@ -84,5 +84,25 @@ RSpec.describe "Operators::Dashboard", type: :request do
       expect(response.body).to include(I18n.t("operators.dashboard.average_occupancy_empty"))
       expect(response.body).to include(I18n.t("operators.dashboard.upcoming_departures_empty"))
     end
+
+    it "mostra o convite pra conectar o Stripe quando o operador ainda nao tem pagamentos habilitados" do
+      operator = create(:operator, :stripe_disconnected)
+      sign_in operator
+
+      get operators_root_path
+
+      expect(response.body).to include(I18n.t("operators.stripe_connect.prompt.title"))
+      expect(response.body).not_to include(I18n.t("operators.stripe_connect.connected"))
+    end
+
+    it "mostra o status conectado quando o operador ja habilitou pagamentos" do
+      operator = create(:operator)
+      sign_in operator
+
+      get operators_root_path
+
+      expect(response.body).to include(I18n.t("operators.stripe_connect.connected"))
+      expect(response.body).not_to include(I18n.t("operators.stripe_connect.prompt.title"))
+    end
   end
 end

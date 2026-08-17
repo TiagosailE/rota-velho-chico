@@ -1,6 +1,18 @@
 <div class="w-full">
   <h1 class="text-2xl sm:text-3xl font-semibold text-ink-900 mb-8"><%= t("operators.dashboard.title") %></h1>
 
+  <% if current_operator.stripe_charges_enabled? %>
+    <div class="card p-4 mb-8 flex items-center gap-2">
+      <span class="badge badge-success"><%= t("operators.stripe_connect.connected") %></span>
+    </div>
+  <% else %>
+    <div class="card p-6 mb-8">
+      <h2 class="text-lg font-semibold text-ink-900 mb-2"><%= t("operators.stripe_connect.prompt.title") %></h2>
+      <p class="text-sm text-ink-600 mb-4"><%= t("operators.stripe_connect.prompt.body") %></p>
+      <%= button_to t("operators.stripe_connect.prompt.button"), operators_stripe_connect_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
   <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
     <div class="card p-5">
       <p class="text-xs font-medium uppercase tracking-wide text-ink-400 mb-1"><%= t("operators.dashboard.deposits_received") %></p>

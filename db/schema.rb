@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_140100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -100,15 +100,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_120000) do
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.string "slug", null: false
+    t.string "stripe_account_id"
+    t.boolean "stripe_charges_enabled", default: false, null: false
     t.datetime "updated_at", null: false
     t.string "whatsapp"
     t.index ["email"], name: "index_operators_on_email", unique: true
     t.index ["reset_password_token"], name: "index_operators_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_operators_on_slug", unique: true
+    t.index ["stripe_account_id"], name: "index_operators_on_stripe_account_id", unique: true
   end
 
   create_table "payments", force: :cascade do |t|
     t.integer "amount_cents", null: false
+    t.integer "application_fee_cents"
     t.bigint "booking_id", null: false
     t.datetime "created_at", null: false
     t.datetime "paid_at"
@@ -124,6 +128,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_120000) do
     t.index ["stripe_payment_intent_id"], name: "index_payments_on_stripe_payment_intent_id", unique: true
     t.index ["stripe_refund_id"], name: "index_payments_on_stripe_refund_id", unique: true
     t.check_constraint "amount_cents >= 0", name: "payments_amount_non_negative"
+    t.check_constraint "application_fee_cents IS NULL OR application_fee_cents >= 0", name: "payments_application_fee_non_negative"
     t.check_constraint "refunded_amount_cents IS NULL OR refunded_amount_cents >= 0 AND refunded_amount_cents <= amount_cents", name: "payments_refund_within_amount"
   end
 
