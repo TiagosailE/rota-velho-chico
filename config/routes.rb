@@ -9,10 +9,12 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Controller proprio existe so pra limitar tentativas de login -- ver
-  # Operators::SessionsController. O resto do Devise segue o padrao.
-  devise_for :operators, skip: [ :registrations ],
-             controllers: { sessions: "operators/sessions" }
+  # Controller proprio pra login (so pra limitar tentativas -- ver
+  # Operators::SessionsController) e pra cadastro (autocadastro do
+  # operador, v3 -- ver Operators::RegistrationsController: forca
+  # active: false e neutraliza edit/update/destroy, ainda nao construidos).
+  devise_for :operators,
+             controllers: { sessions: "operators/sessions", registrations: "operators/registrations" }
 
   # Plural para nao colidir com a constante do model Operator -- um
   # namespace :operator geraria controllers no modulo Operator::, que o
