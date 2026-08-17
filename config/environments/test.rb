@@ -22,6 +22,13 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.cache_store = :null_store
 
+  # O rate_limit dos controllers conta requisicoes numa store de cache, e o
+  # :null_store acima nunca guarda nada -- os limites existiriam no codigo
+  # sem nenhum teste conseguindo alcanca-los. Store propria so pro
+  # Action Controller mantem o :null_store valendo pro resto.
+  # spec/support/rate_limiting.rb limpa o contador entre exemplos.
+  config.action_controller.cache_store = :memory_store
+
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable
 

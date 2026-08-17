@@ -92,6 +92,13 @@ gratuita de 10GB, sem custo.
 
 ## 5. Popular com dados de demonstração
 
+Antes de semear, defina `SEED_OPERATOR_PASSWORD` nas variáveis de ambiente do
+serviço (**Environment** no dashboard). A senha dos operadores de
+demonstração não vive no repositório -- ele é público, e uma senha escrita
+lá é login válido no painel para qualquer pessoa que abra o código. Sem a
+variável definida, o seed para com erro em vez de cair numa senha padrão
+(ver `docs/security.md`, seção 3.1).
+
 Pela aba **Shell** do serviço no dashboard do Render (ou `render.com`'s
 CLI, se preferir):
 

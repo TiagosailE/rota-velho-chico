@@ -1,4 +1,14 @@
 class BookingsController < ApplicationController
+  # Reserva nasce `pending` e ja ocupa vaga -- pagar e um passo posterior.
+  # Um laco contra este endpoint esgota a capacidade de todas as saidas sem
+  # gastar um centavo, e as vagas so voltam quando alguem cancela na mao.
+  # E o unico limite aqui que protege disponibilidade, nao dado pessoal.
+  rate_limit to: 10, within: 10.minutes, only: :create,
+             with: -> {
+               redirect_to new_departure_booking_path(params[:departure_id]),
+                           alert: t("rate_limit.exceeded")
+             }
+
   def new
     @departure = active_departure
     @booking = Booking.new(adults: 1, children_5_9: 0, children_0_4: 0, lunch_count: 0)
