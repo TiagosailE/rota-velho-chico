@@ -9,35 +9,35 @@
 module DemoPhotos
   BY_TOUR_SLUG = {
     "catamara-no-canion" => [
-      { file: "01.jpg", alt: "Barco passando entre paredoes de rocha no canion do Rio Sao Francisco" },
-      { file: "02.jpg", alt: "Vista aerea de canion com cachoeiras e barcos ancorados em agua esverdeada" },
-      { file: "03.jpg", alt: "Turistas de barco observando os paredoes altos do canion" },
-      { file: "04.jpg", alt: "Vista aerea do Rio Sao Francisco cortando o canion entre paredoes de pedra" },
+      { file: "01.jpg", alt: "Barco passando entre paredões de rocha no cânion do Rio São Francisco" },
+      { file: "02.jpg", alt: "Vista aérea de cânion com cachoeiras e barcos ancorados em água esverdeada" },
+      { file: "03.jpg", alt: "Turistas de barco observando os paredões altos do cânion" },
+      { file: "04.jpg", alt: "Vista aérea do Rio São Francisco cortando o cânion entre paredões de pedra" },
       { file: "05.jpg", alt: "Cachoeira caindo em piscina natural de pedra, parada para banho" }
     ],
     "por-do-sol-de-lancha" => [
-      { file: "01.jpg", alt: "Lancha em silhueta contra o por do sol no rio" },
-      { file: "02.jpg", alt: "Lancha navegando em aguas calmas ao entardecer" },
-      { file: "03.jpg", alt: "Represa do Rio Sao Francisco ao entardecer com vegetacao de sertao" },
-      { file: "04.jpg", alt: "Paisagem de sertao com lago ao por do sol" }
+      { file: "01.jpg", alt: "Lancha em silhueta contra o pôr do sol no rio" },
+      { file: "02.jpg", alt: "Lancha navegando em águas calmas ao entardecer" },
+      { file: "03.jpg", alt: "Represa do Rio São Francisco ao entardecer com vegetação de sertão" },
+      { file: "04.jpg", alt: "Paisagem de sertão com lago ao pôr do sol" }
     ],
     "raso-da-catarina-4x4" => [
-      { file: "01.jpg", alt: "Mirante de pedra com vegetacao seca da caatinga ao fundo" },
+      { file: "01.jpg", alt: "Mirante de pedra com vegetação seca da caatinga ao fundo" },
       { file: "02.jpg", alt: "Estrada de terra na caatinga com mandacaru e cerca rural" },
       { file: "03.jpg", alt: "Cactos em contraluz ao amanhecer na caatinga baiana" }
     ],
     "complexo-chesf" => [
-      { file: "01.jpg", alt: "Barragem de concreto com comportas liberando agua" },
-      { file: "02.jpg", alt: "Torres de transmissao de energia eletrica em paisagem rural" }
+      { file: "01.jpg", alt: "Barragem de concreto com comportas liberando água" },
+      { file: "02.jpg", alt: "Torres de transmissão de energia elétrica em paisagem rural" }
     ],
     "rota-do-cangaco" => [
       { file: "01.jpg", alt: "Casa simples de rua de cidade do interior nordestino" },
-      { file: "02.jpg", alt: "Porteira de fazenda antiga em paisagem seca do sertao" }
+      { file: "02.jpg", alt: "Porteira de fazenda antiga em paisagem seca do sertão" }
     ],
     "serra-do-umbuzeiro" => [
-      { file: "01.jpg", alt: "Serra rochosa com vegetacao rala de campo rupestre" },
-      { file: "02.jpg", alt: "Trilha de terra entre vegetacao seca de serra" },
-      { file: "03.jpg", alt: "Estrada de terra ao entardecer entre arvores do sertao" }
+      { file: "01.jpg", alt: "Serra rochosa com vegetação rala de campo rupestre" },
+      { file: "02.jpg", alt: "Trilha de terra entre vegetação seca de serra" },
+      { file: "03.jpg", alt: "Estrada de terra ao entardecer entre árvores do sertão" }
     ]
   }.freeze
 

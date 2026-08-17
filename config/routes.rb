@@ -30,6 +30,12 @@ Rails.application.routes.draw do
     # migracao pro Cloudflare R2, sem precisar de Shell (recurso pago no
     # Render). Remover depois de usada -- ver PROGRESS.md.
     get "maintenance/reset_photos", to: "maintenance#reset_photos"
+
+    # Ferramenta temporaria, uso unico: corrige a acentuacao de operadores/
+    # passeios/fotos ja publicados no Render (db:seed nao atualiza registro
+    # existente). Sem Shell no free tier -- mesma razao da rota acima.
+    # Remover depois de usada -- ver PROGRESS.md.
+    get "maintenance/fix_accents", to: "maintenance#fix_accents"
   end
 
   resources :tours, only: [ :index, :show ], param: :slug

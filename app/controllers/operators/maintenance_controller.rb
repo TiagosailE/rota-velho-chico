@@ -15,4 +15,13 @@ class Operators::MaintenanceController < Operators::BaseController
 
     redirect_to operators_root_path, notice: t("operators.maintenance.reset_photos.success")
   end
+
+  # Mesma justificativa da acao acima (sem Shell no Render free tier), pra
+  # corrigir a acentuacao de operadores/passeios/fotos ja publicados. Ver
+  # FixDemoAccentsJob. Remover depois de usada -- ver PROGRESS.md.
+  def fix_accents
+    FixDemoAccentsJob.perform_later
+
+    redirect_to operators_root_path, notice: t("operators.maintenance.fix_accents.success")
+  end
 end

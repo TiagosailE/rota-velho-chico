@@ -7,31 +7,31 @@ DEPARTURE_OFFSETS_IN_DAYS = (1..10).map { |i| i * 9 } # 10 saidas por passeio, a
 
 operators = [
   {
-    name: "Catamara Paulo Afonso Turismo",
+    name: "Catamarã Paulo Afonso Turismo",
     slug: "catamara-paulo-afonso",
     email: "contato@catamarapauloafonso.example.com",
     phone: "+55 75 3281-1000",
     whatsapp: "+55 75 99100-1000",
-    bio: "Passeios de barco pelo canion do Rio Sao Francisco, saindo do " \
+    bio: "Passeios de barco pelo cânion do Rio São Francisco, saindo do " \
          "Pier do Povoado Rio do Sal."
   },
   {
-    name: "Raso da Catarina Expedicoes",
+    name: "Raso da Catarina Expedições",
     slug: "raso-da-catarina-expedicoes",
     email: "contato@rasodacatarina.example.com",
     phone: "+55 75 3281-2000",
     whatsapp: "+55 75 99100-2000",
-    bio: "Expedicoes 4x4 pelo Raso da Catarina, com foco em observacao de " \
-         "aves e paisagem do sertao."
+    bio: "Expedições 4x4 pelo Raso da Catarina, com foco em observação de " \
+         "aves e paisagem do sertão."
   },
   {
-    name: "Sertao Vivo Turismo Cultural",
+    name: "Sertão Vivo Turismo Cultural",
     slug: "sertao-vivo-cultural",
     email: "contato@sertaovivocultural.example.com",
     phone: "+55 75 3281-3000",
     whatsapp: "+55 75 99100-3000",
-    bio: "Roteiros culturais e historicos em Paulo Afonso: energia, memoria " \
-         "e o sertao baiano."
+    bio: "Roteiros culturais e históricos em Paulo Afonso: energia, memória " \
+         "e o sertão baiano."
   },
   {
     name: "Aventura Serra do Umbuzeiro",
@@ -64,13 +64,13 @@ catamara, raso_da_catarina, sertao_vivo, aventura_umbuzeiro = operators
 tours = [
   {
     operator: catamara,
-    title: "Catamara no Canion",
+    title: "Catamarã no Cânion",
     slug: "catamara-no-canion",
     category: :boat,
-    description: "Passeio de catamara pelo canion do Rio Sao Francisco, com " \
-                  "parede de granito de ate 170 metros e parada de 2 horas " \
-                  "para banho no Espaco Ecologico Vale do Sal. Almoco em " \
-                  "buffet livre disponivel como opcional na reserva.",
+    description: "Passeio de catamarã pelo cânion do Rio São Francisco, com " \
+                  "parede de granito de até 170 metros e parada de 2 horas " \
+                  "para banho no Espaço Ecológico Vale do Sal. Almoço em " \
+                  "buffet livre disponível como opcional na reserva.",
     duration_minutes: 240,
     base_price_cents: 13_500,
     meeting_point: "Pier do Povoado Rio do Sal",
@@ -82,12 +82,12 @@ tours = [
   },
   {
     operator: catamara,
-    title: "Por do Sol de Lancha no Canion",
+    title: "Pôr do Sol de Lancha no Cânion",
     slug: "por-do-sol-de-lancha",
     category: :boat,
-    description: "Passeio curto de lancha pelo trecho navegavel mais alto " \
-                  "do Rio Sao Francisco, com o por do sol entre os " \
-                  "paredoes do canion.",
+    description: "Passeio curto de lancha pelo trecho navegável mais alto " \
+                  "do Rio São Francisco, com o pôr do sol entre os " \
+                  "paredões do cânion.",
     duration_minutes: 90,
     base_price_cents: 9_000,
     meeting_point: "Marina Central de Paulo Afonso",
@@ -101,10 +101,10 @@ tours = [
     title: "Raso da Catarina 4x4",
     slug: "raso-da-catarina-4x4",
     category: :offroad,
-    description: "Expedicao 4x4 saindo da Pousada Aconchego do Raso, com " \
+    description: "Expedição 4x4 saindo da Pousada Aconchego do Raso, com " \
                   "revoada da arara-azul-de-lear ao amanhecer, passagem " \
-                  "pelo Canion Seco da Baixa do Chico e pela comunidade " \
-                  "indigena pankarare, alem de paredoes de arenito e " \
+                  "pelo Cânion Seco da Baixa do Chico e pela comunidade " \
+                  "indígena Pankararé, além de paredões de arenito e " \
                   "mirantes.",
     duration_minutes: 240,
     base_price_cents: 18_000,
@@ -116,12 +116,12 @@ tours = [
   },
   {
     operator: sertao_vivo,
-    title: "Complexo Hidreletrico da CHESF",
+    title: "Complexo Hidrelétrico da CHESF",
     slug: "complexo-chesf",
     category: :cultural,
-    description: "Visita guiada ao complexo hidreletrico da CHESF em Paulo " \
-                  "Afonso, com explicacao sobre a geracao de energia no " \
-                  "Rio Sao Francisco.",
+    description: "Visita guiada ao complexo hidrelétrico da CHESF em Paulo " \
+                  "Afonso, com explicação sobre a geração de energia no " \
+                  "Rio São Francisco.",
     duration_minutes: 90,
     base_price_cents: 6_000,
     meeting_point: "Portaria de Visitantes da CHESF",
@@ -132,15 +132,15 @@ tours = [
   },
   {
     operator: sertao_vivo,
-    title: "Rota do Cangaco",
+    title: "Rota do Cangaço",
     slug: "rota-do-cangaco",
     category: :cultural,
-    description: "Passeio a pe pelo centro de Paulo Afonso com guia local, " \
-                  "contando a historia do cangaco e a memoria de Lampiao " \
-                  "na regiao.",
+    description: "Passeio a pé pelo centro de Paulo Afonso com guia local, " \
+                  "contando a história do cangaço e a memória de Lampião " \
+                  "na região.",
     duration_minutes: 120,
     base_price_cents: 7_000,
-    meeting_point: "Praca da Biblia, Centro de Paulo Afonso",
+    meeting_point: "Praça da Bíblia, Centro de Paulo Afonso",
     lat: -9.4000,
     lng: -38.2250,
     min_age: 0,
@@ -152,7 +152,7 @@ tours = [
     slug: "serra-do-umbuzeiro",
     category: :hiking,
     description: "Trilha e esportes de aventura na Serra do Umbuzeiro, com " \
-                  "vista panoramica do sertao baiano.",
+                  "vista panorâmica do sertão baiano.",
     duration_minutes: 300,
     base_price_cents: 12_000,
     meeting_point: "Base da Serra do Umbuzeiro",
