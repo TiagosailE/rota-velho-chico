@@ -9,7 +9,8 @@
     <div class="card p-6 mb-8">
       <h2 class="text-lg font-semibold text-ink-900 mb-2"><%= t("operators.stripe_connect.prompt.title") %></h2>
       <p class="text-sm text-ink-600 mb-4"><%= t("operators.stripe_connect.prompt.body") %></p>
-      <%= button_to t("operators.stripe_connect.prompt.button"), operators_stripe_connect_path, class: "btn btn-primary" %>
+      <%= button_to t("operators.stripe_connect.prompt.button"), operators_stripe_connect_path,
+            form: { data: { turbo: false } }, class: "btn btn-primary" %>
     </div>
   <% end %>
 
